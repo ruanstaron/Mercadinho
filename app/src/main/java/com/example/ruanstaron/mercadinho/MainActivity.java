@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+//teste
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Button scanBtn;
