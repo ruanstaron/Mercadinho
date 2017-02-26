@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Button scanBtn;
@@ -21,6 +24,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         scanBtn = (Button)findViewById(R.id.scan_button);
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
+        /*ListView listviewProdutos = (ListView) findViewById(R.id.lvLista);
+        ArrayList<Produto> produtos = new ArrayList<Produto>();
+        for(int i = 0; i>10; i++){
+            produtos.add(new Produto());
+        }
+        AdapterProduto adapterProduto = new AdapterProduto(this, produtos);
+        listviewProdutos.setAdapter(adapterProduto);*/
         scanBtn.setOnClickListener(this);
     }
     public void onClick(View v){
