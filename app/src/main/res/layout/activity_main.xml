@@ -12,26 +12,85 @@
 
 
     <Button
+        android:text="Ok"
+        android:layout_height="wrap_content"
+        android:id="@+id/bOk"
+        android:layout_width="45dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/etProduto"
+        android:layout_alignParentEnd="true" />
+
+    <Button
         android:text="Scan"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/scan_button" />
-    
-    <TextView
-        android:id="@+id/scan_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/scan_button"
+        android:id="@+id/scan_button"
+        android:layout_width="65dp"
+        android:layout_alignBaseline="@+id/bOk"
+        android:layout_alignBottom="@+id/bOk"
+        android:layout_toStartOf="@+id/bOk"
         />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etQuantidade"
+        android:layout_width="60dp"
+        android:layout_alignTop="@+id/scan_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/scan_button" />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etValor"
+        android:layout_width="170dp"
+        android:layout_toEndOf="@+id/etQuantidade"
+        android:layout_alignTop="@+id/etQuantidade"
+        android:layout_alignBottom="@+id/etQuantidade" />
+
     <TextView
-        android:id="@+id/scan_content"
+        android:text="Produto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/scan_format"/>
+        android:id="@+id/tvProduto"
+        android:textSize="8sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etProduto"
+        android:layout_below="@+id/tvProduto"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Quantidade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvQuantidade"
+        android:textSize="8sp"
+        android:layout_above="@+id/etQuantidade"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvValor"
+        android:textSize="8sp"
+        android:layout_above="@+id/etValor"
+        android:layout_toEndOf="@+id/etQuantidade" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/etQuantidade"
+        android:layout_alignParentStart="true"
+        android:id="@+id/lvProdutos" />
 </RelativeLayout>
