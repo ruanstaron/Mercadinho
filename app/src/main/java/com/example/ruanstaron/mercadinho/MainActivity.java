@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
         if(v.getId()==R.id.bOk){
             geraProduto(v);
+            etProduto.setText("");
+            etQuantidade.setText("");
+            etValor.setText("");
         }
     }
 

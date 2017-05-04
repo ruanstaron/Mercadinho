@@ -31,24 +31,24 @@
         />
 
     <EditText
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:id="@+id/etQuantidade"
         android:layout_width="60dp"
-        android:layout_alignTop="@+id/scan_button"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/scan_button"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/scan_button" />
+        android:layout_alignTop="@+id/scan_button"
+        android:ems="10"
+        android:inputType="numberSigned" />
 
     <EditText
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:id="@+id/etValor"
         android:layout_width="170dp"
-        android:layout_toEndOf="@+id/etQuantidade"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etQuantidade"
         android:layout_alignTop="@+id/etQuantidade"
-        android:layout_alignBottom="@+id/etQuantidade" />
+        android:layout_toEndOf="@+id/etQuantidade"
+        android:ems="10"
+        android:inputType="numberDecimal" />
 
     <TextView
         android:text="Produto"
