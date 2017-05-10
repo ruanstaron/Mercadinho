@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ruanstaron.mercadinho.MainActivity">
+
+    <Button
+        android:id="@+id/bScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="73dp"
+        android:text="Scan"
+        android:onClick="startScan"/>
+
+    <Button
+        android:id="@+id/bBanco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/bScan"
+        android:layout_below="@+id/bScan"
+        android:layout_marginTop="47dp"
+        android:text="Cria Banco"
+        android:onClick="startBanco"/>
+
+</RelativeLayout>

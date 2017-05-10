@@ -5,9 +5,15 @@ package com.example.ruanstaron.mercadinho;
  */
 
 public class Produto {
+    private String cod_barras;
     private String descricao;
     private String valor;
     private String quantidade;
+
+    public Produto(String cod_barras, String descricao){
+        this.cod_barras = cod_barras;
+        this.descricao = descricao;
+    }
 
     public Produto(String descricao, String valor, String quantidade){
         this.descricao = descricao;
@@ -37,6 +43,14 @@ public class Produto {
 
     public void setQuantidade(String quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getCod_barras() {
+        return cod_barras;
+    }
+
+    public void setCod_barras(String cod_barras) {
+        this.cod_barras = cod_barras;
     }
 
     public String toString(){
