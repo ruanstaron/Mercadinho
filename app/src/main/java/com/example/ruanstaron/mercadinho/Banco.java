@@ -20,7 +20,7 @@ public class Banco extends AppCompatActivity {
         }else{
             db.setVersion(1);
             db.setLocale(Locale.getDefault());
-            db.setLockingEnabled(true);
+            //db.setLockingEnabled(true);
             String sql_lista_de_compras = "CREATE TABLE lista_de_compras ( id INTEGER PRIMARY KEY AUTOINCREMENT, COD_BARRAS INTEGER UNIQUE, DESCRICAO TEXT, QUANTIDADE INTEGER, VALOR DECIMAL);";
             String banco_nuvem = "CREATE TABLE banco_nuvem ( id INTEGER PRIMARY KEY AUTOINCREMENT, COD_BARRAS INTEGER UNIQUE, DESCRICAO TEXT);";
             db.execSQL(sql_lista_de_compras);

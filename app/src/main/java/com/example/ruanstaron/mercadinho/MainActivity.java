@@ -21,4 +21,5 @@ public class MainActivity extends AppCompatActivity {
         Intent banco = new Intent(this, Banco.class);
         startActivity(banco);
     }
+    //ta bugado esse git
 }

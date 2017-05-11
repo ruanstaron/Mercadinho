@@ -70,4 +70,5 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos);
         listaProdutos.setAdapter(arrayAdapter);
     }
+    //ta bugado esse git
 }
