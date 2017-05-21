@@ -5,41 +5,27 @@ package com.example.ruanstaron.mercadinho;
  */
 
 public class Produto {
-    private String descricao;
-    private String valor;
-    private String quantidade;
+    private String id;
+    private String cod_barras;
+    private String produto;
+    private String votos;
 
-    public Produto(String descricao, String valor, String quantidade){
-        this.descricao = descricao;
-        this.valor = valor;
-        this.quantidade = quantidade;
+    public Produto(String s, String s1, String s2) {
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public String getCod_barras(){
+        return cod_barras;
     }
 
     public String getDescricao() {
-        return descricao;
+        return produto;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    public String getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(String quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public String toString(){
-        return "Produto: "+descricao+", Quantidade: "+quantidade+", Valor: "+valor;
+    public String getVotos(){
+        return votos;
     }
 }

@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);
         produtos = new ArrayList<String>();
+
+
     }
 
     public void onClick(View v){
