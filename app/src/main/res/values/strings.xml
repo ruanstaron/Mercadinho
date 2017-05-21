@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mercadinho</string>
     <string name="scan">Scan</string>
+    <string name="title_activity_main_activity">main_activity</string>
 </resources>

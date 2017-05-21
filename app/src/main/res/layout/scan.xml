@@ -8,8 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.ruanstaron.mercadinho.MainActivity">
-
+    tools:context="com.example.ruanstaron.mercadinho.Scan">
 
     <Button
         android:text="Ok"
@@ -27,8 +26,7 @@
         android:layout_width="65dp"
         android:layout_alignBaseline="@+id/bOk"
         android:layout_alignBottom="@+id/bOk"
-        android:layout_toStartOf="@+id/bOk"
-        />
+        android:layout_toStartOf="@+id/bOk" />
 
     <EditText
         android:id="@+id/etQuantidade"
