@@ -1,6 +1,5 @@
 package com.example.ruanstaron.mercadinho;
 
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

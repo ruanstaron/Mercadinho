@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="73dp"
-        android:text="Scan"
-        android:onClick="startScan"/>
+        android:onClick="startScan"
+        android:text="@string/main_activity_escanear" />
 
     <Button
         android:id="@+id/bBanco"
@@ -21,6 +21,6 @@
         android:layout_alignEnd="@+id/bScan"
         android:layout_below="@+id/bScan"
         android:layout_marginTop="47dp"
-        android:text="Cria Banco"
-        android:onClick="startBanco"/>
+        android:onClick="startBanco"
+        android:text="@string/main_activity_criarBanco" />
 </RelativeLayout>

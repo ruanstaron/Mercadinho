@@ -17,8 +17,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
     private ArrayList<String> produtos;
     private ArrayAdapter<String> arrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         Intent banco = new Intent(this, Banco.class);
         startActivity(banco);
     }
-
 
     public void getProdutosWS(){
         Retrofit.Builder builder  = new Retrofit.Builder()

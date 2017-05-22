@@ -11,19 +11,19 @@
     tools:context="com.example.ruanstaron.mercadinho.Scan">
 
     <Button
-        android:text="Ok"
-        android:layout_height="wrap_content"
         android:id="@+id/bOk"
         android:layout_width="45dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/etProduto"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="15dp"
+        android:text="@string/scan_btnOk" />
 
     <Button
-        android:text="Scan"
-        android:layout_height="wrap_content"
         android:id="@+id/scan_button"
-        android:layout_width="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/scan_btnEscanear"
         android:layout_alignBaseline="@+id/bOk"
         android:layout_alignBottom="@+id/bOk"
         android:layout_toStartOf="@+id/bOk" />
@@ -31,59 +31,62 @@
     <EditText
         android:id="@+id/etQuantidade"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/scan_button"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/scan_button"
+        android:layout_height="40dp"
         android:ems="10"
-        android:inputType="numberSigned" />
+        android:inputType="numberSigned"
+        android:layout_alignTop="@+id/scan_button"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/etValor"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etQuantidade"
-        android:layout_alignTop="@+id/etQuantidade"
-        android:layout_toEndOf="@+id/etQuantidade"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
         android:ems="10"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:layout_above="@+id/lvProdutos"
+        android:layout_toEndOf="@+id/tvQuantidade"
+        android:layout_marginStart="13dp" />
 
     <TextView
-        android:text="Produto"
+        android:id="@+id/tvProduto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvProduto"
-        android:textSize="8sp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/scan_tvProduto"
+        android:labelFor="@+id/etProduto"
+        android:textSize="12sp" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
         android:id="@+id/etProduto"
-        android:layout_below="@+id/tvProduto"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/tvProduto"
+        android:ems="10"
+        android:inputType="textPersonName"
+        />
 
     <TextView
-        android:text="Quantidade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/tvQuantidade"
-        android:textSize="8sp"
-        android:layout_above="@+id/etQuantidade"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Valor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvValor"
-        android:textSize="8sp"
         android:layout_above="@+id/etValor"
-        android:layout_toEndOf="@+id/etQuantidade" />
+        android:layout_alignParentStart="true"
+        android:text="@string/scan_tvQuantidade"
+        android:labelFor="@+id/etQuantidade"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvValor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etValor"
+        android:layout_alignStart="@+id/etValor"
+        android:text="@string/scan_tvValor"
+        android:labelFor="@+id/etValor"
+        android:textSize="12sp" />
 
     <ListView
         android:layout_width="match_parent"

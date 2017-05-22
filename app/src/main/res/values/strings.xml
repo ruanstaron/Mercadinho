@@ -2,4 +2,15 @@
     <string name="app_name">Mercadinho</string>
     <string name="scan">Scan</string>
     <string name="title_activity_main_activity">main_activity</string>
+
+    /* main_activity.xml */
+    <string name="main_activity_escanear">Escanear</string>
+    <string name="main_activity_criarBanco">Criar Banco</string>
+
+    /* scan.xml */
+    <string name="scan_tvProduto">Produto</string>
+    <string name="scan_tvQuantidade">Quantidade</string>
+    <string name="scan_tvValor">Valor</string>
+    <string name="scan_btnEscanear">Escanear</string>
+    <string name="scan_btnOk">Ok</string>
 </resources>
