@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.ruanstaron.mercadinho.db.Produtos;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,18 +48,18 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = builder.build();
 
         MercadinhoClient client = retrofit.create(MercadinhoClient.class);
-        Call<List<Produto>> call =  client.Produto();
+        Call<List<Produtos>> call =  client.Produto();
 
-        call.enqueue(new Callback<List<Produto>>() {
+        call.enqueue(new Callback<List<Produtos>>() {
             @Override
-            public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
+            public void onResponse(Call<List<Produtos>> call, Response<List<Produtos>> response) {
                // List<Produto> produtos  = response.body();
 
               //  listaProdutos.setAdapter(new ProdutoAdapter(MainActivity.this, produtos));
             }
 
             @Override
-            public void onFailure(Call<List<Produto>> call, Throwable t) {
+            public void onFailure(Call<List<Produtos>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

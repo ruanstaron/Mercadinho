@@ -4,6 +4,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.ruanstaron.mercadinho.db.DaoMaster;
+import com.example.ruanstaron.mercadinho.db.DaoSession;
+
+import org.greenrobot.greendao.database.Database;
+
 import java.util.Locale;
 
 public class Banco extends AppCompatActivity {
@@ -12,18 +17,8 @@ public class Banco extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banco);
-        SQLiteDatabase db;
-        db = openOrCreateDatabase("TestData.db",SQLiteDatabase.CREATE_IF_NECESSARY,null);
-        if(db.getVersion()==1){
-
-        }else{
-            db.setVersion(1);
-            db.setLocale(Locale.getDefault());
-            //db.setLockingEnabled(true);
-            String sql_lista_de_compras = "CREATE TABLE lista_de_compras ( id INTEGER PRIMARY KEY AUTOINCREMENT, COD_BARRAS INTEGER UNIQUE, DESCRICAO TEXT, QUANTIDADE INTEGER, VALOR DECIMAL);";
-            String banco_nuvem = "CREATE TABLE banco_nuvem ( id INTEGER PRIMARY KEY AUTOINCREMENT, COD_BARRAS INTEGER UNIQUE, DESCRICAO TEXT);";
-            db.execSQL(sql_lista_de_compras);
-            db.execSQL(banco_nuvem);
-        }
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        Database db = helper.getWritableDb();
+        DaoSession daoSession = new DaoMaster(db).newSession();
     }
 }
