@@ -11,6 +11,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1,"com.example.ruanstaron.mercadinho.db");
 
+        Entity bdDefinitivo = schema.addEntity("BdDefinitivo");
+        bdDefinitivo.addIdProperty();
+        bdDefinitivo.addIntProperty("cod_barras");
+        bdDefinitivo.addStringProperty("produto");
+
         Entity lista = schema.addEntity("Lista");
         lista.addIdProperty();
         lista.addStringProperty("descricao");

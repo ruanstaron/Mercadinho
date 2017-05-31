@@ -8,9 +8,11 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.Produtos;
 
+import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 
@@ -23,9 +25,11 @@ import com.example.ruanstaron.mercadinho.db.ProdutosDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig bdDefinitivoDaoConfig;
     private final DaoConfig listaDaoConfig;
     private final DaoConfig produtosDaoConfig;
 
+    private final BdDefinitivoDao bdDefinitivoDao;
     private final ListaDao listaDao;
     private final ProdutosDao produtosDao;
 
@@ -33,22 +37,32 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
+        bdDefinitivoDaoConfig = daoConfigMap.get(BdDefinitivoDao.class).clone();
+        bdDefinitivoDaoConfig.initIdentityScope(type);
+
         listaDaoConfig = daoConfigMap.get(ListaDao.class).clone();
         listaDaoConfig.initIdentityScope(type);
 
         produtosDaoConfig = daoConfigMap.get(ProdutosDao.class).clone();
         produtosDaoConfig.initIdentityScope(type);
 
+        bdDefinitivoDao = new BdDefinitivoDao(bdDefinitivoDaoConfig, this);
         listaDao = new ListaDao(listaDaoConfig, this);
         produtosDao = new ProdutosDao(produtosDaoConfig, this);
 
+        registerDao(BdDefinitivo.class, bdDefinitivoDao);
         registerDao(Lista.class, listaDao);
         registerDao(Produtos.class, produtosDao);
     }
     
     public void clear() {
+        bdDefinitivoDaoConfig.clearIdentityScope();
         listaDaoConfig.clearIdentityScope();
         produtosDaoConfig.clearIdentityScope();
+    }
+
+    public BdDefinitivoDao getBdDefinitivoDao() {
+        return bdDefinitivoDao;
     }
 
     public ListaDao getListaDao() {
