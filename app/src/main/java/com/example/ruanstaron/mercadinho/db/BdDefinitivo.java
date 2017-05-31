@@ -12,7 +12,7 @@ public class BdDefinitivo {
 
     @Id
     private Long id;
-    private Integer cod_barras;
+    private String cod_barras;
     private String produto;
 
     @Generated
@@ -24,7 +24,7 @@ public class BdDefinitivo {
     }
 
     @Generated
-    public BdDefinitivo(Long id, Integer cod_barras, String produto) {
+    public BdDefinitivo(Long id, String cod_barras, String produto) {
         this.id = id;
         this.cod_barras = cod_barras;
         this.produto = produto;
@@ -38,11 +38,11 @@ public class BdDefinitivo {
         this.id = id;
     }
 
-    public Integer getCod_barras() {
+    public String getCod_barras() {
         return cod_barras;
     }
 
-    public void setCod_barras(Integer cod_barras) {
+    public void setCod_barras(String cod_barras) {
         this.cod_barras = cod_barras;
     }
 

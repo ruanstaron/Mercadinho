@@ -16,7 +16,7 @@ public class Produtos {
     @Id
     private Long id;
     private Long listaId;
-    private Integer cod_barras;
+    private String cod_barras;
     private String descricao;
     private Integer quantidade;
     private Double valor;
@@ -44,7 +44,8 @@ public class Produtos {
     }
 
     @Generated
-    public Produtos(Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
+    public Produtos(Long id, Long listaId, String cod_barras, String descricao, Integer quantidade, Double valor) {
+        this.id = id;
         this.listaId = listaId;
         this.cod_barras = cod_barras;
         this.descricao = descricao;
@@ -52,9 +53,7 @@ public class Produtos {
         this.valor = valor;
     }
 
-    public Produtos(Long id, Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
-        this.id = id;
-        this.listaId = listaId;
+    public Produtos(String cod_barras, String descricao, int quantidade, double valor) {
         this.cod_barras = cod_barras;
         this.descricao = descricao;
         this.quantidade = quantidade;
@@ -84,11 +83,11 @@ public class Produtos {
         this.listaId = listaId;
     }
 
-    public Integer getCod_barras() {
+    public String getCod_barras() {
         return cod_barras;
     }
 
-    public void setCod_barras(Integer cod_barras) {
+    public void setCod_barras(String cod_barras) {
         this.cod_barras = cod_barras;
     }
 
@@ -178,4 +177,7 @@ public class Produtos {
         }
     }
 
+    public String toString(){
+        return "Produto: "+descricao+" Quantidade: "+quantidade+" Valor: "+valor;
+    }
 }

@@ -23,7 +23,7 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Cod_barras = new Property(1, Integer.class, "cod_barras", false, "COD_BARRAS");
+        public final static Property Cod_barras = new Property(1, String.class, "cod_barras", false, "COD_BARRAS");
         public final static Property Produto = new Property(2, String.class, "produto", false, "PRODUTO");
     }
 
@@ -41,7 +41,7 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BD_DEFINITIVO\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"COD_BARRAS\" INTEGER," + // 1: cod_barras
+                "\"COD_BARRAS\" TEXT," + // 1: cod_barras
                 "\"PRODUTO\" TEXT);"); // 2: produto
     }
 
@@ -60,9 +60,9 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
             stmt.bindLong(1, id);
         }
  
-        Integer cod_barras = entity.getCod_barras();
+        String cod_barras = entity.getCod_barras();
         if (cod_barras != null) {
-            stmt.bindLong(2, cod_barras);
+            stmt.bindString(2, cod_barras);
         }
  
         String produto = entity.getProduto();
@@ -80,9 +80,9 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
             stmt.bindLong(1, id);
         }
  
-        Integer cod_barras = entity.getCod_barras();
+        String cod_barras = entity.getCod_barras();
         if (cod_barras != null) {
-            stmt.bindLong(2, cod_barras);
+            stmt.bindString(2, cod_barras);
         }
  
         String produto = entity.getProduto();
@@ -100,7 +100,7 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
     public BdDefinitivo readEntity(Cursor cursor, int offset) {
         BdDefinitivo entity = new BdDefinitivo( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // cod_barras
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // cod_barras
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // produto
         );
         return entity;
@@ -109,7 +109,7 @@ public class BdDefinitivoDao extends AbstractDao<BdDefinitivo, Long> {
     @Override
     public void readEntity(Cursor cursor, BdDefinitivo entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCod_barras(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setCod_barras(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setProduto(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     

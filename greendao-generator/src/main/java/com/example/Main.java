@@ -13,7 +13,7 @@ public class Main {
 
         Entity bdDefinitivo = schema.addEntity("BdDefinitivo");
         bdDefinitivo.addIdProperty();
-        bdDefinitivo.addIntProperty("cod_barras");
+        bdDefinitivo.addStringProperty("cod_barras");
         bdDefinitivo.addStringProperty("produto");
 
         Entity lista = schema.addEntity("Lista");
@@ -23,7 +23,7 @@ public class Main {
         Entity produtos = schema.addEntity("Produtos");
         produtos.addIdProperty();
         Property listaId = produtos.addLongProperty("listaId").getProperty();
-        produtos.addIntProperty("cod_barras");
+        produtos.addStringProperty("cod_barras");
         produtos.addStringProperty("descricao");
         produtos.addIntProperty("quantidade");
         produtos.addDoubleProperty("valor");

@@ -3,6 +3,10 @@ package com.example.ruanstaron.mercadinho;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
+import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
+import com.example.ruanstaron.mercadinho.db.DaoMaster;
+import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -15,7 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.greenrobot.greendao.database.Database;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Scan extends AppCompatActivity implements OnClickListener {
     private Button scanBtn, okBtn;
@@ -23,12 +30,17 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     ListView listaProdutos;
     private ArrayList<String> produtos;
     private ArrayAdapter<String> arrayAdapter;
-    int cod_barras;
-    long temp = 1;
+    DaoMaster.DevOpenHelper helper;
+    DaoMaster master;
+    DaoSession session;
+    String cod_barras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan);
+        helper = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        master = new DaoMaster(helper.getWritableDatabase());
+        session = master.newSession();
         scanBtn = (Button)findViewById(R.id.scan_button);
         okBtn = (Button)findViewById(R.id.bOk);
         etProduto = (EditText) findViewById(R.id.etProduto);
@@ -37,7 +49,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         listaProdutos = (ListView) findViewById(R.id.lvProdutos);
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);
-        produtos = new ArrayList<String>();
+        produtos = new ArrayList<>();
     }
 
     public void onClick(View v){
@@ -59,8 +71,8 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             //formatTxt.setText("FORMAT: " + scanFormat);
-            etProduto.setText(scanContent);
-            cod_barras= Integer.parseInt(scanContent);
+            etProduto.setText(verificaProduto(session, scanContent));
+            cod_barras = scanContent;
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -70,10 +82,20 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     }
 
     public void geraProduto(View v){
-        Produtos produto = new Produtos(temp, cod_barras, etProduto.getText().toString(), Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()));
+        Produtos produto = new Produtos(this.cod_barras, etProduto.getText().toString(), Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()));
         produtos.add(produto.toString());
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, produtos);
         listaProdutos.setAdapter(arrayAdapter);
     }
-    //ta bugado esse git
+
+    public String verificaProduto(DaoSession session, String cod_barras){
+        String mensagem = "";
+        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
+        List<BdDefinitivo> datalist = bdDefinitivoDao.queryBuilder().where(BdDefinitivoDao.Properties.Cod_barras.eq(cod_barras)).list();
+        if(datalist.isEmpty()){
+            return "Digite o nome do produto";
+        }else{
+            return datalist.get(0).toString();
+        }
+    }
 }
