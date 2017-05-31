@@ -2,6 +2,8 @@ package com.example.ruanstaron.mercadinho;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Intent;
@@ -21,6 +23,8 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     ListView listaProdutos;
     private ArrayList<String> produtos;
     private ArrayAdapter<String> arrayAdapter;
+    int cod_barras;
+    long temp = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             String scanFormat = scanningResult.getFormatName();
             //formatTxt.setText("FORMAT: " + scanFormat);
             etProduto.setText(scanContent);
+            cod_barras= Integer.parseInt(scanContent);
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -65,7 +70,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     }
 
     public void geraProduto(View v){
-        Produto produto = new Produto(etProduto.getText().toString(), etValor.getText().toString(), etQuantidade.getText().toString());
+        Produtos produto = new Produtos(temp, cod_barras, etProduto.getText().toString(), Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()));
         produtos.add(produto.toString());
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos);
         listaProdutos.setAdapter(arrayAdapter);

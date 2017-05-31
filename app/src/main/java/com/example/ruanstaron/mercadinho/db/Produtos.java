@@ -44,6 +44,14 @@ public class Produtos {
     }
 
     @Generated
+    public Produtos(Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
+        this.listaId = listaId;
+        this.cod_barras = cod_barras;
+        this.descricao = descricao;
+        this.quantidade = quantidade;
+        this.valor = valor;
+    }
+
     public Produtos(Long id, Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
         this.id = id;
         this.listaId = listaId;
