@@ -1,6 +1,5 @@
 package com.example.ruanstaron.mercadinho;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -8,8 +7,6 @@ import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 
 import org.greenrobot.greendao.database.Database;
-
-import java.util.Locale;
 
 public class Banco extends AppCompatActivity {
 
