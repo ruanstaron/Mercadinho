@@ -31,6 +31,7 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         public final static Property Descricao = new Property(3, String.class, "descricao", false, "DESCRICAO");
         public final static Property Quantidade = new Property(4, Integer.class, "quantidade", false, "QUANTIDADE");
         public final static Property Valor = new Property(5, Double.class, "valor", false, "VALOR");
+        public final static Property ValorTotal = new Property(6, Double.class, "valorTotal", false, "VALOR_TOTAL");
     }
 
     private DaoSession daoSession;
@@ -54,7 +55,8 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
                 "\"COD_BARRAS\" TEXT," + // 2: cod_barras
                 "\"DESCRICAO\" TEXT," + // 3: descricao
                 "\"QUANTIDADE\" INTEGER," + // 4: quantidade
-                "\"VALOR\" REAL);"); // 5: valor
+                "\"VALOR\" REAL," + // 5: valor
+                "\"VALOR_TOTAL\" REAL);"); // 6: valorTotal
     }
 
     /** Drops the underlying database table. */
@@ -96,6 +98,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         if (valor != null) {
             stmt.bindDouble(6, valor);
         }
+ 
+        Double valorTotal = entity.getValorTotal();
+        if (valorTotal != null) {
+            stmt.bindDouble(7, valorTotal);
+        }
     }
 
     @Override
@@ -131,6 +138,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         if (valor != null) {
             stmt.bindDouble(6, valor);
         }
+ 
+        Double valorTotal = entity.getValorTotal();
+        if (valorTotal != null) {
+            stmt.bindDouble(7, valorTotal);
+        }
     }
 
     @Override
@@ -152,7 +164,8 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cod_barras
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // descricao
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // quantidade
-            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5) // valor
+            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // valor
+            cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6) // valorTotal
         );
         return entity;
     }
@@ -165,6 +178,7 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         entity.setDescricao(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setQuantidade(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setValor(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
+        entity.setValorTotal(cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6));
      }
     
     @Override

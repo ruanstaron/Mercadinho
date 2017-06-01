@@ -27,6 +27,7 @@ public class Main {
         produtos.addStringProperty("descricao");
         produtos.addIntProperty("quantidade");
         produtos.addDoubleProperty("valor");
+        produtos.addDoubleProperty("valorTotal");
 
         produtos.addToOne(lista, listaId);
 
