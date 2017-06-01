@@ -19,8 +19,9 @@
         </activity>
         <activity
             android:name=".Scan"
-            android:label="@string/title_activity_main_activity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
         <activity android:name=".Banco"></activity>
     </application>
 

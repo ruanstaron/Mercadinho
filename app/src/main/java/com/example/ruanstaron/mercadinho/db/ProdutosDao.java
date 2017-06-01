@@ -27,10 +27,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property ListaId = new Property(1, Long.class, "listaId", false, "LISTA_ID");
-        public final static Property Cod_barras = new Property(2, Integer.class, "cod_barras", false, "COD_BARRAS");
+        public final static Property Cod_barras = new Property(2, String.class, "cod_barras", false, "COD_BARRAS");
         public final static Property Descricao = new Property(3, String.class, "descricao", false, "DESCRICAO");
         public final static Property Quantidade = new Property(4, Integer.class, "quantidade", false, "QUANTIDADE");
         public final static Property Valor = new Property(5, Double.class, "valor", false, "VALOR");
+        public final static Property ValorTotal = new Property(6, Double.class, "valorTotal", false, "VALOR_TOTAL");
     }
 
     private DaoSession daoSession;
@@ -51,10 +52,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"PRODUTOS\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"LISTA_ID\" INTEGER," + // 1: listaId
-                "\"COD_BARRAS\" INTEGER," + // 2: cod_barras
+                "\"COD_BARRAS\" TEXT," + // 2: cod_barras
                 "\"DESCRICAO\" TEXT," + // 3: descricao
                 "\"QUANTIDADE\" INTEGER," + // 4: quantidade
-                "\"VALOR\" REAL);"); // 5: valor
+                "\"VALOR\" REAL," + // 5: valor
+                "\"VALOR_TOTAL\" REAL);"); // 6: valorTotal
     }
 
     /** Drops the underlying database table. */
@@ -77,9 +79,9 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
             stmt.bindLong(2, listaId);
         }
  
-        Integer cod_barras = entity.getCod_barras();
+        String cod_barras = entity.getCod_barras();
         if (cod_barras != null) {
-            stmt.bindLong(3, cod_barras);
+            stmt.bindString(3, cod_barras);
         }
  
         String descricao = entity.getDescricao();
@@ -95,6 +97,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         Double valor = entity.getValor();
         if (valor != null) {
             stmt.bindDouble(6, valor);
+        }
+ 
+        Double valorTotal = entity.getValorTotal();
+        if (valorTotal != null) {
+            stmt.bindDouble(7, valorTotal);
         }
     }
 
@@ -112,9 +119,9 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
             stmt.bindLong(2, listaId);
         }
  
-        Integer cod_barras = entity.getCod_barras();
+        String cod_barras = entity.getCod_barras();
         if (cod_barras != null) {
-            stmt.bindLong(3, cod_barras);
+            stmt.bindString(3, cod_barras);
         }
  
         String descricao = entity.getDescricao();
@@ -130,6 +137,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         Double valor = entity.getValor();
         if (valor != null) {
             stmt.bindDouble(6, valor);
+        }
+ 
+        Double valorTotal = entity.getValorTotal();
+        if (valorTotal != null) {
+            stmt.bindDouble(7, valorTotal);
         }
     }
 
@@ -149,10 +161,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
         Produtos entity = new Produtos( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // listaId
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // cod_barras
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // cod_barras
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // descricao
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // quantidade
-            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5) // valor
+            cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // valor
+            cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6) // valorTotal
         );
         return entity;
     }
@@ -161,10 +174,11 @@ public class ProdutosDao extends AbstractDao<Produtos, Long> {
     public void readEntity(Cursor cursor, Produtos entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setListaId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setCod_barras(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setCod_barras(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDescricao(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setQuantidade(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setValor(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
+        entity.setValorTotal(cursor.isNull(offset + 6) ? null : cursor.getDouble(offset + 6));
      }
     
     @Override

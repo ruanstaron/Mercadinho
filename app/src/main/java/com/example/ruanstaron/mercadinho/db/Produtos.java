@@ -16,10 +16,11 @@ public class Produtos {
     @Id
     private Long id;
     private Long listaId;
-    private Integer cod_barras;
+    private String cod_barras;
     private String descricao;
     private Integer quantidade;
     private Double valor;
+    private Double valorTotal;
 
     /** Used to resolve relations */
     @Generated
@@ -44,21 +45,22 @@ public class Produtos {
     }
 
     @Generated
-    public Produtos(Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
-        this.listaId = listaId;
-        this.cod_barras = cod_barras;
-        this.descricao = descricao;
-        this.quantidade = quantidade;
-        this.valor = valor;
-    }
-
-    public Produtos(Long id, Long listaId, Integer cod_barras, String descricao, Integer quantidade, Double valor) {
+    public Produtos(Long id, Long listaId, String cod_barras, String descricao, Integer quantidade, Double valor, Double valorTotal) {
         this.id = id;
         this.listaId = listaId;
         this.cod_barras = cod_barras;
         this.descricao = descricao;
         this.quantidade = quantidade;
         this.valor = valor;
+        this.valorTotal = valorTotal;
+    }
+
+    public Produtos(String cod_barras, String descricao, int quantidade, double valor, Double valorTotal) {
+        this.cod_barras = cod_barras;
+        this.descricao = descricao;
+        this.quantidade = quantidade;
+        this.valor = valor;
+        this.valorTotal = valorTotal;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -84,11 +86,11 @@ public class Produtos {
         this.listaId = listaId;
     }
 
-    public Integer getCod_barras() {
+    public String getCod_barras() {
         return cod_barras;
     }
 
-    public void setCod_barras(Integer cod_barras) {
+    public void setCod_barras(String cod_barras) {
         this.cod_barras = cod_barras;
     }
 
@@ -114,6 +116,14 @@ public class Produtos {
 
     public void setValor(Double valor) {
         this.valor = valor;
+    }
+
+    public Double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     /** To-one relationship, resolved on first access. */
@@ -178,4 +188,7 @@ public class Produtos {
         }
     }
 
+    public String toString(){
+        return "Produto: "+descricao+" Quantidade: "+quantidade+" Valor: "+valor+" VALOR TOTAL: "+valorTotal;
+    }
 }
