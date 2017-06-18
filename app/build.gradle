@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.2.0'
     compile 'org.greenrobot:greendao:3.2.2' // add library
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 }

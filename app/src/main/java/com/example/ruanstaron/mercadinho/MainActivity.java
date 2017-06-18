@@ -12,13 +12,14 @@ import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
 import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
-import com.example.ruanstaron.mercadinho.db.Produtos;
-import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 
 import org.greenrobot.greendao.database.Database;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,19 +28,42 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String WS_SERVER = "http://10.0.2.2/"; // 10.0.2.2 -> Como o Android entende o endereco lookup do pc rodando a AVD
+    private final String WS_SERVER = "http://mercadinho.96.lt/";
+    private final String WS_SERVER_TESTE = "http://10.0.2.2/";
+
+
+    //ArrayList<BdDefinitivo> bdd = new ArrayList<>();
+    //BdDefinitivo hue = new BdDefinitivo();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+
+        //List<BdDefinitivo> lBdDefinitivo;
+        // bddTeste.setCod_barras("7896541230");
+        // bddTeste.setProduto("Xinxila");
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        getProdutosWS();
+       // bddTeste.setCod_barras("7896541230");
+       // bddTeste.setProduto("Xinxila");
+       // bddTeste.setId(null);
+        //getProdutosWS();
+        BdDefinitivo bddTeste[] = new BdDefinitivo[2];
+        bddTeste[0] = new BdDefinitivo();
+        bddTeste[0].setProduto("xinxila");
+        bddTeste[0].setCod_barras("4554");
+        bddTeste[1] = new BdDefinitivo();
+        bddTeste[1].setProduto("xinxila2");
+        bddTeste[1].setCod_barras("254127478");
+        postProdutoWS(bddTeste);
     }
 
     public void startScan(View view) {
@@ -80,6 +104,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<BdDefinitivo>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void postProdutoWS(BdDefinitivo bdDefinitivo[]){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        final OkHttpClient okclient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(WS_SERVER_TESTE)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okclient);
+
+        Retrofit retrofit = builder.build();
+        MercadinhoClient client = retrofit.create(MercadinhoClient.class);
+
+        Call<BdDefinitivo[]> call = client.AddBdDefinitivo(bdDefinitivo);
+        call.enqueue(new Callback<BdDefinitivo[]>() {
+            @Override
+            public void onResponse(Call<BdDefinitivo[]> call, Response<BdDefinitivo[]> response) {
+                Toast.makeText(MainActivity.this, "poi", Toast.LENGTH_SHORT).show();
+                Log.i("Mercadinho", "adsrfwesews");
+                okclient.toString();
+            }
+
+            @Override
+            public void onFailure(Call<BdDefinitivo[]> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Erro Inserindo", Toast.LENGTH_SHORT).show();
             }
         });
     }
