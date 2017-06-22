@@ -23,4 +23,14 @@
         android:layout_marginTop="47dp"
         android:onClick="startBanco"
         android:text="@string/main_activity_criarBanco" />
+
+    <TextView
+        android:id="@+id/json"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:text="TextView" />
 </RelativeLayout>
