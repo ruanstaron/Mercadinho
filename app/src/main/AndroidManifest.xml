@@ -22,7 +22,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
-        <activity android:name=".Banco"></activity>
     </application>
 
 </manifest>

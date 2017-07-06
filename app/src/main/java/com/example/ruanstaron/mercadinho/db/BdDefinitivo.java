@@ -54,4 +54,8 @@ public class BdDefinitivo {
         this.produto = produto;
     }
 
+    public String toString(){
+        return "id: "+id+" cod_barras= "+cod_barras+" produto= "+produto;
+    }
+
 }
