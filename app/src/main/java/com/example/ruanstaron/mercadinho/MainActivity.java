@@ -5,8 +5,14 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
+import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
+import com.example.ruanstaron.mercadinho.db.DaoMaster;
+import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Produtos;
+import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,60 +24,67 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-    public TextView json;
+    public Button gettProdutos;
+    public Button posttProdutos;
+    public Button fazerCompras;
+    public Button configuracoes;
+    DaoMaster.DevOpenHelper helper;
+    DaoMaster master;
+    DaoSession session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        json = (TextView) findViewById(R.id.json);
+
+        //instancia os botoões
+        gettProdutos = (Button) findViewById(R.id.getProdutos);
+        posttProdutos = (Button) findViewById(R.id.postProdutos);
+        fazerCompras = (Button) findViewById(R.id.fazerCompras);
+        configuracoes = (Button) findViewById(R.id.configuracoes);
+
+        //seta como onlicklistener
+        gettProdutos.setOnClickListener(this);
+        posttProdutos.setOnClickListener(this);
+        fazerCompras.setOnClickListener(this);
+        configuracoes.setOnClickListener(this);
+
         //Para poder conectar na net
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        //postProdutos();
-        //getProdutos();
+        //instancia o greendao para poder limpar e carregar o banco definitivo
+        helper = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        master = new DaoMaster(helper.getWritableDatabase());
+        session = master.newSession();
     }
 
-    public void startScan(View view) {
-        Intent scan = new Intent(this, Scan.class);
-        startActivity(scan);
+    public void onClick(View v){
+        if(v.getId()==R.id.getProdutos){
+            ArrayList<BdDefinitivo> bdd;
+            bdd = getProdutos();
+            limpaBanco();
+            gravaBancoDefinitivo(bdd);
+        }
+        if(v.getId()==R.id.postProdutos){
+            List<Produtos> produtos = carregaProdutos();
+            String json = montaJson(produtos);
+            postProdutos(json);
+        }
+        if(v.getId()==R.id.fazerCompras){
+            Intent scan = new Intent(this, Scan.class);
+            startActivity(scan);
+        }
+        if(v.getId()==R.id.configuracoes){
+
+        }
     }
 
     public void postProdutos(String requestJson){
-        //exemplo de como gerar o Json
-        /*JSONObject produto = new JSONObject();
-        JSONObject produto2 = new JSONObject();
-        JSONObject prontoEnvio = new JSONObject();
-        JSONArray produtos = new JSONArray();
-
-        try {
-            produto.put("cod_barras", "20658");
-            produto.put("descricao", "teste_json");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        produtos.put(produto);
-
-        try {
-            produto2.put("cod_barras", "2424");
-            produto2.put("descricao", "joao_viadao");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        produtos.put(produto2);
-        try {
-            prontoEnvio.put("produto",produtos);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        json.setText(prontoEnvio.toString());
-        //-------------------------------------//
-
-        String requestJson = prontoEnvio.toString();*/
 
         try {
             URL url = new URL("http://mercadinho.96.lt/index.php/addprodutos");
@@ -123,5 +136,48 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bdd;
+    }
+
+    public void gravaBancoDefinitivo(ArrayList<BdDefinitivo> arrayBdd){
+        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
+        for (BdDefinitivo bdd: arrayBdd){
+            bdDefinitivoDao.insert(bdd);
+        }
+    }
+
+    public void limpaBanco(){
+        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
+        bdDefinitivoDao.queryBuilder().buildDelete().executeDeleteWithoutDetachingEntities();
+        session.clear();
+    }
+
+    public List<Produtos> carregaProdutos(){
+        ProdutosDao produtosDao = session.getProdutosDao();
+        List<Produtos> datalist = produtosDao.queryBuilder().list();
+        return datalist;
+    }
+
+    public String montaJson(List<Produtos> produtos){
+        JSONObject prontoEnvio = new JSONObject();
+        JSONArray jsonProdutos = new JSONArray();
+
+        for(Produtos prod : produtos){
+            JSONObject produto = new JSONObject();
+            try {
+                produto.put("cod_barras",prod.getCod_barras());
+                produto.put("descricao",prod.getDescricao());
+                jsonProdutos.put(produto);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            prontoEnvio.put("produto",jsonProdutos);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return prontoEnvio.toString();
     }
 }
