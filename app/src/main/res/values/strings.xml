@@ -3,6 +3,14 @@
     <string name="scan">Scan</string>
     <string name="title_activity_main_activity">main_activity</string>
 
+    /* geral */
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="ok">Ok</string>
+
+    /* menu_mercadinho.xml */
+    <string name="acao_nova_lista">Nova Lista</string>
+
     /* main_activity.xml */
     <string name="main_activity_escanear">Escanear</string>
     <string name="main_activity_criarBanco">Criar Banco</string>
@@ -13,4 +21,11 @@
     <string name="scan_tvValor">Valor</string>
     <string name="scan_btnEscanear">Escanear</string>
     <string name="scan_btnOk">Ok</string>
+    <string name="geraProdutoPreencherProduto">Preencha o produto!</string>
+    <string name="dialogoConfirmaListaTitulo">Finalizar Compra</string>
+    <string name="dialogoConfirmaListaMsg">Deseja finalizar esta compra ?</string>
+    <string name="dialogoNomeListaTitulo">Nova Lista - Descrição</string>
+    <string name="dialogoNomeListaMsg">Nome da lista criada:</string>
+
+
 </resources>
