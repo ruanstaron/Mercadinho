@@ -11,25 +11,24 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1,"com.example.ruanstaron.mercadinho.db");
 
-        Entity bdDefinitivo = schema.addEntity("BdDefinitivo");
-        bdDefinitivo.addIdProperty();
-        bdDefinitivo.addStringProperty("cod_barras");
-        bdDefinitivo.addStringProperty("produto");
-
         Entity lista = schema.addEntity("Lista");
         lista.addIdProperty();
         lista.addStringProperty("descricao");
 
         Entity produtos = schema.addEntity("Produtos");
-        produtos.addIdProperty();
-        Property listaId = produtos.addLongProperty("listaId").getProperty();
-        produtos.addStringProperty("cod_barras");
+        produtos.addLongProperty("cod_barras");
         produtos.addStringProperty("descricao");
-        produtos.addIntProperty("quantidade");
-        produtos.addDoubleProperty("valor");
-        produtos.addDoubleProperty("valorTotal");
 
-        produtos.addToOne(lista, listaId);
+        Entity compras = schema.addEntity("Compras");
+        compras.addIdProperty();
+        Property listaId = compras.addLongProperty("listaId").getProperty();
+        Property cod_barras = compras.addLongProperty("cod_barras").getProperty();
+        compras.addIntProperty("quantidade");
+        compras.addDoubleProperty("valor");
+        compras.addDoubleProperty("valorTotal");
+        compras.addBooleanProperty("Manual");
+        compras.addToMany(lista, listaId);
+        compras.addToMany(produtos, cod_barras);
 
         DaoGenerator dg = new DaoGenerator();
 

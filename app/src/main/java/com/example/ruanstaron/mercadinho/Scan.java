@@ -4,19 +4,16 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
-import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
+
+import com.example.ruanstaron.mercadinho.db.Compras;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
-import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Intent;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -35,16 +32,17 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     private Button scanBtn, okBtn;
     private TextView tvValorTotal;
     private EditText etProduto, etQuantidade, etValor;
-    private ListView listaProdutos;
-    private ArrayList<String> produtos;
+    private ListView listaCompras;
+    private ArrayList<String> compras;
     private ArrayAdapter<String> arrayAdapter;
     private ImageButton btnConfirma;
     DaoMaster.DevOpenHelper helper;
     DaoMaster master;
     DaoSession session;
     ListaDao listaDao;
-    String cod_barras;
+    Long cod_barras;
     Double valorTotalCompra = 0.00;
+    Banco banco;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +56,13 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         etQuantidade = (EditText) findViewById(R.id.etQuantidade);
         etValor = (EditText) findViewById(R.id.etValor);
         tvValorTotal = (TextView) findViewById(R.id.valorTotal);
-        listaProdutos = (ListView) findViewById(R.id.lvProdutos);
+        listaCompras = (ListView) findViewById(R.id.lvProdutos);
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);
-        produtos = new ArrayList<String>();
+        compras = new ArrayList<String>();
         btnConfirma = (ImageButton) findViewById(R.id.btnAddLista);
         btnConfirma.setOnClickListener(this);
+        banco = new Banco(session);
     }
 
     public void onClick(View v){
@@ -91,8 +90,8 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             //formatTxt.setText("FORMAT: " + scanFormat);
-            etProduto.setText(verificaProduto(session, scanContent));
-            cod_barras = scanContent;
+            etProduto.setText(banco.verificaProduto(Long.parseLong(scanContent)));
+            cod_barras = Long.parseLong(scanContent);
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -108,27 +107,16 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         }
 
         Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
-        Produtos produto = new Produtos(this.cod_barras, etProduto.getText().toString(),
-                Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()), valorTotal);
-        produtos.add(produto.toString());
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos);
-        listaProdutos.setAdapter(arrayAdapter);
-        valorTotalCompra = valorTotalCompra+produto.getValorTotal();
+        //aqui tem a parada da lista
+        Compras compra = new Compras ((long) 1, this.cod_barras, Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()), valorTotal, true);
+        compras.add("Produto = "+etProduto.getText().toString()+" "+compra.toString());
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, compras);
+        listaCompras.setAdapter(arrayAdapter);
+        valorTotalCompra = valorTotalCompra+compra.getValorTotal();
         tvValorTotal.setText(valorTotalCompra.toString());
-
         etProduto.setText("");
         etQuantidade.setText("");
         etValor.setText("");
-    }
-
-    public String verificaProduto(DaoSession session, String cod_barras){
-        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
-        List<BdDefinitivo> datalist = bdDefinitivoDao.queryBuilder().where(BdDefinitivoDao.Properties.Cod_barras.eq(cod_barras)).list();
-        if(datalist.isEmpty()){
-            return "Digite o nome do produto";
-        }else{
-            return datalist.get(0).toString();
-        }
     }
 
     public void IncluirBancoLista(DaoSession session, Lista lista){

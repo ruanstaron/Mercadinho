@@ -1,18 +1,20 @@
 package com.example.ruanstaron.mercadinho;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import com.example.ruanstaron.mercadinho.db.BdDefinitivo;
-import com.example.ruanstaron.mercadinho.db.BdDefinitivoDao;
+import android.widget.Toast;
+
+import com.example.ruanstaron.mercadinho.db.Compras;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Produtos;
-import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     DaoMaster.DevOpenHelper helper;
     DaoMaster master;
     DaoSession session;
+    Banco banco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +64,24 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         helper = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
         master = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
+        banco = new Banco(session);
     }
 
     public void onClick(View v){
         if(v.getId()==R.id.getProdutos){
-            ArrayList<BdDefinitivo> bdd;
-            bdd = getProdutos();
-            limpaBanco();
-            gravaBancoDefinitivo(bdd);
+            if (verificaConexao()){
+                ArrayList<Produtos> produtos_array;
+                produtos_array = getProdutos();
+                banco.limpaBanco();
+                banco.gravaBanco(produtos_array);
+            }else{
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Não há conexão com a internet", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
         if(v.getId()==R.id.postProdutos){
-            List<Produtos> produtos = carregaProdutos();
+            List<Compras> produtos = banco.carregaProdutos();
             String json = montaJson(produtos);
             postProdutos(json);
         }
@@ -108,9 +118,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    //Vai retornar um Array de BdDefinitivo
-    public ArrayList<BdDefinitivo> getProdutos(){
-        ArrayList<BdDefinitivo> bdd = new ArrayList<>();
+    public ArrayList<Produtos> getProdutos(){
+        ArrayList<Produtos> produtos_array = new ArrayList<>();
         URL obj;
         String line;
         Gson gson = new Gson();
@@ -129,43 +138,24 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             JSONArray jsonArr = new JSONArray(response.toString());
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject jsonObj = jsonArr.getJSONObject(i);
-                BdDefinitivo bdDefinitivo = gson.fromJson(jsonObj.toString(), BdDefinitivo.class);
-                bdd.add(bdDefinitivo);
+                Produtos produto = gson.fromJson(jsonObj.toString(), Produtos.class);
+                produtos_array.add(produto);
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return bdd;
+        return produtos_array;
     }
 
-    public void gravaBancoDefinitivo(ArrayList<BdDefinitivo> arrayBdd){
-        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
-        for (BdDefinitivo bdd: arrayBdd){
-            bdDefinitivoDao.insert(bdd);
-        }
-    }
-
-    public void limpaBanco(){
-        BdDefinitivoDao bdDefinitivoDao = session.getBdDefinitivoDao();
-        bdDefinitivoDao.queryBuilder().buildDelete().executeDeleteWithoutDetachingEntities();
-        session.clear();
-    }
-
-    public List<Produtos> carregaProdutos(){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        List<Produtos> datalist = produtosDao.queryBuilder().list();
-        return datalist;
-    }
-
-    public String montaJson(List<Produtos> produtos){
+    public String montaJson(List<Compras> compras){
         JSONObject prontoEnvio = new JSONObject();
         JSONArray jsonProdutos = new JSONArray();
 
-        for(Produtos prod : produtos){
+        for(Compras compr : compras){
             JSONObject produto = new JSONObject();
             try {
-                produto.put("cod_barras",prod.getCod_barras());
-                produto.put("descricao",prod.getDescricao());
+                produto.put("cod_barras",compr.getCod_barras());
+                produto.put("descricao",banco.getDescricao(compr.getCod_barras()));
                 jsonProdutos.put(produto);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -179,5 +169,18 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
 
         return prontoEnvio.toString();
+    }
+
+    public  boolean verificaConexao() {
+        boolean conectado;
+        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
+            conectado = true;
+        } else {
+            conectado = false;
+        }
+        return conectado;
     }
 }
