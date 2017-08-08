@@ -21,7 +21,7 @@
     <string name="scan_tvValor">Valor</string>
     <string name="scan_btnEscanear">Escanear</string>
     <string name="scan_btnOk">Ok</string>
-    <string name="geraProdutoPreencherProduto">Preencha o produto!</string>
+    <string name="geraProdutoPreencherValor">Preencha o valor!</string>
     <string name="dialogoConfirmaListaTitulo">Finalizar Compra</string>
     <string name="dialogoConfirmaListaMsg">Deseja finalizar esta compra ?</string>
     <string name="dialogoNomeListaTitulo">Nova Lista - Descrição</string>

@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.ruanstaron.mercadinho.adapter.ComprasAdapter;
 import com.example.ruanstaron.mercadinho.db.Compras;
+import com.example.ruanstaron.mercadinho.db.ComprasDao;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
@@ -36,6 +38,11 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     private ArrayList<String> compras;
     private ArrayAdapter<String> arrayAdapter;
     private ImageButton btnConfirma;
+    private List<Compras> lListaCompras;
+
+    private Lista   lista      = new Lista();
+    private Compras  pCompras  = new Compras();
+
     DaoMaster.DevOpenHelper helper;
     DaoMaster master;
     DaoSession session;
@@ -43,6 +50,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     Long cod_barras;
     Double valorTotalCompra = 0.00;
     Banco banco;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +71,17 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         btnConfirma = (ImageButton) findViewById(R.id.btnAddLista);
         btnConfirma.setOnClickListener(this);
         banco = new Banco(session);
+
+        Intent it = getIntent();
+
+        if (it.hasExtra("id_lista")){
+            lista.setId(((long) Integer.parseInt(it.getStringExtra("id_lista"))));
+            lista.setDescricao(it.getStringExtra("descricao_lista"));
+
+            lista = banco.carregaListas(lista.getId().intValue());
+
+            atualizaCompras();
+        }
     }
 
     public void onClick(View v){
@@ -77,11 +96,16 @@ public class Scan extends AppCompatActivity implements OnClickListener {
                 scanIntegrator.initiateScan();
                 break;
             case R.id.bOk:
-                geraProduto();
+                IncluiCompraLista();
                 break;
         }
 
         // TODO: IMPLEMENTAR UM LISTENER CUSTOMIZADO OU IMPLEMENTAR DE FORMA ANONIMA
+    }
+
+    public void atualizaCompras(){
+        List<Compras> lComprasAtualizadas = new Banco(session).carregaCompras(Integer.parseInt(lista.getId().toString()));
+        listaCompras.setAdapter(new ComprasAdapter(this, lComprasAtualizadas));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -100,18 +124,21 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    public void geraProduto(){
-        if(etProduto.getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.geraProdutoPreencherProduto, Toast.LENGTH_SHORT).show();
+    public void IncluiCompraLista(){
+        if(etValor.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.geraProdutoPreencherValor, Toast.LENGTH_SHORT).show();
             return;
         }
 
         Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
         //aqui tem a parada da lista
-        Compras compra = new Compras ((long) 1, this.cod_barras, Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()), valorTotal, true);
-        compras.add("Produto = "+etProduto.getText().toString()+" "+compra.toString());
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, compras);
-        listaCompras.setAdapter(arrayAdapter);
+        Compras compra = new Compras (lista.getId(), tv, Integer.parseInt(etQuantidade.getText().toString()), Double.parseDouble(etValor.getText().toString()), valorTotal, true);
+        //compras.add("Produto = "+etProduto.getText().toString()+" "+compra.toString());
+        //arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, compras);
+        ComprasDao comprasDao = session.getComprasDao();
+        comprasDao.insert(compra);
+        atualizaCompras();
+
         valorTotalCompra = valorTotalCompra+compra.getValorTotal();
         tvValorTotal.setText(valorTotalCompra.toString());
         etProduto.setText("");

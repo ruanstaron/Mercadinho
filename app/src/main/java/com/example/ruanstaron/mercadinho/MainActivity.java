@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             startActivity(scan);
         }
         if(v.getId()==R.id.configuracoes){
-
+            Intent itListaActivity = new Intent(this, ListaActivity.class);
+            startActivity(itListaActivity);
         }
     }
 
