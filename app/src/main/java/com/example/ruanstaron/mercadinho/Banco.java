@@ -9,7 +9,9 @@ import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,25 +67,68 @@ public class Banco {
         return lCodBarras;
     }
 
-    public List<Compras> carregaProdutos(){
+    public ArrayList<String> carregaNomeProdutos(){
+        ProdutosDao produtosDao = session.getProdutosDao();
+
+        List<Produtos> produtos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
+        ArrayList<String> alNomeProdutos = new ArrayList<String>();
+
+        for(int i = 0; i < produtos.size(); i++)
+            alNomeProdutos.add(produtos.get(i).getDescricao());
+
+        return alNomeProdutos;
+    }
+
+    // NAO REMOVER POR ENQUANTO, PODE SER USADO NO PROBLEMA DO AUTOCOMPLETE
+    public ArrayList<String> carregaCodBarrasProdutos(){
+        ProdutosDao produtosDao = session.getProdutosDao();
+
+        List<Produtos> produtos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
+        ArrayList<String> alCodBarrasProdutos = new ArrayList<String>();
+
+        for(int i = 0; i < produtos.size(); i++)
+            alCodBarrasProdutos.add(produtos.get(i).getCod_barras().toString());
+
+        return alCodBarrasProdutos;
+    }
+
+    public List<Compras> carregaProdutosManuais(){
         ComprasDao comprasDao = session.getComprasDao();
         List<Compras> datalist = comprasDao.queryBuilder().where(ComprasDao.Properties.Manual.eq(true)).list();
         return datalist;
     }
 
-    public String getDescricao (Long cod_barras){
+    public String getProdutoDescricao(Long cod_barras){
         String descricao;
         ProdutosDao produtosDao = session.getProdutosDao();
         List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.eq(cod_barras)).list();
-        descricao = datalist.get(0).toString();
+
+        if(datalist.size() > 0)
+            descricao = datalist.get(0).toString();
+        else
+            descricao = "";
+
         return descricao;
+    }
+
+    public Produtos carregaProduto(String descricao){
+        ProdutosDao produtosDao = session.getProdutosDao();
+        Produtos produto = produtosDao.queryBuilder().where(ProdutosDao.Properties.Descricao.eq(descricao)).orderAsc().unique();
+
+         if (produto != null) {
+             return produto;
+         }
+         else{
+             return produto = new Produtos();
+         }
     }
 
     public String verificaProduto(Long cod_barras){
         ProdutosDao produtosDao = session.getProdutosDao();
         List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.eq(cod_barras)).list();
+
         if(datalist.isEmpty()){
-            return "Digite o nome do produto";
+            return "";
         }else{
             return datalist.get(0).toString();
         }
