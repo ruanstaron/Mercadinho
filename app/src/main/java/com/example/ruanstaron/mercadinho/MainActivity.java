@@ -81,17 +81,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             }
         }
         if(v.getId()==R.id.postProdutos){
-            List<Compras> produtos = banco.carregaProdutos();
+            List<Compras> produtos = banco.carregaProdutosManuais();
             String json = montaJson(produtos);
             postProdutos(json);
         }
         if(v.getId()==R.id.fazerCompras){
-            Intent scan = new Intent(this, Scan.class);
-            startActivity(scan);
+            Intent intentLista = new Intent(this, ListaActivity.class);
+            startActivity(intentLista);
         }
         if(v.getId()==R.id.configuracoes){
-            Intent itListaActivity = new Intent(this, ListaActivity.class);
-            startActivity(itListaActivity);
+            //TODO: CONFIGURAÇÕES
         }
     }
 
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             JSONObject produto = new JSONObject();
             try {
                 produto.put("cod_barras",compr.getCod_barras());
-                produto.put("descricao",banco.getDescricao(compr.getCod_barras()));
+                produto.put("descricao",banco.getProdutoDescricao(compr.getCod_barras()));
                 jsonProdutos.put(produto);
             } catch (JSONException e) {
                 e.printStackTrace();

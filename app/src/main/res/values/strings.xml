@@ -14,6 +14,7 @@
     /* main_activity.xml */
     <string name="main_activity_escanear">Escanear</string>
     <string name="main_activity_criarBanco">Criar Banco</string>
+    <string name="main_activity_btnListas">Listas</string>
 
     /* scan.xml */
     <string name="scan_tvProduto">Produto</string>
@@ -22,6 +23,9 @@
     <string name="scan_btnEscanear">Escanear</string>
     <string name="scan_btnOk">Ok</string>
     <string name="geraProdutoPreencherValor">Preencha o valor!</string>
+    <string name="geraProdutoPreencherQuantidade">Preencha a quantidade!</string>
+    <string name="geraProdutoPreencherDescricao">Preencha a descrição!</string>
+    <string name="geraProdutoPreencherCodBarras">O Produto deve ser escaneado!</string>
     <string name="dialogoConfirmaListaTitulo">Finalizar Compra</string>
     <string name="dialogoConfirmaListaMsg">Deseja finalizar esta compra ?</string>
     <string name="dialogoNomeListaTitulo">Nova Lista - Descrição</string>

@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Fazer compras" />
+                android:text="@string/main_activity_btnListas" />
 
             <Button
                 android:id="@+id/configuracoes"
