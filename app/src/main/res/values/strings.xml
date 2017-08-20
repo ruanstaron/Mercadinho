@@ -30,6 +30,8 @@
     <string name="dialogoConfirmaListaMsg">Deseja finalizar esta compra ?</string>
     <string name="dialogoNomeListaTitulo">Nova Lista - Descrição</string>
     <string name="dialogoNomeListaMsg">Nome da lista criada:</string>
+    <string name="dialogoNomeProdutoTitulo">Novo Produto - Descrição</string>
+    <string name="dialogoNomeProdutoMsg">Nome do Produto escaneado:</string>
 
 
 </resources>

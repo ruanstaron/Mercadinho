@@ -1,5 +1,9 @@
 package com.example.ruanstaron.mercadinho;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -10,9 +14,12 @@ import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
+import com.example.ruanstaron.mercadinho.db.Produtos;
+import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -39,9 +46,9 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     private DaoSession              session;
     private Double                  valorTotalCompra = 0.00;
     private Banco                   banco;
+    private Long                    codEscaneado = (long)0;
 
     private Lista   lista     = new Lista();
-    private Compras pCompras  = new Compras();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus && !etProduto.getText().toString().isEmpty()){
-                    pCompras.setCod_barras(new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras());
+                    codEscaneado = new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras();
                 }
             }
         });
@@ -116,8 +123,16 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             //formatTxt.setText("FORMAT: " + scanFormat);
-            etProduto.setText(banco.verificaProduto(Long.parseLong(scanContent)));
-            pCompras.setCod_barras(Long.parseLong(scanContent));
+
+
+            codEscaneado = Long.parseLong(scanContent);
+
+            if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
+                etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
+            else{
+                ListaDialogProduto dlgNomeProduto = new ListaDialogProduto();
+                dlgNomeProduto.show(getSupportFragmentManager(), "dlgNomemLista");
+            }
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -142,6 +157,10 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             return;
         }
 
+
+        Compras pCompras  = new Compras();
+        pCompras.setCod_barras(new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras());
+
         if((pCompras.getCod_barras() == null) || (pCompras.getCod_barras().toString() == "0")) {
             Toast.makeText(this, R.string.geraProdutoPreencherCodBarras, Toast.LENGTH_SHORT).show();
             return;
@@ -156,6 +175,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         pCompras.setValorTotal(valorTotal);
 
         ComprasDao comprasDao = session.getComprasDao();
+        Toast.makeText(this, pCompras.getListaId().toString() + " - " + pCompras.getCod_barras().toString(), Toast.LENGTH_SHORT).show();
         comprasDao.insert(pCompras);
         atualizaCompras();
 
@@ -165,6 +185,37 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         etProduto.setText("");
         etQuantidade.setText("");
         etValor.setText("");
-        pCompras.setCod_barras((long)0);
+    }
+
+    public static class ListaDialogProduto extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Scan scan = (Scan)getActivity();
+                    Produtos produto = new Produtos();
+                    produto.setDescricao(input.getText().toString());
+                    produto.setCod_barras(scan.codEscaneado);
+
+                    ProdutosDao produtosDao = scan.session.getProdutosDao();
+                    produtosDao.insert(produto);
+
+                    dismiss();
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoNomeListaTitulo)
+                    .setMessage(R.string.dialogoNomeListaMsg)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
     }
 }

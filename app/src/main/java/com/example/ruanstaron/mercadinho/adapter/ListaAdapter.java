@@ -44,8 +44,8 @@ public class ListaAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Lista lista = lListas.get(position);
 
-        View linha = LayoutInflater.from(context).inflate(R.layout.list_item_pagination, parent, false);
-        TextView tvListaDescricao = ((TextView) linha.findViewById(R.id.list_item_pagination_text));
+        View linha = LayoutInflater.from(context).inflate(R.layout.list_item_compras, parent, false);
+        TextView tvListaDescricao = ((TextView) linha.findViewById(R.id.lvtvProduto));
 
         tvListaDescricao.setText(lista.getDescricao());
 

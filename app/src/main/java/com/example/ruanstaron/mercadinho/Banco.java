@@ -104,7 +104,7 @@ public class Banco {
         List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.eq(cod_barras)).list();
 
         if(datalist.size() > 0)
-            descricao = datalist.get(0).toString();
+            descricao = datalist.get(0).getDescricao();
         else
             descricao = "";
 

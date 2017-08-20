@@ -55,12 +55,18 @@ public class ComprasAdapter extends BaseAdapter {
 
         Compras compras = lCompras.get(position);
 
-        View linha = LayoutInflater.from(context).inflate(R.layout.list_item_pagination, parent, false);
-        TextView tvComprasDescricao = ((TextView) linha.findViewById(R.id.list_item_pagination_text));
-        ArrayList<String> lCodBarras = new ArrayList<String>();
-        lCodBarras = banco.carregaProdutosDaLista(Integer.parseInt(compras.getListaId().toString()));
+        View linha = LayoutInflater.from(context).inflate(R.layout.list_item_compras, parent, false);
 
-        tvComprasDescricao.setText(compras.getQuantidade() + "   " + lCodBarras.get(position).toString() + "   " + compras.getValor());
+        TextView tvQuantidade = ((TextView) linha.findViewById(R.id.lvtvQuantidade));
+        TextView tvProduto    = ((TextView) linha.findViewById(R.id.lvtvProduto));
+        TextView tvValor      = ((TextView) linha.findViewById(R.id.lvtvValor));
+
+        ArrayList<String> lCodBarras = new ArrayList<String>();
+          lCodBarras = banco.carregaProdutosDaLista(Integer.parseInt(compras.getListaId().toString()));
+
+        tvQuantidade.setText(compras.getQuantidade().toString());
+        tvProduto.setText(banco.getProdutoDescricao(Long.parseLong(lCodBarras.get(position).toString())));
+        tvValor.setText(compras.getValor().toString());
 
         return linha;
     }
