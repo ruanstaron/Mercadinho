@@ -47,6 +47,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     private Double                  valorTotalCompra = 0.00;
     private Banco                   banco;
     private Long                    codEscaneado = (long)0;
+    private Boolean                 retornoScanFalse = false;
 
     private Lista   lista     = new Lista();
 
@@ -91,6 +92,16 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         atualizaNomeProdutos();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(retornoScanFalse){
+            ListaDialogProduto dlgNomeProduto = new ListaDialogProduto();
+            dlgNomeProduto.show(getSupportFragmentManager(), "dlgnomeProduto");
+        }
+    }
+
     public void onClick(View v){
         switch (v.getId()){
             case R.id.scan_button:
@@ -121,18 +132,12 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            //formatTxt.setText("FORMAT: " + scanFormat);
-
-
             codEscaneado = Long.parseLong(scanContent);
 
             if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
                 etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
-            else{
-                ListaDialogProduto dlgNomeProduto = new ListaDialogProduto();
-                dlgNomeProduto.show(getSupportFragmentManager(), "dlgNomemLista");
-            }
+            else
+                retornoScanFalse = true;
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -203,6 +208,8 @@ public class Scan extends AppCompatActivity implements OnClickListener {
 
                     ProdutosDao produtosDao = scan.session.getProdutosDao();
                     produtosDao.insert(produto);
+                    scan.atualizaNomeProdutos();
+                    scan.etProduto.setText(produto.getDescricao());
 
                     dismiss();
                 }
@@ -210,8 +217,8 @@ public class Scan extends AppCompatActivity implements OnClickListener {
 
             AlertDialog dialog = new AlertDialog.Builder(getActivity())
                     .setView(input)
-                    .setTitle(R.string.dialogoNomeListaTitulo)
-                    .setMessage(R.string.dialogoNomeListaMsg)
+                    .setTitle(R.string.dialogoNomeProdutoTitulo)
+                    .setMessage(R.string.dialogoNomeProdutoMsg)
                     .setPositiveButton(R.string.ok, listener)
                     .create();
 
