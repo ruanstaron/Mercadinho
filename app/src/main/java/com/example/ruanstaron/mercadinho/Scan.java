@@ -99,6 +99,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         if(retornoScanFalse){
             ListaDialogProduto dlgNomeProduto = new ListaDialogProduto();
             dlgNomeProduto.show(getSupportFragmentManager(), "dlgnomeProduto");
+            retornoScanFalse = false;
         }
     }
 
