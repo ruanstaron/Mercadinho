@@ -16,7 +16,7 @@ public class Main {
         lista.addStringProperty("descricao");
 
         Entity produtos = schema.addEntity("Produtos");
-        produtos.addLongProperty("cod_barras");
+        produtos.addLongProperty("cod_barras").primaryKey();
         produtos.addStringProperty("descricao");
         produtos.addBooleanProperty("Manual");
 

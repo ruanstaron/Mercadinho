@@ -16,7 +16,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 /** 
  * DAO for table "PRODUTOS".
 */
-public class ProdutosDao extends AbstractDao<Produtos, Void> {
+public class ProdutosDao extends AbstractDao<Produtos, Long> {
 
     public static final String TABLENAME = "PRODUTOS";
 
@@ -25,7 +25,7 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Cod_barras = new Property(0, Long.class, "cod_barras", false, "COD_BARRAS");
+        public final static Property Cod_barras = new Property(0, Long.class, "cod_barras", true, "COD_BARRAS");
         public final static Property Descricao = new Property(1, String.class, "descricao", false, "DESCRICAO");
         public final static Property Manual = new Property(2, Boolean.class, "Manual", false, "MANUAL");
     }
@@ -44,9 +44,9 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PRODUTOS\" (" + //
-                "\"COD_BARRAS\" INTEGER," + // 0: cod_barras
+                "\"COD_BARRAS\" INTEGER PRIMARY KEY ," + // 0: cod_barras
                 "\"DESCRICAO\" TEXT," + // 1: descricao
-                "\"MANUAL\" INTEGER);"); // 3: cod_barras
+                "\"MANUAL\" INTEGER);");
     }
 
     /** Drops the underlying database table. */
@@ -96,8 +96,8 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
@@ -118,20 +118,23 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(Produtos entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(Produtos entity, long rowId) {
+        entity.setCod_barras(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(Produtos entity) {
-        return null;
+    public Long getKey(Produtos entity) {
+        if(entity != null) {
+            return entity.getCod_barras();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(Produtos entity) {
-        // TODO
-        return false;
+        return entity.getCod_barras() != null;
     }
 
     @Override
