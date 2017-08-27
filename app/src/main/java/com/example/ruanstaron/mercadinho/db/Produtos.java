@@ -11,15 +11,17 @@ import org.greenrobot.greendao.annotation.*;
 public class Produtos {
     private Long cod_barras;
     private String descricao;
+    private Boolean Manual;
 
     @Generated
     public Produtos() {
     }
 
     @Generated
-    public Produtos(Long cod_barras, String descricao) {
+    public Produtos(Long cod_barras, String descricao, Boolean Manual) {
         this.cod_barras = cod_barras;
         this.descricao = descricao;
+        this.Manual = Manual;
     }
 
     public Long getCod_barras() {
@@ -36,6 +38,14 @@ public class Produtos {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Boolean getManual() {
+        return Manual;
+    }
+
+    public void setManual(Boolean Manual) {
+        this.Manual = Manual;
     }
 
 }

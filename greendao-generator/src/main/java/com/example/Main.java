@@ -18,6 +18,7 @@ public class Main {
         Entity produtos = schema.addEntity("Produtos");
         produtos.addLongProperty("cod_barras");
         produtos.addStringProperty("descricao");
+        produtos.addBooleanProperty("Manual");
 
         Entity compras = schema.addEntity("Compras");
         compras.addIdProperty();
@@ -26,7 +27,6 @@ public class Main {
         compras.addIntProperty("quantidade");
         compras.addDoubleProperty("valor");
         compras.addDoubleProperty("valorTotal");
-        compras.addBooleanProperty("Manual");
         compras.addToMany(lista, listaId);
         compras.addToMany(produtos, cod_barras);
 
