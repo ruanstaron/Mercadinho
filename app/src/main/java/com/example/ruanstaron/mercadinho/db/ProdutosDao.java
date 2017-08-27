@@ -28,7 +28,6 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
         public final static Property Cod_barras = new Property(0, Long.class, "cod_barras", false, "COD_BARRAS");
         public final static Property Descricao = new Property(1, String.class, "descricao", false, "DESCRICAO");
         public final static Property Manual = new Property(2, Boolean.class, "Manual", false, "MANUAL");
-        public final static Property Cod_barras = new Property(3, Long.class, "cod_barras", false, "COD_BARRAS");
     }
 
     private Query<Produtos> compras_ProdutosListQuery;
@@ -47,8 +46,7 @@ public class ProdutosDao extends AbstractDao<Produtos, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"PRODUTOS\" (" + //
                 "\"COD_BARRAS\" INTEGER," + // 0: cod_barras
                 "\"DESCRICAO\" TEXT," + // 1: descricao
-                "\"MANUAL\" INTEGER," + // 2: Manual
-                "\"COD_BARRAS\" INTEGER);"); // 3: cod_barras
+                "\"MANUAL\" INTEGER);"); // 3: cod_barras
     }
 
     /** Drops the underlying database table. */

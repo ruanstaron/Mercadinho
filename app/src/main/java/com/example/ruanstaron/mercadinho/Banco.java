@@ -92,9 +92,9 @@ public class Banco {
         return alCodBarrasProdutos;
     }
 
-    public List<Compras> carregaProdutosManuais(){
-        ComprasDao comprasDao = session.getComprasDao();
-        List<Compras> datalist = comprasDao.queryBuilder().where(ComprasDao.Properties.Manual.eq(true)).list();
+    public List<Produtos> carregaProdutosManuais(){
+        ProdutosDao produtosDao = session.getProdutosDao();
+        List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Manual.eq(true)).list();
         return datalist;
     }
 
@@ -132,5 +132,16 @@ public class Banco {
         }else{
             return datalist.get(0).toString();
         }
+    }
+
+    public void setaProdutosEnviados(){
+        ProdutosDao produtosDao = session.getProdutosDao();
+        List<Produtos> lProdutos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).list();
+
+        if(!lProdutos.isEmpty())
+            for(int i = 0; i < lProdutos.size(); i++){
+                lProdutos.get(i).setManual(false);
+                produtosDao.update(lProdutos.get(i));
+            }
     }
 }

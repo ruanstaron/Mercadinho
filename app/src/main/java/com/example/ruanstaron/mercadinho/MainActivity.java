@@ -81,9 +81,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             }
         }
         if(v.getId()==R.id.postProdutos){
-            List<Compras> produtos = banco.carregaProdutosManuais();
+            List<Produtos> produtos = banco.carregaProdutosManuais();
             String json = montaJson(produtos);
             postProdutos(json);
+            banco.setaProdutosEnviados();
         }
         if(v.getId()==R.id.fazerCompras){
             Intent intentLista = new Intent(this, ListaActivity.class);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject jsonObj = jsonArr.getJSONObject(i);
                 Produtos produto = gson.fromJson(jsonObj.toString(), Produtos.class);
+                produto.setManual(false);
                 produtos_array.add(produto);
             }
         } catch (IOException | JSONException e) {
@@ -147,15 +149,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         return produtos_array;
     }
 
-    public String montaJson(List<Compras> compras){
+    public String montaJson(List<Produtos> produtos){
         JSONObject prontoEnvio = new JSONObject();
         JSONArray jsonProdutos = new JSONArray();
 
-        for(Compras compr : compras){
+        for(Produtos prod : produtos){
             JSONObject produto = new JSONObject();
             try {
-                produto.put("cod_barras",compr.getCod_barras());
-                produto.put("descricao",banco.getProdutoDescricao(compr.getCod_barras()));
+                produto.put("cod_barras",prod.getCod_barras());
+                produto.put("descricao",banco.getProdutoDescricao(prod.getCod_barras()));
                 jsonProdutos.put(produto);
             } catch (JSONException e) {
                 e.printStackTrace();

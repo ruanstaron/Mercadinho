@@ -175,7 +175,6 @@ public class Scan extends AppCompatActivity implements OnClickListener {
         Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
 
         pCompras.setListaId(lista.getId());
-        pCompras.setManual(true);
         pCompras.setQuantidade(Integer.parseInt(etQuantidade.getText().toString()));
         pCompras.setValor(Double.parseDouble(etValor.getText().toString()));
         pCompras.setValorTotal(valorTotal);
@@ -206,6 +205,7 @@ public class Scan extends AppCompatActivity implements OnClickListener {
                     Produtos produto = new Produtos();
                     produto.setDescricao(input.getText().toString());
                     produto.setCod_barras(scan.codEscaneado);
+                    produto.setManual(true);
 
                     ProdutosDao produtosDao = scan.session.getProdutosDao();
                     produtosDao.insert(produto);

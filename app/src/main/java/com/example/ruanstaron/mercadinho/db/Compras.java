@@ -58,6 +58,14 @@ public class Compras {
         this.valorTotal = valorTotal;
     }
 
+    public Compras(Long listaId, Long cod_barras, Integer quantidade, Double valor, Double valorTotal, Boolean Manual) {
+        this.listaId = listaId;
+        this.cod_barras = cod_barras;
+        this.quantidade = quantidade;
+        this.valor = valor;
+        this.valorTotal = valorTotal;
+    }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated
     public void __setDaoSession(DaoSession daoSession) {
@@ -192,6 +200,10 @@ public class Compras {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
+    }
+
+    public String toString(){
+        return "Valor="+valor+" Quantidade="+quantidade+" Valor Total="+valorTotal;
     }
 
 }
