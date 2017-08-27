@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             stream.flush();
             stream.close();
             connection.connect();
-            //String responseJson = connection.getInputStream().toString();
+            String responseJson = connection.getInputStream().toString();
+            Toast.makeText(MainActivity.this, responseJson, Toast.LENGTH_SHORT).show();
             connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
