@@ -15,7 +15,7 @@
         android:id="@+id/lvtvProduto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/lvtvQuantidade"
+        android:layout_toEndOf="@id/lvtvQuantidade"
         android:textSize="15sp"
         />
 
@@ -23,8 +23,8 @@
         android:id="@+id/lvtvValor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/lvtvQuantidade"
+        android:layout_toEndOf="@id/lvtvQuantidade"
         android:layout_below="@id/lvtvProduto"
-        android:textSize="10sp"/>
+        android:textSize="12sp"/>
 
 </RelativeLayout>

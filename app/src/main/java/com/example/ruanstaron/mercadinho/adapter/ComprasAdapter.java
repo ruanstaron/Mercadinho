@@ -61,8 +61,8 @@ public class ComprasAdapter extends BaseAdapter {
         TextView tvProduto    = ((TextView) linha.findViewById(R.id.lvtvProduto));
         TextView tvValor      = ((TextView) linha.findViewById(R.id.lvtvValor));
 
-        ArrayList<String> lCodBarras = new ArrayList<String>();
-          lCodBarras = banco.carregaProdutosDaLista(Integer.parseInt(compras.getListaId().toString()));
+        ArrayList<String> lCodBarras;
+        lCodBarras = banco.carregaProdutosDaLista(Integer.parseInt(compras.getListaId().toString()));
 
         tvQuantidade.setText(compras.getQuantidade().toString());
         tvProduto.setText(banco.getProdutoDescricao(Long.parseLong(lCodBarras.get(position).toString())));
