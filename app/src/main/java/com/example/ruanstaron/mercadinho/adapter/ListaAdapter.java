@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.db.Lista;
 
 import java.util.List;
@@ -20,6 +19,7 @@ public class ListaAdapter extends BaseAdapter {
 
     List<Lista> lListas;
     Context context;
+
     public ListaAdapter(Context context, List<Lista> lListas){
         this.context = context;
         this.lListas = lListas;
@@ -44,10 +44,11 @@ public class ListaAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Lista lista = lListas.get(position);
 
-        View linha = LayoutInflater.from(context).inflate(R.layout.list_item_compras, parent, false);
-        TextView tvListaDescricao = ((TextView) linha.findViewById(R.id.lvtvProduto));
+        //View linha = LayoutInflater.from(context).inflate(R.layout.list_item_listas, parent, false);
+        View linha = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_activated_1, parent, false);
 
-        tvListaDescricao.setText(lista.getDescricao());
+        TextView lvtvDescricao = ((TextView) linha.findViewById(android.R.id.text1));
+        lvtvDescricao.setText(lista.getDescricao());
 
         return linha;
     }

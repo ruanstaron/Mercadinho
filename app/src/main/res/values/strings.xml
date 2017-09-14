@@ -7,6 +7,12 @@
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
     <string name="ok">Ok</string>
+    <string name="acao_delete">Excluir</string>
+
+    <plurals name="numero_selecionados">
+        <item quantity="one">1 selecionado</item>
+        <item quantity="other">%d selecionado</item>
+    </plurals>
 
     /* menu_mercadinho.xml */
     <string name="acao_nova_lista">Nova Lista</string>
@@ -26,12 +32,16 @@
     <string name="geraProdutoPreencherQuantidade">Preencha a quantidade!</string>
     <string name="geraProdutoPreencherDescricao">Preencha a descrição!</string>
     <string name="geraProdutoPreencherCodBarras">O Produto deve ser escaneado!</string>
-    <string name="dialogoConfirmaListaTitulo">Finalizar Compra</string>
-    <string name="dialogoConfirmaListaMsg">Deseja finalizar esta compra ?</string>
     <string name="dialogoNomeListaTitulo">Nova Lista - Descrição</string>
     <string name="dialogoNomeListaMsg">Nome da lista criada:</string>
     <string name="dialogoNomeProdutoTitulo">Novo Produto - Descrição</string>
     <string name="dialogoNomeProdutoMsg">Nome do Produto escaneado:</string>
 
+    /* activity_lista.xml */
+    <string name="dialogoConfirmaExclusaoListaTitulo">Excluir Lista</string>
 
+    <plurals name="listas_selecionados">
+        <item quantity="one">Excluir a lista delecionada?</item>
+        <item quantity="other">Excluir as listas selecionadas?</item>
+    </plurals>
 </resources>

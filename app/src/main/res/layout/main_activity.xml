@@ -15,31 +15,8 @@
 
         <TableRow
 
-            android:layout_height="0dp"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:weightSum="2">
-
-            <Button
-                android:id="@+id/getProdutos"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Baixar Banco" />
-
-            <Button
-                android:id="@+id/postProdutos"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Enviar Banco" />
-
-        </TableRow>
-
-        <TableRow
-
             android:layout_height="0dp"
-            android:layout_width="match_parent"
             android:layout_weight="1"
             android:weightSum="2">
 

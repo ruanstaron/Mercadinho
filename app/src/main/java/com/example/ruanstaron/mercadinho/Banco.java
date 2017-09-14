@@ -144,4 +144,9 @@ public class Banco {
                 produtosDao.update(lProdutos.get(i));
             }
     }
+
+    public void excluiListas(long id){
+        ListaDao listaDao = session.getListaDao();
+        listaDao.deleteByKey(id);
+    }
 }

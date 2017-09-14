@@ -13,7 +13,6 @@ import com.example.ruanstaron.mercadinho.db.ComprasDao;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
-import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -162,7 +161,6 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             Toast.makeText(this, R.string.geraProdutoPreencherDescricao, Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         Compras pCompras  = new Compras();
         pCompras.setCod_barras(new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras());
