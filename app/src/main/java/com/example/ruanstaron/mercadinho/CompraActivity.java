@@ -31,7 +31,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scan extends AppCompatActivity implements OnClickListener {
+public class CompraActivity extends AppCompatActivity implements OnClickListener {
 
     private Button                  scanBtn, okBtn;
     private TextView                tvValorTotal;
@@ -48,25 +48,27 @@ public class Scan extends AppCompatActivity implements OnClickListener {
     private Long                    codEscaneado = (long)0;
     private Boolean                 retornoScanFalse = false;
 
-    private Lista   lista     = new Lista();
+    private Lista lista = new Lista();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scan);
-        helper = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
-        master = new DaoMaster(helper.getWritableDatabase());
+        setContentView(R.layout.activity_compra);
+
+        helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        master  = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
-        scanBtn = (Button)findViewById(R.id.scan_button);
-        okBtn = (Button)findViewById(R.id.bOk);
-        etProduto = (AutoCompleteTextView) findViewById(R.id.etProduto);
+        banco = new Banco(session);
+
+        scanBtn      = (Button)findViewById(R.id.scan_button);
+        okBtn        = (Button)findViewById(R.id.bOk);
+        etProduto    = (AutoCompleteTextView) findViewById(R.id.etProduto);
         etQuantidade = (EditText) findViewById(R.id.etQuantidade);
-        etValor = (EditText) findViewById(R.id.etValor);
+        etValor      = (EditText) findViewById(R.id.etValor);
         tvValorTotal = (TextView) findViewById(R.id.valorTotal);
         listaCompras = (ListView) findViewById(R.id.lvProdutos);
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);
-        banco = new Banco(session);
 
         Intent it = getIntent();
 
@@ -199,16 +201,16 @@ public class Scan extends AppCompatActivity implements OnClickListener {
             DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Scan scan = (Scan)getActivity();
+                    CompraActivity compraActivity = (CompraActivity)getActivity();
                     Produtos produto = new Produtos();
                     produto.setDescricao(input.getText().toString());
-                    produto.setCod_barras(scan.codEscaneado);
+                    produto.setCod_barras(compraActivity.codEscaneado);
                     produto.setManual(true);
 
-                    ProdutosDao produtosDao = scan.session.getProdutosDao();
+                    ProdutosDao produtosDao = compraActivity.session.getProdutosDao();
                     produtosDao.insert(produto);
-                    scan.atualizaNomeProdutos();
-                    scan.etProduto.setText(produto.getDescricao());
+                    compraActivity.atualizaNomeProdutos();
+                    compraActivity.etProduto.setText(produto.getDescricao());
 
                     dismiss();
                 }

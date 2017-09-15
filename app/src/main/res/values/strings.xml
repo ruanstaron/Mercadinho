@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Mercadinho</string>
-    <string name="scan">Scan</string>
+    <string name="compraActivity">Scan</string>
     <string name="title_activity_main_activity">main_activity</string>
 
     /* geral */
@@ -22,7 +22,7 @@
     <string name="main_activity_criarBanco">Criar Banco</string>
     <string name="main_activity_btnListas">Listas</string>
 
-    /* scan.xml */
+    /* activity_compra.xml */
     <string name="scan_tvProduto">Produto</string>
     <string name="scan_tvQuantidade">Quantidade</string>
     <string name="scan_tvValor">Valor</string>

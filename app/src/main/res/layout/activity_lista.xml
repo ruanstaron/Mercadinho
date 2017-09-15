@@ -10,8 +10,19 @@
         android:id="@+id/imgListasVazio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_note_add_black_24dp"
+        android:src="@drawable/online_store"
         android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/tvListaVazia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgListasVazio"
+        android:fontFamily="sans-serif"
+        android:text="Você ainda não realizou nenhuma compra :("
+        android:textAlignment="center"
+        android:layout_marginTop="15dp"
+        android:textSize="30sp" />
 
     <ListView
         android:id="@+id/lvListas"

@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".Scan"
+            android:name=".CompraActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ListaActivity"></activity>

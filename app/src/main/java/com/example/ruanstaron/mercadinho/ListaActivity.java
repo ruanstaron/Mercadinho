@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.ruanstaron.mercadinho.adapter.ListaAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
@@ -36,6 +37,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     private ListView lvListas;
     private FloatingActionButton fabAddLista;
     private ActionMode actionMode;
+    private TextView tvListaVazia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 if(actionMode == null){
                     Lista lista = (Lista)parent.getItemAtPosition(position);
 
-                    Intent itScan = new Intent(getApplicationContext(), Scan.class);
+                    Intent itScan = new Intent(getApplicationContext(), CompraActivity.class);
                     itScan.putExtra("id_lista", lista.getId().toString());
                     itScan.putExtra("descricao_lista", lista.getDescricao());
                     startActivity(itScan);
@@ -63,7 +65,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 }
             }
         });
-
+        
+        tvListaVazia = ((TextView) findViewById(R.id.tvListaVazia));
         fabAddLista = ((FloatingActionButton) findViewById(R.id.fabAddLista));
 
         fabAddLista.setOnClickListener(new View.OnClickListener() {
@@ -87,9 +90,16 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     private void atualizaListListas(){
         List<Lista> lListas = new Banco(session).carregaListas();
         lvListas.setAdapter(new ListaAdapter(this, lListas));
+
+        if(lvListas.getAdapter().isEmpty()){
+            tvListaVazia.setVisibility(View.VISIBLE);
+        }
+        else{
+            tvListaVazia.setVisibility(View.INVISIBLE);
+        }
     }
 
-    public void IncluirBancoLista(DaoSession session, Lista lista){
+    public void incluirBancoLista(DaoSession session, Lista lista){
         listaDao = session.getListaDao();
         listaDao.insert(lista);
     }
@@ -201,7 +211,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                         input.setText("Nova Lista");
 
                     lista.setDescricao(input.getText().toString());
-                    atvLista.IncluirBancoLista(atvLista.session, lista);
+                    atvLista.incluirBancoLista(atvLista.session, lista);
                     dismiss();
                     atvLista.atualizaListListas();
                 }
