@@ -43,8 +43,6 @@ public class ListaAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Lista lista = lListas.get(position);
-
-        //View linha = LayoutInflater.from(context).inflate(R.layout.list_item_listas, parent, false);
         View linha = LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_activated_1, parent, false);
 
         TextView lvtvDescricao = ((TextView) linha.findViewById(android.R.id.text1));

@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
             banco.limpaBanco();
             banco.gravaBanco(webService.getProdutos());
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, ListaActivity.class);
             startActivity(intent);
             finish();
         }
