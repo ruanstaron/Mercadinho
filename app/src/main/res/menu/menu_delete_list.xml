@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/acao_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/acao_edit"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/acao_delete"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/acao_delete"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

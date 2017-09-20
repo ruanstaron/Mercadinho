@@ -2,16 +2,13 @@ package com.example.ruanstaron.mercadinho;
 
 import com.example.ruanstaron.mercadinho.db.Compras;
 import com.example.ruanstaron.mercadinho.db.ComprasDao;
-import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.Produtos;
 import com.example.ruanstaron.mercadinho.db.ProdutosDao;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +37,7 @@ public class Banco {
 
     public List<Lista> carregaListas(){
         ListaDao listasDao = session.getListaDao();
-        List<Lista> datalist = listasDao.queryBuilder().where(ListaDao.Properties.Id.isNotNull()).list();
+        List<Lista> datalist = listasDao.queryBuilder().where(ListaDao.Properties.Id.isNotNull()).orderDesc(ListaDao.Properties.Id).list();
         return datalist;
     }
 
@@ -145,8 +142,23 @@ public class Banco {
             }
     }
 
-    public void excluiListas(long id){
-        ListaDao listaDao = session.getListaDao();
-        listaDao.deleteByKey(id);
+    public List<Compras> carregaComprasLista(long id){
+        ComprasDao comprasDao = session.getComprasDao();
+        List<Compras> datalist = comprasDao.queryBuilder().where(ComprasDao.Properties.ListaId.eq(id)).list();
+
+        return datalist;
+    }
+
+
+    public void excluiListas(long idLista){
+        ListaDao listaDao     = session.getListaDao();
+        ComprasDao comprasDao = session.getComprasDao();
+
+        List<Compras> comprasVinculadas = carregaComprasLista(idLista);
+
+        for(int i = 0; i < comprasVinculadas.size(); i++)
+            comprasDao.deleteByKey(comprasVinculadas.get(i).getId());
+
+        listaDao.deleteByKey(idLista);
     }
 }

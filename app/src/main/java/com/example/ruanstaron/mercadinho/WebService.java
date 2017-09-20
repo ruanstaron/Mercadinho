@@ -3,8 +3,6 @@ package com.example.ruanstaron.mercadinho;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.StrictMode;
-import android.widget.Toast;
-
 
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
@@ -30,6 +28,20 @@ import java.util.List;
 
 public class WebService {
 
+    private final String WS_URL     = "http://mercadinho.96.lt/WS/index.php/";
+    private final String POST_URL   = "addprodutos";
+    private final String GET_URL    = "getprodutos";
+    private final String POST       = "POST";
+    private final String GET        = "GET";
+    private final String UTF_8      = "UTF-8";
+
+    private final String PRODUTO            = "produto";
+    private final String PRODUTO_COD_BARRAS = "cod_barras";
+    private final String PRODUTO_DESCRICAO  = "descricao";
+
+    private final int TIMEOUT = 3000;
+
+
     DaoMaster.DevOpenHelper helper;
     DaoMaster master;
     DaoSession session;
@@ -45,26 +57,26 @@ public class WebService {
         banco = new Banco(session);
     }
 
-    public  boolean verificaConexao(ConnectivityManager conectivtyManager) {
+    public boolean verificaConexao(ConnectivityManager conectivtyManager) {
         return (conectivtyManager.getActiveNetworkInfo() != null
                 && conectivtyManager.getActiveNetworkInfo().isConnected()
                 && conectivtyManager.getActiveNetworkInfo().isAvailable());
     }
 
-    public void postProdutos(String requestJson){
+    private void postProdutos(String requestJson){
 
         try {
-            URL url = new URL("http://mercadinho.96.lt/WS/index.php/addprodutos");
+            URL url = new URL(WS_URL + POST_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(POST);
             connection.setDoOutput(true);
             connection.setUseCaches(false);
-            connection.setConnectTimeout(3000);
+            connection.setConnectTimeout(TIMEOUT);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Length", Integer.toString(requestJson.length()));
             DataOutputStream stream = new DataOutputStream(connection.getOutputStream());
-            stream.write(requestJson.getBytes("UTF-8"));
+            stream.write(requestJson.getBytes(UTF_8));
             stream.flush();
             stream.close();
             connection.connect();
@@ -75,18 +87,18 @@ public class WebService {
         }
     }
 
-    public ArrayList<Produtos> getProdutos(){
+    private ArrayList<Produtos> getProdutos(){
         ArrayList<Produtos> produtos_array = new ArrayList<>();
         URL obj;
         String line;
         Gson gson = new Gson();
         try {
-            obj = new URL("http://mercadinho.96.lt/WS/index.php/getprodutos");
+            obj = new URL(WS_URL + GET_URL);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
+            con.setRequestMethod(GET);
             con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            con.setRequestProperty("Accept-Charset", "UTF-8");
-            con.setConnectTimeout(3000);
+            con.setRequestProperty("Accept-Charset", UTF_8);
+            con.setConnectTimeout(TIMEOUT);
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             StringBuffer response = new StringBuffer();
             while ((line = in.readLine()) != null) {
@@ -106,15 +118,15 @@ public class WebService {
         return produtos_array;
     }
 
-    public String montaJson(List<Produtos> produtos){
+    private String montaJson(List<Produtos> produtos){
         JSONObject prontoEnvio = new JSONObject();
         JSONArray jsonProdutos = new JSONArray();
 
         for(Produtos prod : produtos){
             JSONObject produto = new JSONObject();
             try {
-                produto.put("cod_barras",prod.getCod_barras());
-                produto.put("descricao",banco.getProdutoDescricao(prod.getCod_barras()));
+                produto.put(PRODUTO_COD_BARRAS, prod.getCod_barras());
+                produto.put(PRODUTO_DESCRICAO, banco.getProdutoDescricao(prod.getCod_barras()));
                 jsonProdutos.put(produto);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -122,11 +134,19 @@ public class WebService {
         }
 
         try {
-            prontoEnvio.put("produto",jsonProdutos);
+                prontoEnvio.put(PRODUTO,jsonProdutos);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return prontoEnvio.toString();
+    }
+
+    public void sincronizar(){
+        postProdutos(montaJson(banco.carregaProdutosManuais()));
+        banco.setaProdutosEnviados();
+
+        banco.limpaBanco();
+        banco.gravaBanco(getProdutos());
     }
 }

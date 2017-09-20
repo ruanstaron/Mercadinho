@@ -8,6 +8,7 @@
     <string name="nao">Não</string>
     <string name="ok">Ok</string>
     <string name="acao_delete">Excluir</string>
+    <string name="acao_edit">Editar</string>
 
     <plurals name="numero_selecionados">
         <item quantity="one">1 selecionado</item>
@@ -39,6 +40,10 @@
 
     /* activity_lista.xml */
     <string name="dialogoConfirmaExclusaoListaTitulo">Excluir Lista</string>
+    <string name="dialogoEditarListaTitulo">Alterar nome</string>
+    <string name="dialogoEditarNomeListaMsg">Nome da lista:</string>
+    <string name="lista_vazia">Você ainda não realizou nenhuma compra :(</string>
+    <string name="lista_vazia_desc">Nenhuma lista criada</string>
 
     <plurals name="listas_selecionados">
         <item quantity="one">Excluir a lista delecionada?</item>

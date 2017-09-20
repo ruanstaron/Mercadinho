@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.adapter.ListaAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
@@ -29,6 +30,8 @@ import java.util.List;
 
 public class ListaActivity extends AppCompatActivity implements ActionMode.Callback, AdapterView.OnItemLongClickListener {
 
+    private final int ACAO_EDITAR = 0;
+
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster master;
     private DaoSession session;
@@ -38,6 +41,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     private FloatingActionButton fabAddLista;
     private ActionMode actionMode;
     private TextView tvListaVazia;
+
+    public Lista lista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 }
             }
         });
-        
+
         tvListaVazia = ((TextView) findViewById(R.id.tvListaVazia));
         fabAddLista = ((FloatingActionButton) findViewById(R.id.fabAddLista));
 
@@ -104,6 +109,11 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         listaDao.insert(lista);
     }
 
+    public void editarBancoLista(DaoSession session, Lista lista) {
+        listaDao = session.getListaDao();
+        listaDao.update(lista);
+    }
+
     private void iniciarModoExclusao(){
         actionMode = startSupportActionMode(this);
         lvListas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -114,6 +124,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
 
         String selecionados = getResources().getQuantityString(R.plurals.numero_selecionados, checkedCount, checkedCount);
         actionMode.setTitle(selecionados);
+
+        actionMode.getMenu().getItem(ACAO_EDITAR).setVisible(qtdeItensMarcados() == 1);
     }
 
     private int qtdeItensMarcados(){
@@ -132,6 +144,12 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     private void atualizarItensMarcados(ListView l, int position) {
         l.setItemChecked(position, l.isItemChecked(position));
         atualizarTitulo();
+
+        if(l.getCheckedItemCount() == 1)
+            for(int i = 0; i < lvListas.getCount(); i++) {
+                if(l.isItemChecked(i))
+                    lista = (Lista) l.getItemAtPosition(i);
+            }
     }
 
     @Override
@@ -146,16 +164,14 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
 
         return consumed;
     }
-
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_delete_list, menu);
         return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
     }
 
     public void excluirListasSelecionadas(){
@@ -176,12 +192,17 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        if(item.getItemId() == R.id.acao_delete) {
-            SparseBooleanArray checked = lvListas.getCheckedItemPositions();
+        switch(item.getItemId()){
+            case R.id.acao_delete:
+                SparseBooleanArray checked = lvListas.getCheckedItemPositions();
 
-            ExcluirDialogLista dlgExcluirListas = new ExcluirDialogLista();
-            dlgExcluirListas.setMensagem(getResources().getQuantityString(R.plurals.listas_selecionados, checked.size(), checked.size()));
-            dlgExcluirListas.show(getSupportFragmentManager(), "dlgExcluirLista");
+                ExcluirDialogLista dlgExcluirListas = new ExcluirDialogLista();
+                dlgExcluirListas.setMensagem(getResources().getQuantityString(R.plurals.listas_selecionados, checked.size(), checked.size()));
+                dlgExcluirListas.show(getSupportFragmentManager(), "dlgExcluirLista");
+                break;
+            case R.id.acao_edit:
+                EditarDialogLista dlgEditarListas = new EditarDialogLista();
+                dlgEditarListas.show(getSupportFragmentManager(), "dlgEditarLista");
         }
 
         return true;
@@ -221,6 +242,38 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                     .setView(input)
                     .setTitle(R.string.dialogoNomeListaTitulo)
                     .setMessage(R.string.dialogoNomeListaMsg)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
+    }
+
+    public static class EditarDialogLista extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            final ListaActivity atvLista = (ListaActivity)getActivity();
+            input.setText(atvLista.lista.getDescricao());
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(!input.getText().toString().isEmpty()){
+                        atvLista.lista.setDescricao(input.getText().toString());
+                        atvLista.editarBancoLista(atvLista.session, atvLista.lista);
+                        dismiss();
+                        atvLista.atualizaListListas();
+                    }
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoEditarListaTitulo)
+                    .setMessage(R.string.dialogoEditarNomeListaMsg)
                     .setPositiveButton(R.string.ok, listener)
                     .create();
 
