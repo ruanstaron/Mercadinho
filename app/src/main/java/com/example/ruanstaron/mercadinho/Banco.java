@@ -1,12 +1,12 @@
 package com.example.ruanstaron.mercadinho;
 
-import com.example.ruanstaron.mercadinho.db.Compras;
-import com.example.ruanstaron.mercadinho.db.ComprasDao;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
-import com.example.ruanstaron.mercadinho.db.Produtos;
-import com.example.ruanstaron.mercadinho.db.ProdutosDao;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
+import com.example.ruanstaron.mercadinho.db.Produto;
+import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +23,14 @@ public class Banco {
     }
 
     public void limpaBanco(){
-        ProdutosDao produtosDao = session.getProdutosDao();
+        ProdutoDao produtosDao = session.getProdutoDao();
         produtosDao.queryBuilder().buildDelete().executeDeleteWithoutDetachingEntities();
         session.clear();
     }
 
-    public void gravaBanco(ArrayList<Produtos> arrayBdd){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        for (Produtos bdd: arrayBdd){
+    public void gravaBanco(ArrayList<Produto> arrayBdd){
+        ProdutoDao produtosDao = session.getProdutoDao();
+        for (Produto bdd: arrayBdd){
             produtosDao.insert(bdd);
         }
     }
@@ -47,14 +47,14 @@ public class Banco {
         return lista;
     }
 
-    public List<Compras> carregaCompras(int id){
-        ComprasDao comprasDao = session.getComprasDao();
-        List<Compras> lCompras = comprasDao.queryBuilder().where(ComprasDao.Properties.ListaId.eq(id)).list();
+    public List<Lista_de_produtos> carregaCompras(int id){
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+        List<Lista_de_produtos> lCompras = comprasDao.queryBuilder().where(Lista_de_produtosDao.Properties.ListaId.eq(id)).list();
         return lCompras;
     }
 
     public ArrayList<String> carregaProdutosDaLista(int id){
-        List<Compras> lCompras = carregaCompras(id);
+        List<Lista_de_produtos> lCompras = carregaCompras(id);
         ArrayList<String> lCodBarras = new ArrayList<String>();
 
         for(int i = 0; i < lCompras.size(); i++){
@@ -65,9 +65,9 @@ public class Banco {
     }
 
     public ArrayList<String> carregaNomeProdutos(){
-        ProdutosDao produtosDao = session.getProdutosDao();
+        ProdutoDao produtosDao = session.getProdutoDao();
 
-        List<Produtos> produtos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
+        List<Produto> produtos = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
         ArrayList<String> alNomeProdutos = new ArrayList<String>();
 
         for(int i = 0; i < produtos.size(); i++)
@@ -78,9 +78,9 @@ public class Banco {
 
     // NAO REMOVER POR ENQUANTO, PODE SER USADO NO PROBLEMA DO AUTOCOMPLETE
     public ArrayList<String> carregaCodBarrasProdutos(){
-        ProdutosDao produtosDao = session.getProdutosDao();
+        ProdutoDao produtosDao = session.getProdutoDao();
 
-        List<Produtos> produtos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
+        List<Produto> produtos = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.isNotNull()).orderAsc().list();
         ArrayList<String> alCodBarrasProdutos = new ArrayList<String>();
 
         for(int i = 0; i < produtos.size(); i++)
@@ -89,16 +89,16 @@ public class Banco {
         return alCodBarrasProdutos;
     }
 
-    public List<Produtos> carregaProdutosManuais(){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Manual.eq(true)).list();
+    public List<Produto> carregaProdutosManuais(){
+        ProdutoDao produtosDao = session.getProdutoDao();
+        List<Produto> datalist = produtosDao.queryBuilder().where(ProdutoDao.Properties.Recente.eq(true)).list();
         return datalist;
     }
 
     public String getProdutoDescricao(Long cod_barras){
         String descricao;
-        ProdutosDao produtosDao = session.getProdutosDao();
-        List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.eq(cod_barras)).list();
+        ProdutoDao produtosDao = session.getProdutoDao();
+        List<Produto> datalist = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.eq(cod_barras)).list();
 
         if(datalist.size() > 0)
             descricao = datalist.get(0).getDescricao();
@@ -108,21 +108,21 @@ public class Banco {
         return descricao;
     }
 
-    public Produtos carregaProduto(String descricao){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        Produtos produto = produtosDao.queryBuilder().where(ProdutosDao.Properties.Descricao.eq(descricao)).orderAsc().unique();
+    public Produto carregaProduto(String descricao){
+        ProdutoDao produtosDao = session.getProdutoDao();
+        Produto produto = produtosDao.queryBuilder().where(ProdutoDao.Properties.Descricao.eq(descricao)).orderAsc().unique();
 
          if (produto != null) {
              return produto;
          }
          else{
-             return produto = new Produtos();
+             return produto = new Produto();
          }
     }
 
     public String verificaProduto(Long cod_barras){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        List<Produtos> datalist = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.eq(cod_barras)).list();
+        ProdutoDao produtosDao = session.getProdutoDao();
+        List<Produto> datalist = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.eq(cod_barras)).list();
 
         if(datalist.isEmpty()){
             return "";
@@ -132,19 +132,19 @@ public class Banco {
     }
 
     public void setaProdutosEnviados(){
-        ProdutosDao produtosDao = session.getProdutosDao();
-        List<Produtos> lProdutos = produtosDao.queryBuilder().where(ProdutosDao.Properties.Cod_barras.isNotNull()).list();
+        ProdutoDao produtosDao = session.getProdutoDao();
+        List<Produto> lProdutos = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.isNotNull()).list();
 
         if(!lProdutos.isEmpty())
             for(int i = 0; i < lProdutos.size(); i++){
-                lProdutos.get(i).setManual(false);
+                lProdutos.get(i).setRecente(false);
                 produtosDao.update(lProdutos.get(i));
             }
     }
 
-    public List<Compras> carregaComprasLista(long id){
-        ComprasDao comprasDao = session.getComprasDao();
-        List<Compras> datalist = comprasDao.queryBuilder().where(ComprasDao.Properties.ListaId.eq(id)).list();
+    public List<Lista_de_produtos> carregaComprasLista(long id){
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+        List<Lista_de_produtos> datalist = comprasDao.queryBuilder().where(Lista_de_produtosDao.Properties.ListaId.eq(id)).list();
 
         return datalist;
     }
@@ -152,9 +152,9 @@ public class Banco {
 
     public void excluiListas(long idLista){
         ListaDao listaDao     = session.getListaDao();
-        ComprasDao comprasDao = session.getComprasDao();
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
 
-        List<Compras> comprasVinculadas = carregaComprasLista(idLista);
+        List<Lista_de_produtos> comprasVinculadas = carregaComprasLista(idLista);
 
         for(int i = 0; i < comprasVinculadas.size(); i++)
             comprasDao.deleteByKey(comprasVinculadas.get(i).getId());

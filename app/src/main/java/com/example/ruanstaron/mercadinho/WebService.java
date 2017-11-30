@@ -6,7 +6,7 @@ import android.os.StrictMode;
 
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
-import com.example.ruanstaron.mercadinho.db.Produtos;
+import com.example.ruanstaron.mercadinho.db.Produto;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -87,8 +87,8 @@ public class WebService {
         }
     }
 
-    private ArrayList<Produtos> getProdutos(){
-        ArrayList<Produtos> produtos_array = new ArrayList<>();
+    private ArrayList<Produto> getProdutos(){
+        ArrayList<Produto> produtos_array = new ArrayList<>();
         URL obj;
         String line;
         Gson gson = new Gson();
@@ -108,8 +108,8 @@ public class WebService {
             JSONArray jsonArr = new JSONArray(response.toString());
             for (int i = 0; i < jsonArr.length(); i++) {
                 JSONObject jsonObj = jsonArr.getJSONObject(i);
-                Produtos produto = gson.fromJson(jsonObj.toString(), Produtos.class);
-                produto.setManual(false);
+                Produto produto = gson.fromJson(jsonObj.toString(), Produto.class);
+                produto.setRecente(false);
                 produtos_array.add(produto);
             }
         } catch (IOException | JSONException e) {
@@ -118,11 +118,11 @@ public class WebService {
         return produtos_array;
     }
 
-    private String montaJson(List<Produtos> produtos){
+    private String montaJson(List<Produto> produtos){
         JSONObject prontoEnvio = new JSONObject();
         JSONArray jsonProdutos = new JSONArray();
 
-        for(Produtos prod : produtos){
+        for(Produto prod : produtos){
             JSONObject produto = new JSONObject();
             try {
                 produto.put(PRODUTO_COD_BARRAS, prod.getCod_barras());

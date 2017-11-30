@@ -21,16 +21,24 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        ProdutoDao.createTable(db, ifNotExists);
         ListaDao.createTable(db, ifNotExists);
-        ProdutosDao.createTable(db, ifNotExists);
-        ComprasDao.createTable(db, ifNotExists);
+        SituacaoDao.createTable(db, ifNotExists);
+        EstadoDao.createTable(db, ifNotExists);
+        CidadeDao.createTable(db, ifNotExists);
+        MercadoDao.createTable(db, ifNotExists);
+        Lista_de_produtosDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        ProdutoDao.dropTable(db, ifExists);
         ListaDao.dropTable(db, ifExists);
-        ProdutosDao.dropTable(db, ifExists);
-        ComprasDao.dropTable(db, ifExists);
+        SituacaoDao.dropTable(db, ifExists);
+        EstadoDao.dropTable(db, ifExists);
+        CidadeDao.dropTable(db, ifExists);
+        MercadoDao.dropTable(db, ifExists);
+        Lista_de_produtosDao.dropTable(db, ifExists);
     }
 
     /**
@@ -49,9 +57,13 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(ProdutoDao.class);
         registerDaoClass(ListaDao.class);
-        registerDaoClass(ProdutosDao.class);
-        registerDaoClass(ComprasDao.class);
+        registerDaoClass(SituacaoDao.class);
+        registerDaoClass(EstadoDao.class);
+        registerDaoClass(CidadeDao.class);
+        registerDaoClass(MercadoDao.class);
+        registerDaoClass(Lista_de_produtosDao.class);
     }
 
     public DaoSession newSession() {

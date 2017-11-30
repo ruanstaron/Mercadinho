@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
-import com.example.ruanstaron.mercadinho.db.Compras;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,10 @@ import java.util.List;
 
 public class ComprasAdapter extends BaseAdapter {
 
-    List<Compras> lCompras;
+    List<Lista_de_produtos> lCompras;
     Context context;
 
-    public ComprasAdapter(Context context, List<Compras> lCompras){
+    public ComprasAdapter(Context context, List<Lista_de_produtos> lCompras){
         this.context = context;
         this.lCompras = lCompras;
     }
@@ -53,7 +53,7 @@ public class ComprasAdapter extends BaseAdapter {
         DaoSession session = master.newSession();
         Banco banco = new Banco(session);
 
-        Compras compras = lCompras.get(position);
+        Lista_de_produtos compras = lCompras.get(position);
 
         View linha = LayoutInflater.from(context).inflate(R.layout.list_item_compras, parent, false);
 

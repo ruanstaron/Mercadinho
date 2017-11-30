@@ -8,13 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.ruanstaron.mercadinho.adapter.ComprasAdapter;
-import com.example.ruanstaron.mercadinho.db.Compras;
-import com.example.ruanstaron.mercadinho.db.ComprasDao;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
-import com.example.ruanstaron.mercadinho.db.Produtos;
-import com.example.ruanstaron.mercadinho.db.ProdutosDao;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
+import com.example.ruanstaron.mercadinho.db.Produto;
+import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Intent;
@@ -119,7 +119,7 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
     }
 
     public void atualizaCompras(){
-        List<Compras> lComprasAtualizadas = new Banco(session).carregaCompras(Integer.parseInt(lista.getId().toString()));
+        List<Lista_de_produtos> lComprasAtualizadas = new Banco(session).carregaCompras(Integer.parseInt(lista.getId().toString()));
         listaCompras.setAdapter(new ComprasAdapter(this, lComprasAtualizadas));
     }
 
@@ -164,7 +164,7 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
             return;
         }
 
-        Compras pCompras  = new Compras();
+        Lista_de_produtos pCompras  = new Lista_de_produtos();
         pCompras.setCod_barras(new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras());
 
         if((pCompras.getCod_barras() == null) || (pCompras.getCod_barras().toString() == "0")) {
@@ -172,19 +172,19 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
             return;
         }
 
-        Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
+        //Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
 
         pCompras.setListaId(lista.getId());
-        pCompras.setQuantidade(Integer.parseInt(etQuantidade.getText().toString()));
-        pCompras.setValor(Double.parseDouble(etValor.getText().toString()));
-        pCompras.setValorTotal(valorTotal);
+        pCompras.setQuantidade(Float.parseFloat(etQuantidade.getText().toString()));
+        pCompras.setValor(Float.parseFloat(etValor.getText().toString()));
+        //pCompras.setValorTotal(valorTotal);
 
-        ComprasDao comprasDao = session.getComprasDao();
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
         Toast.makeText(this, pCompras.getListaId().toString() + " - " + pCompras.getCod_barras().toString(), Toast.LENGTH_SHORT).show();
         comprasDao.insert(pCompras);
         atualizaCompras();
 
-        valorTotalCompra = valorTotalCompra+pCompras.getValorTotal();
+        //valorTotalCompra = valorTotalCompra+pCompras.getValorTotal();
         tvValorTotal.setText(valorTotalCompra.toString());
 
         etProduto.setText("");
@@ -202,12 +202,12 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     CompraActivity compraActivity = (CompraActivity)getActivity();
-                    Produtos produto = new Produtos();
+                    Produto produto = new Produto();
                     produto.setDescricao(input.getText().toString());
                     produto.setCod_barras(compraActivity.codEscaneado);
-                    produto.setManual(true);
+                    produto.setRecente(true);
 
-                    ProdutosDao produtosDao = compraActivity.session.getProdutosDao();
+                    ProdutoDao produtosDao = compraActivity.session.getProdutoDao();
                     produtosDao.insert(produto);
                     compraActivity.atualizaNomeProdutos();
                     compraActivity.etProduto.setText(produto.getDescricao());

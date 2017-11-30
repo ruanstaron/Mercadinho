@@ -13,6 +13,7 @@ public class Lista {
     @Id
     private Long id;
     private String descricao;
+    private Boolean recente;
 
     @Generated
     public Lista() {
@@ -23,9 +24,10 @@ public class Lista {
     }
 
     @Generated
-    public Lista(Long id, String descricao) {
+    public Lista(Long id, String descricao, Boolean recente) {
         this.id = id;
         this.descricao = descricao;
+        this.recente = recente;
     }
 
     public Long getId() {
@@ -42,6 +44,14 @@ public class Lista {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Boolean getRecente() {
+        return recente;
+    }
+
+    public void setRecente(Boolean recente) {
+        this.recente = recente;
     }
 
 }
