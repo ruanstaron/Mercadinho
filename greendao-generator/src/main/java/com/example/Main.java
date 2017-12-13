@@ -5,11 +5,13 @@ import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
 
+
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1,"com.example.ruanstaron.mercadinho.db");
+        schema.enableKeepSectionsByDefault();
 
         Entity produto = schema.addEntity("Produto");
         produto.addLongProperty("cod_barras").primaryKey();
@@ -28,17 +30,17 @@ public class Main {
 
         Entity estado = schema.addEntity("Estado");
         estado.addIdProperty();
-        estado.addStringProperty("uf");
+        estado.addStringProperty("descricao");
+        estado.addStringProperty("sigla");
 
         Entity cidade = schema.addEntity("Cidade");
         cidade.addIdProperty();
         Property estadoId = cidade.addLongProperty("estadoId").getProperty();
         cidade.addStringProperty("descricao");
-        cidade.addBooleanProperty("recente");
         cidade.addToOne(estado, estadoId);
 
         Entity mercado = schema.addEntity("Mercado");
-        mercado.addIdProperty();
+        mercado.addLongProperty("cnpj").primaryKey();
         Property cidadeId = mercado.addLongProperty("cidadeId").getProperty();
         mercado.addStringProperty("descricao");
         mercado.addBooleanProperty("recente");
@@ -48,7 +50,7 @@ public class Main {
         lista_de_produtos.addIdProperty();
         Property cod_barras = lista_de_produtos.addLongProperty("cod_barras").getProperty();
         Property listaId = lista_de_produtos.addLongProperty("listaId").getProperty();
-        Property mercadoId = lista_de_produtos.addLongProperty("mercadoId").getProperty();
+        Property cnpj = lista_de_produtos.addLongProperty("cnpj").getProperty();
         Property situacaoId = lista_de_produtos.addLongProperty("situacaoId").getProperty();
         lista_de_produtos.addFloatProperty("quantidade");
         lista_de_produtos.addFloatProperty("valor");
@@ -56,7 +58,7 @@ public class Main {
         lista_de_produtos.addBooleanProperty("recente");
         lista_de_produtos.addToMany(produto, cod_barras);
         lista_de_produtos.addToOne(lista, listaId);
-        lista_de_produtos.addToMany(mercado, mercadoId);
+        lista_de_produtos.addToMany(mercado, cnpj);
         lista_de_produtos.addToMany(situacao, situacaoId);
 
         DaoGenerator dg = new DaoGenerator();

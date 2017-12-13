@@ -8,40 +8,42 @@ import org.greenrobot.greendao.annotation.*;
 // KEEP INCLUDES END
 
 /**
- * Entity mapped to table "LISTA".
+ * Entity mapped to table "PRODUTO".
  */
 @Entity
-public class Lista {
+public class Produto {
 
     @Id
-    private Long id;
+    private Long cod_barras;
     private String descricao;
+    private String descricao_usuario;
     private Boolean recente;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
     @Generated
-    public Lista() {
+    public Produto() {
     }
 
-    public Lista(Long id) {
-        this.id = id;
+    public Produto(Long cod_barras) {
+        this.cod_barras = cod_barras;
     }
 
     @Generated
-    public Lista(Long id, String descricao, Boolean recente) {
-        this.id = id;
+    public Produto(Long cod_barras, String descricao, String descricao_usuario, Boolean recente) {
+        this.cod_barras = cod_barras;
         this.descricao = descricao;
+        this.descricao_usuario = descricao_usuario;
         this.recente = recente;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCod_barras() {
+        return cod_barras;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCod_barras(Long cod_barras) {
+        this.cod_barras = cod_barras;
     }
 
     public String getDescricao() {
@@ -50,6 +52,14 @@ public class Lista {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getDescricao_usuario() {
+        return descricao_usuario;
+    }
+
+    public void setDescricao_usuario(String descricao_usuario) {
+        this.descricao_usuario = descricao_usuario;
     }
 
     public Boolean getRecente() {

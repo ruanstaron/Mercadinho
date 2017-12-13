@@ -8,32 +8,30 @@ import org.greenrobot.greendao.annotation.*;
 // KEEP INCLUDES END
 
 /**
- * Entity mapped to table "LISTA".
+ * Entity mapped to table "SITUACAO".
  */
 @Entity
-public class Lista {
+public class Situacao {
 
     @Id
     private Long id;
     private String descricao;
-    private Boolean recente;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
     @Generated
-    public Lista() {
+    public Situacao() {
     }
 
-    public Lista(Long id) {
+    public Situacao(Long id) {
         this.id = id;
     }
 
     @Generated
-    public Lista(Long id, String descricao, Boolean recente) {
+    public Situacao(Long id, String descricao) {
         this.id = id;
         this.descricao = descricao;
-        this.recente = recente;
     }
 
     public Long getId() {
@@ -50,14 +48,6 @@ public class Lista {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Boolean getRecente() {
-        return recente;
-    }
-
-    public void setRecente(Boolean recente) {
-        this.recente = recente;
     }
 
     // KEEP METHODS - put your custom methods here
