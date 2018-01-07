@@ -31,7 +31,6 @@ public class MercadoDao extends AbstractDao<Mercado, Long> {
         public final static Property CidadeId = new Property(1, Long.class, "cidadeId", false, "CIDADE_ID");
         public final static Property Descricao = new Property(2, String.class, "descricao", false, "DESCRICAO");
         public final static Property Recente = new Property(3, Boolean.class, "recente", false, "RECENTE");
-        public final static Property Cnpj = new Property(4, Long.class, "cnpj", false, "CNPJ");
     }
 
     private DaoSession daoSession;
@@ -54,8 +53,7 @@ public class MercadoDao extends AbstractDao<Mercado, Long> {
                 "\"CNPJ\" INTEGER PRIMARY KEY ," + // 0: cnpj
                 "\"CIDADE_ID\" INTEGER," + // 1: cidadeId
                 "\"DESCRICAO\" TEXT," + // 2: descricao
-                "\"RECENTE\" INTEGER," + // 3: recente
-                "\"CNPJ\" INTEGER);"); // 4: cnpj
+                "\"RECENTE\" INTEGER);");
     }
 
     /** Drops the underlying database table. */

@@ -29,7 +29,6 @@ public class ProdutoDao extends AbstractDao<Produto, Long> {
         public final static Property Descricao = new Property(1, String.class, "descricao", false, "DESCRICAO");
         public final static Property Descricao_usuario = new Property(2, String.class, "descricao_usuario", false, "DESCRICAO_USUARIO");
         public final static Property Recente = new Property(3, Boolean.class, "recente", false, "RECENTE");
-        public final static Property Cod_barras = new Property(4, Long.class, "cod_barras", false, "COD_BARRAS");
     }
 
     private Query<Produto> lista_de_produtos_ProdutoListQuery;
@@ -49,8 +48,7 @@ public class ProdutoDao extends AbstractDao<Produto, Long> {
                 "\"COD_BARRAS\" INTEGER PRIMARY KEY ," + // 0: cod_barras
                 "\"DESCRICAO\" TEXT," + // 1: descricao
                 "\"DESCRICAO_USUARIO\" TEXT," + // 2: descricao_usuario
-                "\"RECENTE\" INTEGER," + // 3: recente
-                "\"COD_BARRAS\" INTEGER);"); // 4: cod_barras
+                "\"RECENTE\" INTEGER);");
     }
 
     /** Drops the underlying database table. */
