@@ -1,4 +1,4 @@
-package com.example.ruanstaron.mercadinho;
+package com.example.ruanstaron.mercadinho.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -18,9 +18,10 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ruanstaron.mercadinho.adapter.ListaAdapter;
+import com.example.ruanstaron.mercadinho.Banco;
+import com.example.ruanstaron.mercadinho.R;
+import com.example.ruanstaron.mercadinho.adapters.ListaAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;

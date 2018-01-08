@@ -11,9 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".CompraActivity"
+            android:name=".activities.CompraActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ListaActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ListaActivity" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.CadastroActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.ruanstaron.mercadinho.adapter;
+package com.example.ruanstaron.mercadinho.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

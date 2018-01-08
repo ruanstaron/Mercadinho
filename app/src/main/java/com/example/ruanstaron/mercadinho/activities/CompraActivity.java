@@ -1,4 +1,4 @@
-package com.example.ruanstaron.mercadinho;
+package com.example.ruanstaron.mercadinho.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,7 +7,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.ruanstaron.mercadinho.adapter.ComprasAdapter;
+import com.example.ruanstaron.mercadinho.Banco;
+import com.example.ruanstaron.mercadinho.R;
+import com.example.ruanstaron.mercadinho.adapters.ComprasAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
