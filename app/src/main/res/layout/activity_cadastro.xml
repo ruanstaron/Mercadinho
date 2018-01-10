@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/notebook" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvPros1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -57,7 +57,7 @@
         app:srcCompat="@drawable/money" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvPros2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -88,7 +88,7 @@
         app:srcCompat="@drawable/cashier" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvPros3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -115,14 +115,14 @@
         android:ems="10"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/edtCadastroLogin"
+        app:layout_constraintBottom_toTopOf="@+id/edtCadastroSenha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/edtCadastroLogin"
+        android:id="@+id/edtCadastroSenha"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
