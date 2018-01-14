@@ -9,11 +9,20 @@
     <string name="ok">Ok</string>
     <string name="acao_delete">Excluir</string>
     <string name="acao_edit">Editar</string>
+    <string name="erro_generico">Erro!</string>
+    <string name="email_invalido">E-mail inválido!</string>
 
     <plurals name="numero_selecionados">
         <item quantity="one">1 selecionado</item>
         <item quantity="other">%d selecionado</item>
     </plurals>
+
+    /* activity_login.xml */
+    <string name="login_usuario_incorreto">Usuário/Senha Incorretos!</string>
+
+    /* activity_cadastro */
+    <string name="signup_usuario_duplicado">Usuário já cadastrado</string>
+    <string name="signup_sucesso">Cadastro realizado com sucesso!</string>
 
     /* menu_mercadinho.xml */
     <string name="acao_nova_lista">Nova Lista</string>

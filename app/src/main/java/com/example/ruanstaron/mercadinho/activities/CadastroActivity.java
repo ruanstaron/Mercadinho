@@ -45,6 +45,15 @@ public class CadastroActivity extends AppCompatActivity {
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!verificarCamposObrigatorios())
+                    return;
+
+                if(!Validacao.verificarEmail(edtEmail.getText().toString())){
+                    edtEmail.setError(getText(R.string.email_invalido));
+                    return;
+                }
+
                 Usuario usuario = new Usuario(
                         edtEmail.getText().toString(),
                         edtSenha.getText().toString(),
@@ -58,23 +67,40 @@ public class CadastroActivity extends AppCompatActivity {
                 Retrofit retrofit = retrofitBuilder.build();
                 WsClient wsclient = retrofit.create(WsClient.class);
 
-                Call<Boolean> call = wsclient.usuarioSignup(usuario);
+                Call<Integer> call = wsclient.usuarioSignup(usuario);
 
-                call.enqueue(new Callback<Boolean>() {
+                call.enqueue(new Callback<Integer>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if(response.isSuccessful() && response.body())
-                            Toast.makeText(getApplicationContext(), "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getApplicationContext(), WsClient.SIGNUP_FALHA, Toast.LENGTH_SHORT).show();
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        if(response.isSuccessful())
+                            switch (response.body()) {
+                                case 1:
+                                    Toast.makeText(getApplicationContext(), R.string.signup_sucesso, Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 1062:
+                                Toast.makeText(getApplicationContext(), R.string.signup_usuario_duplicado, Toast.LENGTH_SHORT).show();
+                                break;
+                                default:
+                                Toast.makeText(getApplicationContext(), R.string.erro_generico, Toast.LENGTH_SHORT).show();
+                            }
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
+                    public void onFailure(Call<Integer> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
+    }
+
+    private boolean verificarCamposObrigatorios(){
+        if(Validacao.verificarCamposObrigatorios(edtEmail, "Preencha o e-mail!") &&
+           Validacao.verificarCamposObrigatorios(edtSenha, "Preencha a senha")   &&
+           Validacao.verificarCamposObrigatorios(edtNome,  "Preencha o Nome!")){
+            return true;
+        }
+        else
+            return false;
     }
 }

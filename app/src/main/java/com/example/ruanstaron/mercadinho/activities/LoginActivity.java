@@ -59,6 +59,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if(!verificarCamposObrigatorios())
+                    return;
+
+                if(!Validacao.verificarEmail(edtEmail.getText().toString())){
+                    edtEmail.setError(getText(R.string.email_invalido));
+                    return;
+                }
+
                 Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                         .baseUrl(WsClient.SERVER_URL)
                         .addConverterFactory(GsonConverterFactory.create());
@@ -76,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful() && response.body())
                             Toast.makeText(getApplicationContext(), "Autorizado", Toast.LENGTH_SHORT).show(); // mudar
                         else
-                            Toast.makeText(getApplicationContext(), WsClient.LOGIN_FALHA, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.login_usuario_incorreto, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -86,5 +94,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private boolean verificarCamposObrigatorios(){
+        if(Validacao.verificarCamposObrigatorios(edtEmail, "Preencha o e-mail!") &&
+           Validacao.verificarCamposObrigatorios(edtSenha, "Preencha a senha")){
+            return true;
+        }
+        else
+            return false;
     }
 }

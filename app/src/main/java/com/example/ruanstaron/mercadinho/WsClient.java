@@ -22,15 +22,9 @@ public interface WsClient {
     String AUTHORIZATION = "Authorization";
     String BASIC_AUTH    = "Basic ";
 
-    // Login const
-    String LOGIN_FALHA = "Usuário/Senha incorretos!";
-
-    // SignUp const
-    String SIGNUP_FALHA = "E-mail já cadastrado!";
-
     @POST(EDP_LOGIN)
     Call<Boolean> usuarioLogin(@Header(AUTHORIZATION) String authHeader);
 
     @POST(EDP_SIGNUP)
-    Call<Boolean> usuarioSignup(@Body Usuario usuario);
+    Call<Integer> usuarioSignup(@Body Usuario usuario);
 }
