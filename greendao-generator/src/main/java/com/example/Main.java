@@ -5,9 +5,6 @@ import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
 
-
-import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1,"com.example.ruanstaron.mercadinho.db");
