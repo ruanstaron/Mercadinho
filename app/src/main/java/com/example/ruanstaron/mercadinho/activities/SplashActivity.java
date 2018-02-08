@@ -19,20 +19,18 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent itLogin = new Intent(this, LoginActivity.class);
-        startActivity(itLogin);
-
-
-        // TODO: Ativar novamente depois de fazer o login e as requisicoes funcionarem com o novo banco
-/*        WebService webService = new WebService(this);
+        WebService webService = new WebService(this);
         ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if(webService.verificaConexao(conectivtyManager)){
             webService.sincronizar();
 
-            Intent intent = new Intent(this, ListaActivity.class);
-            startActivity(intent);
+            Intent itLogin = new Intent(this, LoginActivity.class);
+            startActivity(itLogin);
+
+            //Intent intent = new Intent(this, ListaActivity.class);
+            //startActivity(intent);
             finish();
-        }*/
+        }
     }
 }

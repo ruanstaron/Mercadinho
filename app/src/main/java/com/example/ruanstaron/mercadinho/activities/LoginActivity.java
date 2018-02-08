@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.WsClient;
+import com.example.ruanstaron.mercadinho.model.Usuario;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,19 +79,20 @@ public class LoginActivity extends AppCompatActivity {
 
                 String base = edtEmail.getText().toString() + ":" + edtSenha.getText().toString();
                 String authHeader = WsClient.BASIC_AUTH + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-                Call<Boolean> call = wsclient.usuarioLogin(authHeader);
+                Call<List<Usuario>> call = wsclient.usuarioLogin(authHeader);
 
-                call.enqueue(new Callback<Boolean>() {
+                call.enqueue(new Callback<List<Usuario>>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if(response.isSuccessful() && response.body())
+                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                        List<Usuario> resposta = response.body();
+                        if(response.isSuccessful() && resposta.get(0).getCod_msg() != "-2")
                             Toast.makeText(getApplicationContext(), "Autorizado", Toast.LENGTH_SHORT).show(); // mudar
                         else
                             Toast.makeText(getApplicationContext(), R.string.login_usuario_incorreto, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
+                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
                         Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

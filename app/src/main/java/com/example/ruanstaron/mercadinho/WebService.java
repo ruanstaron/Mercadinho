@@ -3,24 +3,30 @@ package com.example.ruanstaron.mercadinho;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.StrictMode;
+import android.widget.Toast;
 
+import com.example.ruanstaron.mercadinho.db.AtributosDao;
+import com.example.ruanstaron.mercadinho.db.Cidade;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Mercado;
 import com.example.ruanstaron.mercadinho.db.Produto;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by pucci on 10/09/2017.
@@ -46,6 +52,7 @@ public class WebService {
     DaoMaster master;
     DaoSession session;
     Banco banco;
+    private Context context;
 
     public WebService(Context context) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -55,6 +62,10 @@ public class WebService {
         master = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
         banco = new Banco(session);
+
+        this.context = context;
+
+        AtributosDao.insereDados(helper.getReadableDb());
     }
 
     public boolean verificaConexao(ConnectivityManager conectivtyManager) {
@@ -87,37 +98,34 @@ public class WebService {
         }
     }
 
-    private ArrayList<Produto> getProdutos(){
-        ArrayList<Produto> produtos_array = new ArrayList<>();
-        URL obj;
-        String line;
-        Gson gson = new Gson();
-        try {
-            obj = new URL(WS_URL + GET_URL);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod(GET);
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
-            con.setRequestProperty("Accept-Charset", UTF_8);
-            con.setConnectTimeout(TIMEOUT);
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            StringBuffer response = new StringBuffer();
-            while ((line = in.readLine()) != null) {
-                response.append(line);
+    private void getProdutos(){
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(WsClient.SERVER_URL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = retrofitBuilder.build();
+        final WsClient wsclient = retrofit.create(WsClient.class);
+
+        Call<List<Produto>> call = wsclient.getProdutos();
+
+        call.enqueue(new Callback<List<Produto>>() {
+            @Override
+            public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
+                if(response.isSuccessful()){
+                    List<Produto> lProdutos = response.body();
+
+                    banco.gravaProdutos(lProdutos);
+                }
             }
-            in.close();
-            JSONArray jsonArr = new JSONArray(response.toString());
-            for (int i = 0; i < jsonArr.length(); i++) {
-                JSONObject jsonObj = jsonArr.getJSONObject(i);
-                Produto produto = gson.fromJson(jsonObj.toString(), Produto.class);
-                produto.setRecente(false);
-                produtos_array.add(produto);
+
+            @Override
+            public void onFailure(Call<List<Produto>> call, Throwable t) {
+
             }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return produtos_array;
+        });
     }
 
+    //TODO: TEM QUE FAZER ALGO PARECIDO PARA FRENTE, VER ISSO
     private String montaJson(List<Produto> produtos){
         JSONObject prontoEnvio = new JSONObject();
         JSONArray jsonProdutos = new JSONArray();
@@ -143,10 +151,38 @@ public class WebService {
     }
 
     public void sincronizar(){
-        postProdutos(montaJson(banco.carregaProdutosManuais()));
+        //postProdutos(montaJson(banco.carregaProdutosManuais())); TODO: Ver se esta funcionando no server e ajustar
         banco.setaProdutosEnviados();
+        banco.excluiProdutos();
+        getProdutos();
+    }
 
-        banco.limpaBanco();
-        banco.gravaBanco(getProdutos());
+    public void getMercados(Cidade cidade){
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(WsClient.SERVER_URL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = retrofitBuilder.build();
+        final WsClient wsclient = retrofit.create(WsClient.class);
+
+        Call<List<Mercado>> call = wsclient.getMercados(cidade);
+
+        call.enqueue(new Callback<List<Mercado>>() {
+            @Override
+            public void onResponse(Call<List<Mercado>> call, Response<List<Mercado>> response) {
+                if(response.isSuccessful()){
+                    List<Mercado> lMercados = response.body();
+
+                    if(lMercados != null)
+                        banco.insertMercados(lMercados);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Mercado>> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

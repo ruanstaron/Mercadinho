@@ -38,7 +38,7 @@ public class AtributosDao {
                 "INSERT INTO Estado (descricao, sigla) VALUES (\"São Paulo\", \"SP\");\n" +
                 "INSERT INTO Estado (descricao, sigla) VALUES (\"Sergipe\", \"SE\");\n" +
                 "INSERT INTO Estado (descricao, sigla) VALUES (\"Tocantins\", \"TO\");");
-        db.execSQL("INSERT INTO Cidade (id_estado, descricao) VALUES (15, \"Abatiá\"),\n" +
+        db.execSQL("INSERT INTO Cidade (estado_id, descricao) VALUES (15, \"Abatiá\"),\n" +
                 "(15, \"Adrianópolis\"),\n" +
                 "(15, \"Agudos do Sul\"),\n" +
                 "(15, \"Almirante Tamandaré\"),\n" +

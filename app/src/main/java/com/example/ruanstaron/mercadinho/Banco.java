@@ -1,10 +1,14 @@
 package com.example.ruanstaron.mercadinho;
 
+import com.example.ruanstaron.mercadinho.db.Cidade;
+import com.example.ruanstaron.mercadinho.db.CidadeDao;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
+import com.example.ruanstaron.mercadinho.db.Mercado;
+import com.example.ruanstaron.mercadinho.db.MercadoDao;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
@@ -22,13 +26,13 @@ public class Banco {
         this.session = session;
     }
 
-    public void limpaBanco(){
+    public void excluiProdutos(){
         ProdutoDao produtosDao = session.getProdutoDao();
         produtosDao.queryBuilder().buildDelete().executeDeleteWithoutDetachingEntities();
         session.clear();
     }
 
-    public void gravaBanco(ArrayList<Produto> arrayBdd){
+    public void gravaProdutos(List<Produto> arrayBdd){
         ProdutoDao produtosDao = session.getProdutoDao();
         for (Produto bdd: arrayBdd){
             produtosDao.insert(bdd);
@@ -151,7 +155,7 @@ public class Banco {
 
 
     public void excluiListas(long idLista){
-        ListaDao listaDao     = session.getListaDao();
+        ListaDao listaDao = session.getListaDao();
         Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
 
         List<Lista_de_produtos> comprasVinculadas = carregaComprasLista(idLista);
@@ -161,4 +165,21 @@ public class Banco {
 
         listaDao.deleteByKey(idLista);
     }
+
+    public void insertMercados(List<Mercado> lMercado){
+        MercadoDao mercadoDao = session.getMercadoDao();
+
+        for (Mercado mercado : lMercado) {
+            mercadoDao.insert(mercado);
+        }
+    }
+
+    public List<Cidade> selectCidadesTodas(){
+        CidadeDao cidadeDao = session.getCidadeDao();
+        List<Cidade> lCidades = cidadeDao.queryBuilder().list();
+
+        return lCidades;
+    }
+
+
 }
