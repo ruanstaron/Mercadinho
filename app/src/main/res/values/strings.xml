@@ -53,6 +53,8 @@
     <string name="dialogoEditarNomeListaMsg">Nome da lista:</string>
     <string name="lista_vazia">Você ainda não realizou nenhuma compra :(</string>
     <string name="lista_vazia_desc">Nenhuma lista criada</string>
+    <string name="name">Name</string>
+    <string name="produto">Produto</string>
 
     <plurals name="listas_selecionados">
         <item quantity="one">Excluir a lista delecionada?</item>

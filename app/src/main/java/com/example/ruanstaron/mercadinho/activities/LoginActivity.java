@@ -85,9 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                         List<Usuario> resposta = response.body();
-                        if(response.isSuccessful() && resposta.get(0).getCod_msg() != "-2")
-                            Toast.makeText(getApplicationContext(), "Autorizado", Toast.LENGTH_SHORT).show(); // mudar
-                        else
+                        if(response.isSuccessful() && resposta.get(0).getCod_msg() != "-2"){
+                            Intent itLista = new Intent(getApplicationContext(), ListaActivity.class);
+                            startActivity(itLista);
+                        } else
                             Toast.makeText(getApplicationContext(), R.string.login_usuario_incorreto, Toast.LENGTH_SHORT).show();
                     }
 
