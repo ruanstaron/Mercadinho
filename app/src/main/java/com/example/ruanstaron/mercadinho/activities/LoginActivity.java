@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.R;
+import com.example.ruanstaron.mercadinho.Validacao;
 import com.example.ruanstaron.mercadinho.WsClient;
 import com.example.ruanstaron.mercadinho.model.Usuario;
 
@@ -85,10 +86,12 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                         List<Usuario> resposta = response.body();
-                        if(response.isSuccessful() && resposta.get(0).getCod_msg() != "-2"){
-                            Intent itLista = new Intent(getApplicationContext(), ListaActivity.class);
-                            startActivity(itLista);
-                        } else
+                        if(response.isSuccessful() && resposta.get(0).getCod_msg() == null ){
+                            Intent itListas = new Intent(getApplicationContext(), ListaActivity.class);
+                            startActivity(itListas);
+                            finish();
+                        }
+                        else if(resposta.get(0).getCod_msg().equals("-2"))
                             Toast.makeText(getApplicationContext(), R.string.login_usuario_incorreto, Toast.LENGTH_SHORT).show();
                     }
 

@@ -1,4 +1,4 @@
-package com.example.ruanstaron.mercadinho.activities;
+package com.example.ruanstaron.mercadinho;
 
 /**
  * Created by pucci on 28/01/2018.

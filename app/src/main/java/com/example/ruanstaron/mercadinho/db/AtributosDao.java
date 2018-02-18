@@ -9,35 +9,8 @@ import org.greenrobot.greendao.database.Database;
 public class AtributosDao {
 
     public static void insereDados(Database db) {
-        db.execSQL("INSERT INTO Situacao (descricao) VALUES (\"ok\");\n" +
-                "INSERT INTO Situacao (descricao) VALUES (\"divergencia\");\n" +
-                "INSERT INTO Situacao (descricao) VALUES (\"compra\");");
-        db.execSQL("INSERT INTO Estado (descricao, sigla) VALUES (\"Acre\", \"AC\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Alagoas\", \"AL\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Amazonas\", \"AM\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Bahia\", \"BA\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Ceará\", \"CE\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Distrito Federal\", \"DF\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Espírito Santo\", \"ES\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Goiás\", \"GO\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Maranhão\", \"MA\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Mato Grosso\", \"MG\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Mato Grosso do Sul\", \"MS\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Minas Gerais\", \"MG\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Pará\", \"PA\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Paraíba\", \"PB\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Paraná\", \"PR\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Pernambuco\", \"PE\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Piauí\", \"PI\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Rio de Janeiro\", \"RJ\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Rio Grande do Norte\", \"RN\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Rio Grande do Sul\", \"RS\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Rondônia\", \"RO\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Roraima\", \"RR\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Santa Catarina\", \"SC\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"São Paulo\", \"SP\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Sergipe\", \"SE\");\n" +
-                "INSERT INTO Estado (descricao, sigla) VALUES (\"Tocantins\", \"TO\");");
+        db.execSQL("insert or ignore into SITUACAO (_id, descricao) VALUES (1, \"ok\"), (2, \"divergencia\"), (3, \"compra\"), (4, \"comprado\");");
+        db.execSQL("INSERT INTO Estado (descricao, sigla) VALUES ('Acre', 'AC'), ('Alagoas', 'AL'), ('Amazonas', 'AM'), ('Bahia', 'BA'), ('Ceará', 'CE'), ('Distrito Federal', 'DF'), ('Espírito Santo', 'ES'), ('Goiás', 'GO'), ('Maranhão', 'MA'), ('Mato Grosso', 'MG'), ('Mato Grosso do Sul', 'MS'), ('Minas Gerais', 'MG'), ('Pará', 'PA'), ('Paraíba', 'PB'), ('Paraná', 'PR'), ('Pernambuco', 'PE'), ('Piauí', 'PI'), ('Rio de Janeiro', 'RJ'), ('Rio Grande do Norte', 'RN'), ('Rio Grande do Sul', 'RS'), ('Rondônia', 'RO'), ('Roraima', 'RR'), ('Santa Catarina', 'SC'), ('São Paulo', 'SP'), ('Sergipe', 'SE'), ('Tocantins', 'TO');");
         db.execSQL("INSERT INTO Cidade (estado_id, descricao) VALUES (15, \"Abatiá\"),\n" +
                 "(15, \"Adrianópolis\"),\n" +
                 "(15, \"Agudos do Sul\"),\n" +

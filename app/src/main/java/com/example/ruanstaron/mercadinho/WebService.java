@@ -120,7 +120,7 @@ public class WebService {
 
             @Override
             public void onFailure(Call<List<Produto>> call, Throwable t) {
-
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

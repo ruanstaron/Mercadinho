@@ -25,6 +25,11 @@ public class Lista {
     public Lista() {
     }
 
+    public Lista(String descricao, boolean recente){
+        setDescricao(descricao);
+        setRecente(recente);
+    }
+
     public Lista(Long id) {
         this.id = id;
     }

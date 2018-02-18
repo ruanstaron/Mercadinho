@@ -1,4 +1,4 @@
-package com.example.ruanstaron.mercadinho.activities;
+package com.example.ruanstaron.mercadinho;
 
 import android.content.Context;
 import android.widget.EditText;

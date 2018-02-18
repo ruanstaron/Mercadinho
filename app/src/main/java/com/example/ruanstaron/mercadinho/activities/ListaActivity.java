@@ -3,11 +3,11 @@ package com.example.ruanstaron.mercadinho.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.text.InputType;
 import android.util.SparseBooleanArray;
@@ -31,7 +31,8 @@ import java.util.List;
 
 public class ListaActivity extends AppCompatActivity implements ActionMode.Callback, AdapterView.OnItemLongClickListener {
 
-    private final int ACAO_EDITAR = 0;
+    private final int ACAO_EDITAR   = 0;
+    private final int ACAO_DUPLICAR = 2;
 
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster master;
@@ -65,9 +66,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 }else{
                     atualizarItensMarcados(lvListas, position);
 
-                    if(qtdeItensMarcados() == 0){
+                    if(qtdeItensMarcados() == 0)
                         actionMode.finish();
-                    }
                 }
             }
         });
@@ -78,6 +78,9 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         fabAddLista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(actionMode != null) // na verdade nao precisa, tirar e testar
+                    return;
+
                 ListaDialogLista dlgNomeLista = new ListaDialogLista();
                 dlgNomeLista.show(getSupportFragmentManager(), "dlgNomemLista");
             }
@@ -97,15 +100,14 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         List<Lista> lListas = new Banco(session).carregaListas();
         lvListas.setAdapter(new ListaAdapter(this, lListas));
 
-        if(lvListas.getAdapter().isEmpty()){
+        if(lvListas.getAdapter().isEmpty())
             tvListaVazia.setVisibility(View.VISIBLE);
-        }
-        else{
+        else
             tvListaVazia.setVisibility(View.INVISIBLE);
-        }
     }
 
     public void incluirBancoLista(DaoSession session, Lista lista){
+        lista.setRecente(true);
         listaDao = session.getListaDao();
         listaDao.insert(lista);
     }
@@ -118,6 +120,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     private void iniciarModoExclusao(){
         actionMode = startSupportActionMode(this);
         lvListas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        fabAddLista.hide();
     }
 
     private void atualizarTitulo(){
@@ -127,6 +130,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         actionMode.setTitle(selecionados);
 
         actionMode.getMenu().getItem(ACAO_EDITAR).setVisible(qtdeItensMarcados() == 1);
+        actionMode.getMenu().getItem(ACAO_DUPLICAR).setVisible(actionMode.getMenu().getItem(ACAO_EDITAR).isVisible());
     }
 
     private int qtdeItensMarcados(){
@@ -171,7 +175,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
     }
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_delete_list, menu);
+        getMenuInflater().inflate(R.menu.menu_listas_list, menu);
         return true;
     }
 
@@ -204,6 +208,10 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
             case R.id.acao_edit:
                 EditarDialogLista dlgEditarListas = new EditarDialogLista();
                 dlgEditarListas.show(getSupportFragmentManager(), "dlgEditarLista");
+                break;
+            case R.id.acao_duplicar:
+                DuplicarDialogLista dlgDuplicarListas = new DuplicarDialogLista();
+                dlgDuplicarListas.show(getSupportFragmentManager(), "dlgDuplicarLista");
         }
 
         return true;
@@ -215,6 +223,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         lvListas.clearChoices();
         lvListas.setChoiceMode(ListView.CHOICE_MODE_NONE);
         atualizaListListas();
+        fabAddLista.show();
     }
 
     public static class ListaDialogLista extends DialogFragment {
@@ -307,6 +316,34 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
             AlertDialog dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.dialogoConfirmaExclusaoListaTitulo)
                     .setMessage(mensagem)
+                    .setPositiveButton(R.string.sim, listener)
+                    .setNegativeButton(R.string.nao, null)
+                    .create();
+            return dialog;
+        }
+    }
+
+    public static class DuplicarDialogLista extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int button){
+                    if(button == DialogInterface.BUTTON_POSITIVE){
+                        ListaActivity actvListas = ((ListaActivity) getActivity());
+                        Lista duplicata = new Lista(actvListas.lista.getDescricao(), true);
+                        actvListas.incluirBancoLista(actvListas.session, duplicata);
+                        actvListas.actionMode.finish();
+                        actvListas.atualizaListListas();
+                        dismiss();
+                    }
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.dialogoConfirmaDuplicarListaTitulo)
+                    .setMessage(R.string.dialogoDuplicarListaMsg)
                     .setPositiveButton(R.string.sim, listener)
                     .setNegativeButton(R.string.nao, null)
                     .create();

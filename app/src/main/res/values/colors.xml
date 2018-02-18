@@ -3,5 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Customizadas -->
     <color name="colorOrange">#ffaf18</color>
+    <color name="colorListaOk">#bbf4a1</color>
+    <color name="colorListaEmCompra">#a1c1f4</color>
+    <color name="colorListaDivergencia">#fc6c6c</color>
 </resources>

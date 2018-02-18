@@ -1,6 +1,5 @@
 package com.example.ruanstaron.mercadinho;
 
-import com.example.ruanstaron.mercadinho.activities.RetornoWS;
 import com.example.ruanstaron.mercadinho.db.Cidade;
 import com.example.ruanstaron.mercadinho.db.Mercado;
 import com.example.ruanstaron.mercadinho.db.Produto;

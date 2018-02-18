@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
+import com.example.ruanstaron.mercadinho.RetornoWS;
+import com.example.ruanstaron.mercadinho.Validacao;
 import com.example.ruanstaron.mercadinho.WebService;
 import com.example.ruanstaron.mercadinho.WsClient;
 import com.example.ruanstaron.mercadinho.db.Cidade;

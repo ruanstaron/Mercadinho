@@ -5,10 +5,15 @@
         android:id="@+id/acao_edit"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/acao_edit"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/acao_delete"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/acao_delete"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/acao_duplicar"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="@string/acao_duplicar"
         app:showAsAction="ifRoom" />
 </menu>
