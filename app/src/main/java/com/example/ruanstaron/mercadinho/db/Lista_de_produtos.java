@@ -57,6 +57,13 @@ public class Lista_de_produtos {
     })
     private List<Situacao> situacaoList;
 
+    public Lista_de_produtos(Long cod_barras, Long listaId, Long situacaoId, Float quantidade, Float valor) {
+        this.cod_barras = cod_barras;
+        this.listaId = listaId;
+        this.situacaoId = situacaoId;
+        this.quantidade = quantidade;
+        this.valor = valor;
+    }
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 

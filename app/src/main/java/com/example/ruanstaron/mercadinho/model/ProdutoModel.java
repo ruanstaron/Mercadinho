@@ -6,13 +6,13 @@ package com.example.ruanstaron.mercadinho.model;
  * Created by Ruan on 10/02/2018.
  */
 
-public class Produto {
+public class ProdutoModel {
     private String produto;
     private String mercado;
     private float valor;
     private String data;
 
-    public Produto(String produto, String mercado, float valor, String data) {
+    public ProdutoModel(String produto, String mercado, float valor, String data) {
         this.produto = produto;
         this.mercado = mercado;
         this.valor = valor;

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.ruanstaron.mercadinho.R;
-import com.example.ruanstaron.mercadinho.model.Produto;
+import com.example.ruanstaron.mercadinho.model.ProdutoModel;
 import java.util.List;
 
 /**
@@ -16,25 +16,25 @@ import java.util.List;
 
 public class BuscaProdutoAdapter extends BaseAdapter {
     private final Activity act;
-    private final List<Produto> produtos;
+    private final List<ProdutoModel> produtoModels;
 
-    public BuscaProdutoAdapter(List<Produto> produtos, Activity act) {
-        this.produtos = produtos;
+    public BuscaProdutoAdapter(List<ProdutoModel> produtoModels, Activity act) {
+        this.produtoModels = produtoModels;
         this.act = act;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = act.getLayoutInflater().inflate(R.layout.list_item_busca_produtos, parent, false);
-        Produto produto = produtos.get(position);
+        ProdutoModel produtoModel = produtoModels.get(position);
         TextView NomeProduto = (TextView) view.findViewById(R.id.tvNomeProduto);
         TextView NomeMercado = (TextView) view.findViewById(R.id.tvNomeMercado);
         TextView ValorProduto = (TextView) view.findViewById(R.id.tvValorProduto);
         TextView DataCompraProduto = (TextView) view.findViewById(R.id.tvDataCompraProduto);
-        NomeProduto.setText(produto.getProduto());
-        NomeMercado.setText(produto.getMercado());
-        ValorProduto.setText(String.valueOf(produto.getValor()));
-        DataCompraProduto.setText(produto.getData());
+        NomeProduto.setText(produtoModel.getProduto());
+        NomeMercado.setText(produtoModel.getMercado());
+        ValorProduto.setText(String.valueOf(produtoModel.getValor()));
+        DataCompraProduto.setText(produtoModel.getData());
         if(position % 2 == 0){
             view.setBackgroundColor(Color.parseColor("#ffaf18"));
         }
@@ -43,12 +43,12 @@ public class BuscaProdutoAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return produtos.size();
+        return produtoModels.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return produtos.get(position);
+        return produtoModels.get(position);
     }
 
     @Override

@@ -1,19 +1,33 @@
 package com.example.ruanstaron.mercadinho.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.adapters.CompraAdapter;
+import com.example.ruanstaron.mercadinho.db.DaoMaster;
+import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Lista;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.example.ruanstaron.mercadinho.db.Produto;
-import com.example.ruanstaron.mercadinho.model.Compra;
+import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import android.content.Intent;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -24,19 +38,23 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
     /*private Button                  scanBtn, okBtn;
     private TextView                tvValorTotal;
     private EditText                etQuantidade, etValor;
-    private AutoCompleteTextView    etProduto;
 
-    private ArrayList<String>       alProdutosAutocompletar;
+
+
+
+
+    private Double                  valorTotalCompra = 0.00;*/
+
+    private Lista lista = new Lista();
     private ArrayAdapter<String>    adapterNomeProdutos;
+    private ArrayList<String>       alProdutosAutocompletar;
+    private Boolean                 retornoScanFalse = false;
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster               master;
     private DaoSession              session;
-    private Double                  valorTotalCompra = 0.00;
     private Banco                   banco;
-    private Long                    codEscaneado = (long)0;
-    private Boolean                 retornoScanFalse = false;/*
-
-    private Lista lista = new Lista();*/
+    private Long                    codEscaneado = (long) 0;
+    private Button                  scan;
     private EditText                etProduto;
     private ListView                listaCompras;
 
@@ -45,15 +63,20 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compra);
         listaCompras = (ListView) findViewById(R.id.lvCompras);
+        List<Lista_de_produtos> lista_de_produtos = null;
         try {
-            List<Compra> compras = buscaCompras();
-            CompraAdapter adapter = new CompraAdapter(compras, this);
-            listaCompras.setAdapter(adapter);
+            lista_de_produtos = buscaCompras();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        //atualizaLista(lista_de_produtos);
+        CompraAdapter adapter = new CompraAdapter(lista_de_produtos, this, session);
+        listaCompras.setAdapter(adapter);
+        scan = (Button) findViewById(R.id.bEscanear);
         etProduto    = (EditText) findViewById(R.id.etProduto);
+        scan.setOnClickListener(this);
+
+        //clique longo no editText
         etProduto.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View arg0) {
                 Intent itBuscaProduto = new Intent(getApplicationContext(), BuscaProdutosActivity.class);
@@ -62,12 +85,12 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
             }
         });
 
-        /*helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
         master  = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
         banco = new Banco(session);
 
-        scanBtn      = (Button)findViewById(R.id.scan_button);
+        /*scanBtn      = (Button)findViewById(R.id.scan_button);
         okBtn        = (Button)findViewById(R.id.bOk);
         etQuantidade = (EditText) findViewById(R.id.etQuantidade);
         etValor      = (EditText) findViewById(R.id.etValor);
@@ -75,18 +98,18 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         listaCompras = (ListView) findViewById(R.id.lvBuscaProdutos);
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);*/
-        //Intent it = getIntent();
+        Intent it = getIntent();
 
-        /*if (it.hasExtra("id_lista")){
+        if (it.hasExtra("id_lista")){
             lista.setId(((long) Integer.parseInt(it.getStringExtra("id_lista"))));
             lista.setDescricao(it.getStringExtra("descricao_lista"));
 
             lista = banco.carregaListas(lista.getId().intValue());
 
-            atualizaCompras();
+            //atualizaCompras();
         }
 
-        etProduto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*etProduto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus && !etProduto.getText().toString().isEmpty()){
@@ -98,27 +121,18 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         atualizaNomeProdutos();*/
     }
 
-    private List<Compra> buscaCompras() throws ParseException {
+    /*public void atualizaLista(List<Lista_de_produtos> lista_de_produtos){
 
-        List<Compra> compras = new ArrayList<Compra>();
-        Compra c = new Compra("produto1", 1, 1, false);
-        compras.add(c);
+    }*/
+    private List<Lista_de_produtos> buscaCompras() throws ParseException {
 
-        c = new Compra("produto2", 2, 2, false);
-        compras.add(c);
-
-        c = new Compra("produto3", 3, 3, false);
-        compras.add(c);
-
-        c = new Compra("produto3", 3, 3, false);
-        compras.add(c);
-
-        c = new Compra("produto4", 4, 4, false);
-        compras.add(c);
-        return compras;
+        List<Lista_de_produtos> lista_produtos = new ArrayList<>();
+        Lista_de_produtos c = new Lista_de_produtos((long) 123456789, (long) 1, (long) 3, (float) 1, (float) 2);
+        lista_produtos.add(c);
+        return lista_produtos;
     }
 
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -127,11 +141,11 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
             dlgNomeProduto.show(getSupportFragmentManager(), "dlgnomeProduto");
             retornoScanFalse = false;
         }
-    }*/
+    }
 
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.scan_button:
+            case R.id.bEscanear:
                 IntentIntegrator scanIntegrator = new IntentIntegrator(this);
                 scanIntegrator.initiateScan();
                 break;
@@ -145,15 +159,16 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
 
     /*public void atualizaCompras(){
         List<Lista_de_produtos> lComprasAtualizadas = new Banco(session).carregaCompras(Integer.parseInt(lista.getId().toString()));
-        listaCompras.setAdapter(new CompraAdapter(this, lComprasAtualizadas));
-    }
+        //alterar o adpter para çista de produtos em vez de compra.
+        listaCompras.setAdapter(new CompraAdapter(lComprasAtualizadas, this, session));
+    }*/
 
-    public void atualizaNomeProdutos(){
+    /*public void atualizaNomeProdutos(){
         alProdutosAutocompletar = new Banco(session).carregaNomeProdutos();
         adapterNomeProdutos = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alProdutosAutocompletar);
         etProduto.setAdapter(adapterNomeProdutos);
         etProduto.setThreshold(1);
-    }
+    }*/
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
@@ -173,7 +188,7 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         }
     }
 
-    public void IncluiCompraLista(){
+    /*public void IncluiCompraLista(){
         if(etValor.getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.geraProdutoPreencherValor, Toast.LENGTH_SHORT).show();
             return;
@@ -215,7 +230,7 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         etProduto.setText("");
         etQuantidade.setText("");
         etValor.setText("");
-    }
+    }*/
 
     public static class ListaDialogProduto extends DialogFragment {
         @Override
@@ -234,7 +249,7 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
 
                     ProdutoDao produtosDao = compraActivity.session.getProdutoDao();
                     produtosDao.insert(produto);
-                    compraActivity.atualizaNomeProdutos();
+                    //compraActivity.atualizaNomeProdutos();
                     compraActivity.etProduto.setText(produto.getDescricao());
 
                     dismiss();
@@ -250,5 +265,5 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
 
             return dialog;
         }
-    }*/
+    }
 }
