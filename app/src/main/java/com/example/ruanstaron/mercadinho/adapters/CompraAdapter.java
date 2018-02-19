@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
@@ -38,8 +39,7 @@ public class CompraAdapter extends BaseAdapter {
         TextView quantidade = (TextView) view.findViewById(R.id.tvQuantidade);
         TextView valorTotal = (TextView) view.findViewById(R.id.tvValalorTotal);
         CheckBox comprado = (CheckBox) view.findViewById(R.id.cbComprado);
-        nomeProduto.setText("teste");
-        //nomeProduto.setText(new Banco(session).getProdutoDescricao(lista_de_produto.getCod_barras()));
+        nomeProduto.setText(new Banco(session).getProdutoDescricao(lista_produto.getCod_barras()));
         quantidade.setText(String.valueOf(lista_produto.getQuantidade()));
         valorTotal.setText(String.valueOf(lista_produto.getQuantidade()*lista_produto.getValor()));
         //fazer um switch para saber qual a situação desse produto

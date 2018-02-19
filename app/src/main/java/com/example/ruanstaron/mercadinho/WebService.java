@@ -152,9 +152,9 @@ public class WebService {
 
     public void sincronizar(){
         //postProdutos(montaJson(banco.carregaProdutosManuais())); TODO: Ver se esta funcionando no server e ajustar
-        banco.setaProdutosEnviados();
+        /*banco.setaProdutosEnviados(); TODO: Comitei senão não conseguia gravar nenhum produto no banco.
         banco.excluiProdutos();
-        getProdutos();
+        getProdutos();*/
     }
 
     public void getMercados(Cidade cidade){

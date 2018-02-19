@@ -12,6 +12,9 @@ import com.example.ruanstaron.mercadinho.db.MercadoDao;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,5 +184,8 @@ public class Banco {
         return lCidades;
     }
 
-
+    public void verificaMenorCodBarras(){
+        ProdutoDao produto = session.getProdutoDao();
+        Query<Produto> query = produto.queryBuilder().where(new WhereCondition.StringCondition("SELECT min(cod_barras) FROM Produto")).build();
+    }
 }

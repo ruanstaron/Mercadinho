@@ -14,6 +14,7 @@ import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -23,10 +24,10 @@ import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -38,16 +39,11 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
     /*private Button                  scanBtn, okBtn;
     private TextView                tvValorTotal;
     private EditText                etQuantidade, etValor;
-
-
-
-
-
-    private Double                  valorTotalCompra = 0.00;*/
-
-    private Lista lista = new Lista();
     private ArrayAdapter<String>    adapterNomeProdutos;
     private ArrayList<String>       alProdutosAutocompletar;
+    */
+
+    private Lista lista = new Lista();
     private Boolean                 retornoScanFalse = false;
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster               master;
@@ -55,26 +51,35 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
     private Banco                   banco;
     private Long                    codEscaneado = (long) 0;
     private Button                  scan;
+    private Button                  add;
     private EditText                etProduto;
+    private EditText                etQuantidade;
+    private EditText                etValor;
     private ListView                listaCompras;
+    private List<Lista_de_produtos> lista_de_produtos;
+    private Double                  valorTotalCompra = 0.00;
+    private TextView                tvValorTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compra);
+
         listaCompras = (ListView) findViewById(R.id.lvCompras);
-        List<Lista_de_produtos> lista_de_produtos = null;
-        try {
-            lista_de_produtos = buscaCompras();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        //atualizaLista(lista_de_produtos);
-        CompraAdapter adapter = new CompraAdapter(lista_de_produtos, this, session);
-        listaCompras.setAdapter(adapter);
         scan = (Button) findViewById(R.id.bEscanear);
+        add = (Button) findViewById(R.id.bAdd);
         etProduto    = (EditText) findViewById(R.id.etProduto);
+        etQuantidade    = (EditText) findViewById(R.id.etQuantidade);
+        etValor    = (EditText) findViewById(R.id.etValor);
+        tvValorTotal = (TextView) findViewById(R.id.tvValorTotal);
+
+        helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
+        master  = new DaoMaster(helper.getWritableDatabase());
+        session = master.newSession();
+        banco = new Banco(session);
+
         scan.setOnClickListener(this);
+        add.setOnClickListener(this);
 
         //clique longo no editText
         etProduto.setOnLongClickListener(new View.OnLongClickListener() {
@@ -85,10 +90,9 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
             }
         });
 
-        helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
-        master  = new DaoMaster(helper.getWritableDatabase());
-        session = master.newSession();
-        banco = new Banco(session);
+        verificaIdLista();
+        atualizaListaDeCompras();
+        atualizaValorTotal();
 
         /*scanBtn      = (Button)findViewById(R.id.scan_button);
         okBtn        = (Button)findViewById(R.id.bOk);
@@ -98,16 +102,6 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         listaCompras = (ListView) findViewById(R.id.lvBuscaProdutos);
         scanBtn.setOnClickListener(this);
         okBtn.setOnClickListener(this);*/
-        Intent it = getIntent();
-
-        if (it.hasExtra("id_lista")){
-            lista.setId(((long) Integer.parseInt(it.getStringExtra("id_lista"))));
-            lista.setDescricao(it.getStringExtra("descricao_lista"));
-
-            lista = banco.carregaListas(lista.getId().intValue());
-
-            //atualizaCompras();
-        }
 
         /*etProduto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -119,17 +113,6 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         });
 
         atualizaNomeProdutos();*/
-    }
-
-    /*public void atualizaLista(List<Lista_de_produtos> lista_de_produtos){
-
-    }*/
-    private List<Lista_de_produtos> buscaCompras() throws ParseException {
-
-        List<Lista_de_produtos> lista_produtos = new ArrayList<>();
-        Lista_de_produtos c = new Lista_de_produtos((long) 123456789, (long) 1, (long) 3, (float) 1, (float) 2);
-        lista_produtos.add(c);
-        return lista_produtos;
     }
 
     @Override
@@ -149,12 +132,66 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
                 IntentIntegrator scanIntegrator = new IntentIntegrator(this);
                 scanIntegrator.initiateScan();
                 break;
-            case R.id.bOk:
-                //IncluiCompraLista();
-                break;
+            case R.id.bAdd:
+                IncluiCompraLista();
+        }
+    }
+
+    public void verificaIdLista(){
+        Intent it = getIntent();
+        if (it.hasExtra("id_lista")){
+            lista.setId(((long) Integer.parseInt(it.getStringExtra("id_lista"))));
+            lista.setDescricao(it.getStringExtra("descricao_lista"));
+        }
+    }
+
+    private void atualizaListaDeCompras(){
+        lista_de_produtos = new Banco(session).carregaCompras(Integer.valueOf(lista.getId().intValue()));
+        listaCompras.setAdapter(new CompraAdapter(lista_de_produtos, this, session));
+    }
+
+    public void atualizaValorTotal(){
+        tvValorTotal.setText(valorTotalCompra.toString());
+    }
+
+    public void IncluiCompraLista(){
+        if(etProduto.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.geraProdutoPreencherDescricao, Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // TODO: IMPLEMENTAR UM LISTENER CUSTOMIZADO OU IMPLEMENTAR DE FORMA ANONIMA
+        if(etQuantidade.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.geraProdutoPreencherQuantidade, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(etValor.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.geraProdutoPreencherValor, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Lista_de_produtos produto  = new Lista_de_produtos();
+        if(codEscaneado != 0){
+            produto.setCod_barras(codEscaneado);
+            produto.setListaId(lista.getId());
+            produto.setSituacaoId((long) 3);
+            produto.setQuantidade(Float.parseFloat(etQuantidade.getText().toString()));
+            produto.setValor(Float.parseFloat(etValor.getText().toString()));
+            produto.setRecente(true);
+            valorTotalCompra = (double) produto.getQuantidade() * produto.getValor();
+        }else{
+            banco.verificaMenorCodBarras();
+        }
+
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+        comprasDao.insert(produto);
+        atualizaListaDeCompras();
+        atualizaValorTotal();
+
+        codEscaneado = (long) 0;
+        etProduto.setText("");
+        etQuantidade.setText("");
+        etValor.setText("");
     }
 
     /*public void atualizaCompras(){
@@ -188,50 +225,6 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
         }
     }
 
-    /*public void IncluiCompraLista(){
-        if(etValor.getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.geraProdutoPreencherValor, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(etQuantidade.getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.geraProdutoPreencherQuantidade, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(etProduto.getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.geraProdutoPreencherDescricao, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Lista_de_produtos pCompras  = new Lista_de_produtos();
-        pCompras.setCod_barras(new Banco(session).carregaProduto(etProduto.getText().toString()).getCod_barras());
-
-        if((pCompras.getCod_barras() == null) || (pCompras.getCod_barras().toString() == "0")) {
-            Toast.makeText(this, R.string.geraProdutoPreencherCodBarras, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        //Double valorTotal = Integer.parseInt(etQuantidade.getText().toString()) * Double.parseDouble(etValor.getText().toString());
-
-        pCompras.setListaId(lista.getId());
-        pCompras.setQuantidade(Float.parseFloat(etQuantidade.getText().toString()));
-        pCompras.setValor(Float.parseFloat(etValor.getText().toString()));
-        //pCompras.setValorTotal(valorTotal);
-
-        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
-        Toast.makeText(this, pCompras.getListaId().toString() + " - " + pCompras.getCod_barras().toString(), Toast.LENGTH_SHORT).show();
-        comprasDao.insert(pCompras);
-        atualizaCompras();
-
-        //valorTotalCompra = valorTotalCompra+pCompras.getValorTotal();
-        tvValorTotal.setText(valorTotalCompra.toString());
-
-        etProduto.setText("");
-        etQuantidade.setText("");
-        etValor.setText("");
-    }*/
-
     public static class ListaDialogProduto extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -249,7 +242,6 @@ public class CompraActivity extends AppCompatActivity implements OnClickListener
 
                     ProdutoDao produtosDao = compraActivity.session.getProdutoDao();
                     produtosDao.insert(produto);
-                    //compraActivity.atualizaNomeProdutos();
                     compraActivity.etProduto.setText(produto.getDescricao());
 
                     dismiss();
