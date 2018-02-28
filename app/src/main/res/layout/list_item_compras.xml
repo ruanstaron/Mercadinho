@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:longClickable="true">
 
     <TextView
         android:id="@+id/tvProduto"
@@ -21,26 +22,25 @@
 
     <TextView
         android:id="@+id/tvQuantidade"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Quantidade"
-        app:layout_constraintEnd_toStartOf="@+id/tvValalorTotal"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toStartOf="@+id/tvVu"
+        app:layout_constraintStart_toEndOf="@+id/TvQtd"
         app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
 
     <TextView
-        android:id="@+id/tvValalorTotal"
-        android:layout_width="0dp"
+        android:id="@+id/tvValorTotal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Valor Total"
+        android:textAlignment="viewStart"
         app:layout_constraintEnd_toStartOf="@+id/cbComprado"
-        app:layout_constraintStart_toEndOf="@+id/tvQuantidade"
+        app:layout_constraintStart_toEndOf="@+id/tvTotal"
         app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
 
     <CheckBox
@@ -51,10 +51,55 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:checked="false"
-        android:text="Comprado?"
+        android:text="Carrinho"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvValalorTotal"
+        app:layout_constraintStart_toEndOf="@+id/tvValorTotal"
         app:layout_constraintTop_toBottomOf="@+id/tvProduto"
         tools:checked="false" />
+
+    <TextView
+        android:id="@+id/TvQtd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Qtd:"
+        app:layout_constraintEnd_toStartOf="@+id/tvQuantidade"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
+
+    <TextView
+        android:id="@+id/tvVu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Un: R$"
+        app:layout_constraintEnd_toStartOf="@+id/tvValorUnitario"
+        app:layout_constraintStart_toEndOf="@+id/tvQuantidade"
+        app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
+
+    <TextView
+        android:id="@+id/tvValorUnitario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toStartOf="@+id/tvTotal"
+        app:layout_constraintStart_toEndOf="@+id/tvVu"
+        app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
+
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Total: R$"
+        app:layout_constraintEnd_toStartOf="@+id/tvValorTotal"
+        app:layout_constraintStart_toEndOf="@+id/tvValorUnitario"
+        app:layout_constraintTop_toBottomOf="@+id/tvProduto" />
 
 </android.support.constraint.ConstraintLayout>

@@ -107,11 +107,15 @@ public class Banco {
         ProdutoDao produtosDao = session.getProdutoDao();
         List<Produto> datalist = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.eq(cod_barras)).list();
 
-        if(datalist.size() > 0)
-            descricao = datalist.get(0).getDescricao();
-        else
+        if(datalist.size() > 0){
+            if(datalist.get(0).getDescricao() == null){
+                descricao = datalist.get(0).getDescricao_usuario();
+            }else{
+                descricao = datalist.get(0).getDescricao();
+            }
+        } else{
             descricao = "";
-
+        }
         return descricao;
     }
 
@@ -184,8 +188,15 @@ public class Banco {
         return lCidades;
     }
 
-    public void verificaMenorCodBarras(){
+    public long verificaMenorCodBarras(){
+        long cod_barras = 0;
         ProdutoDao produto = session.getProdutoDao();
-        Query<Produto> query = produto.queryBuilder().where(new WhereCondition.StringCondition("SELECT min(cod_barras) FROM Produto")).build();
+        List<Produto> list = produto.queryBuilder().list();
+        for (Produto p: list){
+            if(p.getCod_barras()<cod_barras)
+                cod_barras = p.getCod_barras();
+        }
+        cod_barras = cod_barras -1;
+        return cod_barras;
     }
 }
