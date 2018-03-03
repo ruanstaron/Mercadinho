@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -55,6 +56,11 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
             RelativeLayout llLoginActvDisable = ((RelativeLayout) ((LoginActivity) contextRef.get()).findViewById(R.id.llLoginActvDisable));
             llLoginActvDisable.setVisibility(View.VISIBLE);
+
+            Button btnLogin = ((Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnLogin));
+            btnLogin.setEnabled(false);
+            Button btnCadastrar = ((Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnCadastrar));
+            btnCadastrar.setEnabled(false);
         }
     }
 
@@ -137,6 +143,11 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
             RelativeLayout llLoginActvDisable = ((RelativeLayout) ((LoginActivity) contextRef.get()).findViewById(R.id.llLoginActvDisable));
             llLoginActvDisable.setVisibility(View.GONE);
+
+            Button btnLogin = ((Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnLogin));
+            btnLogin.setEnabled(true);
+            Button btnCadastrar = ((Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnCadastrar));
+            btnCadastrar.setEnabled(true);
 
             Toast.makeText(context, "Usuário/Senha inválidos", Toast.LENGTH_SHORT).show();
         }
