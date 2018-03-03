@@ -13,10 +13,10 @@ import com.example.ruanstaron.mercadinho.WebService;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText edtEmail;
-    private EditText edtSenha;
-    private Button   btnCadastrar;
-    private Button   btnLogin;
+    private EditText    edtEmail;
+    private EditText    edtSenha;
+    private Button      btnCadastrar;
+    private Button      btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private void instanciarComponentes(){
         edtEmail = ((EditText) findViewById(R.id.edtLoginEmail));
         edtSenha = ((EditText) findViewById(R.id.edtLoginSenha));
+
         instanciarBtnCadastrar();
         instanciarBtnLogin();
     }

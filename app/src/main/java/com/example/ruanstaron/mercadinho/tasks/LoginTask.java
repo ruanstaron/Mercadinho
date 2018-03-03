@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.R;
@@ -45,8 +48,13 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
         Log.i("LoginTask", "onPreExecute");
 
         if(contextRef.get() instanceof LoginActivity){
-            Button btnLogin = (Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnLogin);
-            btnLogin.setEnabled(false);
+            ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
+            pbLogin.setVisibility(View.VISIBLE);
+            ((LoginActivity) contextRef.get()).getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            RelativeLayout llLoginActvDisable = ((RelativeLayout) ((LoginActivity) contextRef.get()).findViewById(R.id.llLoginActvDisable));
+            llLoginActvDisable.setVisibility(View.VISIBLE);
         }
     }
 
@@ -117,11 +125,18 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
             ((LoginActivity) context).finish();
 
+            ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
+            pbLogin.setVisibility(View.GONE);
+
             Log.i("Retrofit", "Login success");
         }
         else if(!b && context instanceof LoginActivity){
-            Button btnLogin = (Button) ((LoginActivity) contextRef.get()).findViewById(R.id.btnLogin);
-            btnLogin.setEnabled(true);
+            ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
+            pbLogin.setVisibility(View.INVISIBLE);
+            ((LoginActivity)context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            RelativeLayout llLoginActvDisable = ((RelativeLayout) ((LoginActivity) contextRef.get()).findViewById(R.id.llLoginActvDisable));
+            llLoginActvDisable.setVisibility(View.GONE);
 
             Toast.makeText(context, "Usuário/Senha inválidos", Toast.LENGTH_SHORT).show();
         }
