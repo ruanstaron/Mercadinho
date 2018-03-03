@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
     tools:context="com.example.ruanstaron.mercadinho.activities.LoginActivity">
 
     <ImageView
@@ -29,7 +28,6 @@
         android:ems="10"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
-        android:text="ruan.staron@hotmail.com"
         app:layout_constraintBottom_toTopOf="@+id/edtLoginSenha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -45,7 +43,6 @@
         android:ems="10"
         android:hint="Senha"
         android:inputType="textPassword"
-        android:text="xinxila2017"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
