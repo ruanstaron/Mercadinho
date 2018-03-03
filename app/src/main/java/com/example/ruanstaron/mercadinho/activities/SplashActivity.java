@@ -2,6 +2,7 @@ package com.example.ruanstaron.mercadinho.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,10 +26,18 @@ public class SplashActivity extends AppCompatActivity {
         if(webService.verificaConexao(conectivtyManager)){
             webService.sincronizar();
 
-            Intent itLogin = new Intent(this, LoginActivity.class);
-            startActivity(itLogin);
+            SharedPreferences prefs = getSharedPreferences(WebService.PREFS_USUARIO, MODE_PRIVATE);
 
-            finish();
+            if(prefs.contains(WebService.PREFS_USUARIO_USERNAME)){
+                webService.realizarLogin(prefs.getString(WebService.PREFS_USUARIO_USERNAME, null),
+                        prefs.getString(WebService.PREFS_USUARIO_SENHA, null));
+            }
+            else{
+                Intent itLogin = new Intent(this, LoginActivity.class);
+                startActivity(itLogin);
+
+                finish();
+            }
         }
     }
 }

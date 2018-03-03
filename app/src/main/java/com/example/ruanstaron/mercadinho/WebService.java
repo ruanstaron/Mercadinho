@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.os.StrictMode;
 import android.widget.Toast;
 
+import com.example.ruanstaron.mercadinho.tasks.LoginTask;
 import com.example.ruanstaron.mercadinho.db.AtributosDao;
 import com.example.ruanstaron.mercadinho.db.Cidade;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
@@ -34,6 +35,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WebService {
 
+
+    public static final String PREFS_USUARIO            = "usuario";
+    public static final String PREFS_USUARIO_USERNAME   = "username";
+    public static final String PREFS_USUARIO_SENHA      = "senha";
+
     private final String WS_URL     = "http://mercadinho.96.lt/WS/index.php/";
     private final String POST_URL   = "addprodutos";
     private final String GET_URL    = "getprodutos";
@@ -48,10 +54,10 @@ public class WebService {
     private final int TIMEOUT = 3000;
 
 
-    DaoMaster.DevOpenHelper helper;
-    DaoMaster master;
-    DaoSession session;
-    Banco banco;
+    private DaoMaster.DevOpenHelper helper;
+    private DaoMaster master;
+    private DaoSession session;
+    private Banco banco;
     private Context context;
 
     public WebService(Context context) {
@@ -74,6 +80,7 @@ public class WebService {
                 && conectivtyManager.getActiveNetworkInfo().isAvailable());
     }
 
+    //TODO: ARRUMAR ASSIM QUE OS PRODUTOS PUDEREM SER CADASTRADOS
     private void postProdutos(String requestJson){
 
         try {
@@ -185,4 +192,11 @@ public class WebService {
         });
 
     }
+
+    public void realizarLogin(String usuario, String senha){
+        LoginTask loginTask = new LoginTask(context);
+
+        loginTask.execute(usuario, senha);
+    }
 }
+
