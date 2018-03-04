@@ -2,23 +2,11 @@ package com.example.ruanstaron.mercadinho.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import com.example.ruanstaron.mercadinho.Banco;
-import com.example.ruanstaron.mercadinho.R;
-import com.example.ruanstaron.mercadinho.adapters.CompraAdapter;
-import com.example.ruanstaron.mercadinho.db.DaoMaster;
-import com.example.ruanstaron.mercadinho.db.DaoSession;
-import com.example.ruanstaron.mercadinho.db.Lista;
-import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
-import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
-import com.example.ruanstaron.mercadinho.db.Produto;
-import com.example.ruanstaron.mercadinho.db.ProdutoDao;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import android.content.Intent;
 import android.support.v7.view.ActionMode;
 import android.text.InputType;
 import android.view.Menu;
@@ -31,6 +19,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ruanstaron.mercadinho.Banco;
+import com.example.ruanstaron.mercadinho.R;
+import com.example.ruanstaron.mercadinho.adapters.CompraAdapter;
+import com.example.ruanstaron.mercadinho.db.DaoMaster;
+import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Lista;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
+import com.example.ruanstaron.mercadinho.db.Produto;
+import com.example.ruanstaron.mercadinho.db.ProdutoDao;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.util.List;
 
 public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener {
@@ -217,6 +219,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        intent.putExtra(IntentIntegrator.SCAN_RESULT_VEIO_DO_BOTAO, true);
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();

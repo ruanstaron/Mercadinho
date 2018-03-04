@@ -1,11 +1,5 @@
 package com.google.zxing.integration.android;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -16,14 +10,22 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 public class IntentIntegrator {
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
     private static final String TAG = IntentIntegrator.class.getSimpleName();
-    public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
+    public static final String DEFAULT_TITLE = "Instalar o Barcode Scanner?";
     public static final String DEFAULT_MESSAGE =
-            "This application requires Barcode Scanner. Would you like to install it?";
+            "Esta aplição requer o Barcode Scanner. Gostaria de instalá-lo?";
     public static final String DEFAULT_YES = "Yes";
     public static final String DEFAULT_NO = "No";
+    public static final String SCAN_RESULT_VEIO_DO_BOTAO = "SCAN_RESULT_VEIO_DO_BOTAO";
     private static final String BS_PACKAGE = "com.google.zxing.client.android";
     private static final String BSPLUS_PACKAGE = "com.srowen.bs.android";
     // supported barcode formats
@@ -188,11 +190,13 @@ public class IntentIntegrator {
                 int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
                 Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
                 String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+                boolean veioDoBotao = intent.getBooleanExtra(SCAN_RESULT_VEIO_DO_BOTAO, false);
                 return new IntentResult(contents,
                         formatName,
                         rawBytes,
                         orientation,
-                        errorCorrectionLevel);
+                        errorCorrectionLevel,
+                        veioDoBotao);
             }
             return new IntentResult();
         }
