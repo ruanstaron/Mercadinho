@@ -3,9 +3,12 @@ package com.example.ruanstaron.mercadinho.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,11 +31,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    private EditText edtEmail;
-    private EditText edtSenha;
-    private EditText edtNome;
-    private Button   btnCadastrar;
-    private Spinner  spCidades;
+    private EditText       edtEmail;
+    private EditText       edtSenha;
+    private EditText       edtNome;
+    private Button         btnCadastrar;
+    private Spinner        spCidades;
+    private RelativeLayout rlActvDisable;
+    private ProgressBar    pbCadastrar;
 
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster master;
@@ -49,9 +54,12 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void instanciarComponentes(){
-        edtEmail  = ((EditText) findViewById(R.id.edtCadastroEmail));
-        edtSenha  = ((EditText) findViewById(R.id.edtCadastroSenha));
-        edtNome   = ((EditText) findViewById(R.id.edtCadastroNome));
+        edtEmail      = ((EditText) findViewById(R.id.edtCadastroEmail));
+        edtSenha      = ((EditText) findViewById(R.id.edtCadastroSenha));
+        edtNome       = ((EditText) findViewById(R.id.edtCadastroNome));
+        rlActvDisable = ((RelativeLayout) findViewById(R.id.rlActvDisable));
+        pbCadastrar   = ((ProgressBar) findViewById(R.id.pbCadastrar));
+
         instanciarBotaoCadastrar();
         instanciarSpinnerCidades();
     }
@@ -65,7 +73,9 @@ public class CadastroActivity extends AppCompatActivity {
 
     private void instanciarSpinnerCidades(){
         spCidades = ((Spinner) findViewById(R.id.spCidade));
-        ArrayAdapter cidadeAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, banco.selectCidadesTodas());
+        ArrayAdapter<Cidade> cidadeAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item);
+        cidadeAdapter.add(new Cidade(((long) - 1), null, "--- Selecione uma cidade ---"));
+        cidadeAdapter.addAll(banco.selectCidadesTodas());
         spCidades.setAdapter(cidadeAdapter);
     }
 
@@ -84,8 +94,10 @@ public class CadastroActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(!Validacao.verificarCamposObrigatorios(spCidades, "Preencha a Cidade!", getApplicationContext()))
+                if(!Validacao.verificarCamposObrigatorios(spCidades, "Selecione uma Cidade!", getApplicationContext()))
                     return;
+
+                desabilitarUI();
 
                 final Cidade cidade = (Cidade) ((Spinner) findViewById(R.id.spCidade)).getSelectedItem();
 
@@ -119,9 +131,11 @@ public class CadastroActivity extends AppCompatActivity {
                                     break;
                                 case "23505":
                                     Toast.makeText(getApplicationContext(), R.string.signup_usuario_duplicado, Toast.LENGTH_SHORT).show();
+                                    habilitarUI();
                                     break;
                                 default:
                                     Toast.makeText(getApplicationContext(), R.string.erro_generico, Toast.LENGTH_SHORT).show();
+                                    habilitarUI();
                             }
                     }
 
@@ -142,5 +156,19 @@ public class CadastroActivity extends AppCompatActivity {
         }
         else
             return false;
+    }
+
+    private void habilitarUI(){
+        btnCadastrar.setEnabled(true);
+        pbCadastrar.setVisibility(View.INVISIBLE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        rlActvDisable.setVisibility(View.GONE);
+    }
+
+    private void desabilitarUI(){
+        btnCadastrar.setEnabled(false);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        rlActvDisable.setVisibility(View.VISIBLE);
+        pbCadastrar.setVisibility(View.VISIBLE);
     }
 }

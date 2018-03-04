@@ -5,6 +5,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.ruanstaron.mercadinho.db.Cidade;
+
 /**
  * Created by pucci on 14/01/2018.
  */
@@ -20,7 +22,7 @@ public class Validacao {
     }
 
     public static boolean verificarCamposObrigatorios(Spinner spn, String msg, Context context){
-        if(spn.getSelectedItem().toString().trim().isEmpty()){
+        if(((Cidade) spn.getSelectedItem()).getId().equals(((long) - 1))){
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
             return false;
         }
