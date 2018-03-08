@@ -25,7 +25,6 @@ public class IntentIntegrator {
             "Esta aplição requer o Barcode Scanner. Gostaria de instalá-lo?";
     public static final String DEFAULT_YES = "Yes";
     public static final String DEFAULT_NO = "No";
-    public static final String SCAN_RESULT_VEIO_DO_BOTAO = "SCAN_RESULT_VEIO_DO_BOTAO";
     private static final String BS_PACKAGE = "com.google.zxing.client.android";
     private static final String BSPLUS_PACKAGE = "com.srowen.bs.android";
     // supported barcode formats
@@ -190,13 +189,11 @@ public class IntentIntegrator {
                 int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
                 Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
                 String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
-                boolean veioDoBotao = intent.getBooleanExtra(SCAN_RESULT_VEIO_DO_BOTAO, false);
                 return new IntentResult(contents,
                         formatName,
                         rawBytes,
                         orientation,
-                        errorCorrectionLevel,
-                        veioDoBotao);
+                        errorCorrectionLevel);
             }
             return new IntentResult();
         }

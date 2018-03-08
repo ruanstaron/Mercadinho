@@ -12,6 +12,7 @@ import com.example.ruanstaron.mercadinho.db.MercadoDao;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
+import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.WhereCondition;
 
@@ -198,5 +199,15 @@ public class Banco {
         }
         cod_barras = cod_barras -1;
         return cod_barras;
+    }
+
+    public void atualizaCodBarras(long codBarrasOld, long codBarrasNew){
+        Database db = session.getDatabase();
+        db.execSQL("update Produto set cod_barras ="+codBarrasNew+" where cod_barras ="+codBarrasOld+";");
+    }
+
+    public void atualizaProdutoComprado(long id, long situacao){
+        Database db = session.getDatabase();
+        db.execSQL("update Lista_de_produtos set situacaoId ="+situacao+" where id ="+id+";");
     }
 }

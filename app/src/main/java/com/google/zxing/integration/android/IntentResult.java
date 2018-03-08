@@ -6,22 +6,19 @@ public final class IntentResult {
     private final byte[] rawBytes;
     private final Integer orientation;
     private final String errorCorrectionLevel;
-    private final boolean veioDoBotao;
     IntentResult() {
-        this(null, null, null, null, null, false);
+        this(null, null, null, null, null);
     }
     IntentResult(String contents,
                  String formatName,
                  byte[] rawBytes,
                  Integer orientation,
-                 String errorCorrectionLevel,
-                 boolean veioDoBotao) {
+                 String errorCorrectionLevel) {
         this.contents = contents;
         this.formatName = formatName;
         this.rawBytes = rawBytes;
         this.orientation = orientation;
         this.errorCorrectionLevel = errorCorrectionLevel;
-        this.veioDoBotao = veioDoBotao;
     }
     public String getContents() {
         return contents;
@@ -37,9 +34,6 @@ public final class IntentResult {
     }
     public String getErrorCorrectionLevel() {
         return errorCorrectionLevel;
-    }
-    public boolean getVeioDoBotao(){
-        return veioDoBotao;
     }
     @Override
     public String toString() {

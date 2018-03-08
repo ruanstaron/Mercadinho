@@ -38,12 +38,12 @@ import java.util.List;
 public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener {
 
     private Lista lista = new Lista();
-    private Boolean                 retornoScanFalse = false;
+    private boolean                 retornoScanFalse = false;
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster               master;
     private DaoSession              session;
     private Banco                   banco;
-    private Long                    codEscaneado = (long) 0;
+    private long                    codEscaneado = (long) 0;
     private Button                  scan;
     private Button                  add;
     private EditText                etProduto;
@@ -55,6 +55,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     private TextView                tvValorTotal;
     private ActionMode              actionMode;
     private Produto                 produ;
+    private boolean                 veioDoBotao = false;
+    public static long              codBarrasNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,11 +121,13 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     public void onClick(View v){
         switch (v.getId()){
             case R.id.bEscanear:
+                veioDoBotao = true;
                 IntentIntegrator scanIntegrator = new IntentIntegrator(this);
                 scanIntegrator.initiateScan();
                 break;
             case R.id.bAdd:
                 IncluiCompraLista();
+                break;
         }
     }
 
@@ -219,22 +223,34 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        intent.putExtra(IntentIntegrator.SCAN_RESULT_VEIO_DO_BOTAO, true);
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
-            String scanContent = scanningResult.getContents();
-            codEscaneado = Long.parseLong(scanContent);
+        if(veioDoBotao){
+            if (scanningResult != null) {
+                String scanContent = scanningResult.getContents();
+                codEscaneado = Long.parseLong(scanContent);
 
-            if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
-                etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
-            else
-                retornoScanFalse = true;
+                if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
+                    etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
+                else
+                    retornoScanFalse = true;
+            }
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Nenhum dado foi recebido!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }else{
+            if (scanningResult != null) {
+                String scanContent = scanningResult.getContents();
+                codBarrasNew = Long.parseLong(scanContent);
+            }
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Nenhum dado foi recebido!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Nenhum dado foi recebido!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        veioDoBotao = false;
     }
 
     @Override

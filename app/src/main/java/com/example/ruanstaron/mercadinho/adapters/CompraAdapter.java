@@ -1,26 +1,18 @@
 package com.example.ruanstaron.mercadinho.adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import java.util.List;
+import static com.example.ruanstaron.mercadinho.activities.CompraActivity.codBarrasNew;
 
 /**
  * Created by pucci on 07/08/2017.
@@ -31,6 +23,7 @@ public class CompraAdapter extends BaseAdapter {
     private final Activity act;
     private final List<Lista_de_produtos> lista_produtos;
     private DaoSession session;
+    private boolean veioDoCarrinho = false;
 
     public CompraAdapter(List<Lista_de_produtos> lista_produtos, Activity act, DaoSession session) {
         this.lista_produtos = lista_produtos;
@@ -40,7 +33,6 @@ public class CompraAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //http://respostas.guj.com.br/4372-listview-multiselecionavel-com-checkbox-selecionar-varios-itens-de-uma-listview
         View view = act.getLayoutInflater().inflate(R.layout.list_item_compras, parent, false);
         final Lista_de_produtos lista_produto = lista_produtos.get(position);
         TextView nomeProduto = (TextView) view.findViewById(R.id.tvProduto);
@@ -54,7 +46,6 @@ public class CompraAdapter extends BaseAdapter {
                 if(comprado.isChecked()){
                     if(lista_produto.getCod_barras()<0){
                         IntentIntegrator scan = new IntentIntegrator(act);
-                        //scan.addExtra("Listview",1);
                         scan.initiateScan();
                     }else{
                         System.out.println("Produto COM código de barras");
@@ -62,13 +53,24 @@ public class CompraAdapter extends BaseAdapter {
                 }else{
                     System.out.println("NÃO");
                 }
+                veioDoCarrinho = true;
             }
         });
+        if(veioDoCarrinho){
+            if(codBarrasNew > 0) {
+                atualizaProduto(lista_produto, codBarrasNew);
+                atualizaProdutoComprado(lista_produto, 4);
+                lista_produto.setCod_barras(codBarrasNew);
+                lista_produto.setSituacaoId((long) 4);
+            }
+        }
         nomeProduto.setText(new Banco(session).getProdutoDescricao(lista_produto.getCod_barras()));
         quantidade.setText(String.valueOf(lista_produto.getQuantidade()));
         valorUnitario.setText(String.valueOf(lista_produto.getValor()));
         valorTotal.setText(String.valueOf(lista_produto.getQuantidade()*lista_produto.getValor()));
-        atualizaCompra(view, Integer.parseInt(lista_produto.getSituacaoId().toString()), comprado);
+        pintaCompra(view, Integer.parseInt(lista_produto.getSituacaoId().toString()), comprado);
+        codBarrasNew = 0;
+        veioDoCarrinho = false;
         return view;
     }
 
@@ -87,7 +89,7 @@ public class CompraAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void atualizaCompra(View view, int situacao, CheckBox comprado){
+    public void pintaCompra(View view, int situacao, CheckBox comprado){
         switch(situacao){
             case 1:
                 view.setBackgroundResource(R.drawable.list_selector_compra_ok);
@@ -110,5 +112,13 @@ public class CompraAdapter extends BaseAdapter {
                 comprado.setChecked(false);
                 break;
         }
+    }
+
+    public void atualizaProduto(Lista_de_produtos lista, long codDeBarrasNovo){
+        new Banco(session).atualizaCodBarras(lista.getCod_barras(), codDeBarrasNovo);
+    }
+
+    public void atualizaProdutoComprado(Lista_de_produtos lista, long situacao){
+        new Banco(session).atualizaProdutoComprado(lista.getId(), situacao);
     }
 }
