@@ -201,13 +201,14 @@ public class Banco {
         return cod_barras;
     }
 
-    public void atualizaCodBarras(long codBarrasOld, long codBarrasNew){
+    public void atualizaCodBarras(long id, long codBarrasOld, long codBarrasNew){
         Database db = session.getDatabase();
-        db.execSQL("update Produto set cod_barras ="+codBarrasNew+" where cod_barras ="+codBarrasOld+";");
+        db.execSQL("UPDATE Produto SET cod_barras ="+codBarrasNew+" WHERE cod_barras ="+codBarrasOld+";");
+        db.execSQL("UPDATE Lista_de_produtos SET cod_barras = "+codBarrasNew+" WHERE _id = "+id+";");
     }
 
     public void atualizaProdutoComprado(long id, long situacao){
         Database db = session.getDatabase();
-        db.execSQL("update Lista_de_produtos set situacaoId ="+situacao+" where id ="+id+";");
+        db.execSQL("UPDATE Lista_de_produtos SET situacao_id = "+situacao+" WHERE _id = "+id+";");
     }
 }

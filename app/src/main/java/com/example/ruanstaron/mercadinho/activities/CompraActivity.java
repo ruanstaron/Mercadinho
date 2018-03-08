@@ -57,6 +57,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     private Produto                 produ;
     private boolean                 veioDoBotao = false;
     public static long              codBarrasNew;
+    public static long              codBarrasOld;
+    public static long              idListaCompras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                 return true;
             }
         });
-
         verificaIdLista();
         atualizaListaDeCompras();
         atualizaValorTotal();
@@ -243,6 +244,11 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
             if (scanningResult != null) {
                 String scanContent = scanningResult.getContents();
                 codBarrasNew = Long.parseLong(scanContent);
+                banco.atualizaCodBarras(idListaCompras,codBarrasOld,codBarrasNew);
+                banco.atualizaProdutoComprado(idListaCompras, 4);
+                codBarrasOld = 0;
+                codBarrasNew = 0;
+                idListaCompras = 0;
             }
             else{
                 Toast toast = Toast.makeText(getApplicationContext(),

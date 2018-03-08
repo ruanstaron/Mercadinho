@@ -1,6 +1,7 @@
 package com.example.ruanstaron.mercadinho.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,6 +14,8 @@ import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
 import java.util.List;
 import static com.example.ruanstaron.mercadinho.activities.CompraActivity.codBarrasNew;
+import static com.example.ruanstaron.mercadinho.activities.CompraActivity.codBarrasOld;
+import static com.example.ruanstaron.mercadinho.activities.CompraActivity.idListaCompras;
 
 /**
  * Created by pucci on 07/08/2017.
@@ -23,7 +26,6 @@ public class CompraAdapter extends BaseAdapter {
     private final Activity act;
     private final List<Lista_de_produtos> lista_produtos;
     private DaoSession session;
-    private boolean veioDoCarrinho = false;
 
     public CompraAdapter(List<Lista_de_produtos> lista_produtos, Activity act, DaoSession session) {
         this.lista_produtos = lista_produtos;
@@ -32,7 +34,7 @@ public class CompraAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View view = act.getLayoutInflater().inflate(R.layout.list_item_compras, parent, false);
         final Lista_de_produtos lista_produto = lista_produtos.get(position);
         TextView nomeProduto = (TextView) view.findViewById(R.id.tvProduto);
@@ -47,30 +49,32 @@ public class CompraAdapter extends BaseAdapter {
                     if(lista_produto.getCod_barras()<0){
                         IntentIntegrator scan = new IntentIntegrator(act);
                         scan.initiateScan();
+                        codBarrasOld = lista_produto.getCod_barras();
+                        idListaCompras = lista_produto.getId();
                     }else{
                         System.out.println("Produto COM código de barras");
                     }
                 }else{
                     System.out.println("NÃO");
                 }
-                veioDoCarrinho = true;
+                //veioDoCarrinho = true;
             }
         });
-        if(veioDoCarrinho){
+        /*if(veioDoCarrinho){
             if(codBarrasNew > 0) {
                 atualizaProduto(lista_produto, codBarrasNew);
                 atualizaProdutoComprado(lista_produto, 4);
                 lista_produto.setCod_barras(codBarrasNew);
                 lista_produto.setSituacaoId((long) 4);
             }
-        }
+        }*/
         nomeProduto.setText(new Banco(session).getProdutoDescricao(lista_produto.getCod_barras()));
         quantidade.setText(String.valueOf(lista_produto.getQuantidade()));
         valorUnitario.setText(String.valueOf(lista_produto.getValor()));
         valorTotal.setText(String.valueOf(lista_produto.getQuantidade()*lista_produto.getValor()));
         pintaCompra(view, Integer.parseInt(lista_produto.getSituacaoId().toString()), comprado);
-        codBarrasNew = 0;
-        veioDoCarrinho = false;
+        //codBarrasNew = 0;
+        //veioDoCarrinho = false;
         return view;
     }
 
@@ -112,13 +116,5 @@ public class CompraAdapter extends BaseAdapter {
                 comprado.setChecked(false);
                 break;
         }
-    }
-
-    public void atualizaProduto(Lista_de_produtos lista, long codDeBarrasNovo){
-        new Banco(session).atualizaCodBarras(lista.getCod_barras(), codDeBarrasNovo);
-    }
-
-    public void atualizaProdutoComprado(Lista_de_produtos lista, long situacao){
-        new Banco(session).atualizaProdutoComprado(lista.getId(), situacao);
     }
 }
