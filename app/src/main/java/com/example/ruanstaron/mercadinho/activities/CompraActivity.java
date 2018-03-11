@@ -157,7 +157,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     }
 
     private void atualizaListaDeCompras(){
-        lista_de_produtos = new Banco(session).carregaCompras(Integer.valueOf(lista.getId().intValue()));
+        lista_de_produtos = new Banco(master.newSession()).carregaCompras(lista.getId().intValue());
         listaCompras.setAdapter(new CompraAdapter(lista_de_produtos, this, session));
     }
 
@@ -249,6 +249,9 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                 codBarrasOld = 0;
                 codBarrasNew = 0;
                 idListaCompras = 0;
+                codEscaneado = 0;
+
+                atualizaListaDeCompras();
             }
             else{
                 Toast toast = Toast.makeText(getApplicationContext(),

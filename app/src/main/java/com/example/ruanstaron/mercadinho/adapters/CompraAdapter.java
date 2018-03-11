@@ -1,19 +1,21 @@
 package com.example.ruanstaron.mercadinho.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import com.example.ruanstaron.mercadinho.Banco;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.google.zxing.integration.android.IntentIntegrator;
+
 import java.util.List;
-import static com.example.ruanstaron.mercadinho.activities.CompraActivity.codBarrasNew;
+
 import static com.example.ruanstaron.mercadinho.activities.CompraActivity.codBarrasOld;
 import static com.example.ruanstaron.mercadinho.activities.CompraActivity.idListaCompras;
 
@@ -49,13 +51,14 @@ public class CompraAdapter extends BaseAdapter {
                     if(lista_produto.getCod_barras()<0){
                         IntentIntegrator scan = new IntentIntegrator(act);
                         scan.initiateScan();
+
                         codBarrasOld = lista_produto.getCod_barras();
                         idListaCompras = lista_produto.getId();
                     }else{
-                        System.out.println("Produto COM código de barras");
+                        Log.i("CompraAdapter", "com codbar");
                     }
                 }else{
-                    System.out.println("NÃO");
+                    Log.i("CompraAdapter", "sem codbar");
                 }
                 //veioDoCarrinho = true;
             }
