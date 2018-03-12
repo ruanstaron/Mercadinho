@@ -47,6 +47,8 @@
     <string name="dialogoNomeListaMsg">Nome da lista criada:</string>
     <string name="dialogoNomeProdutoTitulo">Novo Produto - Descrição</string>
     <string name="dialogoNomeProdutoMsg">Nome do Produto escaneado:</string>
+    <string name="dialogoValorProdutoTitulo">Valor unitário</string>
+    <string name="dialogoValorProdutoMsg">Valor unitário do produto</string>
 
     /* activity_lista.xml */
     <string name="dialogoConfirmaExclusaoListaTitulo">Excluir Lista</string>

@@ -1,5 +1,8 @@
 package com.example.ruanstaron.mercadinho;
 
+import android.database.sqlite.SQLiteConstraintException;
+import android.util.Log;
+
 import com.example.ruanstaron.mercadinho.db.Cidade;
 import com.example.ruanstaron.mercadinho.db.CidadeDao;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
@@ -203,12 +206,21 @@ public class Banco {
 
     public void atualizaCodBarras(long id, long codBarrasOld, long codBarrasNew){
         Database db = session.getDatabase();
-        db.execSQL("UPDATE Produto SET cod_barras ="+codBarrasNew+" WHERE cod_barras ="+codBarrasOld+";");
+        try {
+            db.execSQL("UPDATE Produto SET cod_barras ="+codBarrasNew+" WHERE cod_barras ="+codBarrasOld+";");
+        }catch (SQLiteConstraintException e){
+            Log.i("Erro sql: ", "Primarykey");
+        }
         db.execSQL("UPDATE Lista_de_produtos SET cod_barras = "+codBarrasNew+" WHERE _id = "+id+";");
     }
 
     public void atualizaProdutoComprado(long id, long situacao){
         Database db = session.getDatabase();
         db.execSQL("UPDATE Lista_de_produtos SET situacao_id = "+situacao+" WHERE _id = "+id+";");
+    }
+
+    public void atualizaValorProduto(long id, float valor){
+        Database db = session.getDatabase();
+        db.execSQL("UPDATE Lista_de_produtos SET valor = "+valor+" WHERE _id = "+id+";");
     }
 }

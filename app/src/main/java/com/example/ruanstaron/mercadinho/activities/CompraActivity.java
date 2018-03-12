@@ -40,9 +40,9 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     private Lista lista = new Lista();
     private boolean                 retornoScanFalse = false;
     private DaoMaster.DevOpenHelper helper;
-    private DaoMaster               master;
+    private static DaoMaster        master;
     private DaoSession              session;
-    private Banco                   banco;
+    private Banco            banco;
     private long                    codEscaneado = (long) 0;
     private Button                  scan;
     private Button                  add;
@@ -56,9 +56,10 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     private ActionMode              actionMode;
     private Produto                 produ;
     private boolean                 veioDoBotao = false;
-    public static long              codBarrasNew;
+    private long                    codBarrasNew;
     public static long              codBarrasOld;
     public static long              idListaCompras;
+    public static boolean           valorProdutoZerado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         });
         verificaIdLista();
         atualizaListaDeCompras();
-        atualizaValorTotal();
 
         listaCompras.setOnItemLongClickListener(this);
     }
@@ -117,6 +117,10 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
             dlgNomeProduto.show(getSupportFragmentManager(), "dlgnomeProduto");
             retornoScanFalse = false;
         }
+        if (valorProdutoZerado){
+            ListaDialogValorProduto dlgNomeValorProduto = new ListaDialogValorProduto();
+            dlgNomeValorProduto.show(getSupportFragmentManager(), "dlgNomeValorProduto");
+        }
     }
 
     public void onClick(View v){
@@ -132,6 +136,9 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         }
     }
 
+    public void chamaDialog(){
+
+    }
     private void atualizarItensMarcados(ListView l, int position) {
         l.setItemChecked(position, l.isItemChecked(position));
         //atualizarTitulo();
@@ -158,7 +165,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
 
     private void atualizaListaDeCompras(){
         lista_de_produtos = new Banco(master.newSession()).carregaCompras(lista.getId().intValue());
-        listaCompras.setAdapter(new CompraAdapter(lista_de_produtos, this, session));
+        listaCompras.setAdapter(new CompraAdapter(lista_de_produtos, this, master, this));
+        atualizaValorTotal();
     }
 
     public void atualizaValorTotal(){
@@ -166,7 +174,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         for(Lista_de_produtos l:lista_de_produtos){
             valorTotalCompra = valorTotalCompra + l.getValor()*l.getQuantidade();
         }
-        tvValorTotal.setText(valorTotalCompra.toString());
+        String resultado = String.format("%.2f", valorTotalCompra);
+        tvValorTotal.setText(resultado);
     }
 
     public void IncluiCompraLista(){
@@ -215,7 +224,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
         comprasDao.insert(produto);
         atualizaListaDeCompras();
-        atualizaValorTotal();
 
         codEscaneado = (long) 0;
         etProduto.setText("");
@@ -248,7 +256,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                 banco.atualizaProdutoComprado(idListaCompras, 4);
                 codBarrasOld = 0;
                 codBarrasNew = 0;
-                idListaCompras = 0;
                 codEscaneado = 0;
 
                 atualizaListaDeCompras();
@@ -330,6 +337,34 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                     .setView(input)
                     .setTitle(R.string.dialogoNomeProdutoTitulo)
                     .setMessage(R.string.dialogoNomeProdutoMsg)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
+    }
+
+    public static class ListaDialogValorProduto extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CompraActivity compraActivity = (CompraActivity)getActivity();
+                    new Banco(master.newSession()).atualizaValorProduto(compraActivity.idListaCompras, Float.parseFloat(input.getText().toString()));
+                    valorProdutoZerado = false;
+                    compraActivity.atualizaListaDeCompras();
+                    dismiss();
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoValorProdutoTitulo)
+                    .setMessage(R.string.dialogoValorProdutoMsg)
                     .setPositiveButton(R.string.ok, listener)
                     .create();
 
