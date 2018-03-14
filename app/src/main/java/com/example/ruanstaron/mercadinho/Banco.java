@@ -112,10 +112,10 @@ public class Banco {
         List<Produto> datalist = produtosDao.queryBuilder().where(ProdutoDao.Properties.Cod_barras.eq(cod_barras)).list();
 
         if(datalist.size() > 0){
-            if(datalist.get(0).getDescricao() == null){
-                descricao = datalist.get(0).getDescricao_usuario();
-            }else{
+            if(datalist.get(0).getDescricao_usuario() == null){
                 descricao = datalist.get(0).getDescricao();
+            }else{
+                descricao = datalist.get(0).getDescricao_usuario();
             }
         } else{
             descricao = "";
@@ -222,5 +222,27 @@ public class Banco {
     public void atualizaValorProduto(long id, float valor){
         Database db = session.getDatabase();
         db.execSQL("UPDATE Lista_de_produtos SET valor = "+valor+" WHERE _id = "+id+";");
+    }
+
+    public void excluiProdutoDaLista(long idLista){
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+
+        comprasDao.deleteByKey(idLista);
+    }
+
+    public void insereProdutoNaLista(Lista_de_produtos lista_de_produtos){
+        lista_de_produtos.setId(null);
+        Lista_de_produtosDao lista_de_produtosDao = session.getLista_de_produtosDao();
+        lista_de_produtosDao.insert(lista_de_produtos);
+    }
+
+    public void atualizaDescricaoProduto(long cod_barras, String descricao){
+        Database db = session.getDatabase();
+        db.execSQL("UPDATE Produto SET descricao_usuario = \""+descricao+"\" WHERE cod_barras = "+cod_barras+";");
+    }
+
+    public void atualizaQuantidadeProduto(long id, float quantidade){
+        Database db = session.getDatabase();
+        db.execSQL("UPDATE Lista_de_produtos SET quantidade = "+quantidade+" WHERE _id = "+id+";");
     }
 }

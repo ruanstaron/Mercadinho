@@ -49,6 +49,13 @@
     <string name="dialogoNomeProdutoMsg">Nome do Produto escaneado:</string>
     <string name="dialogoValorProdutoTitulo">Valor unitário</string>
     <string name="dialogoValorProdutoMsg">Valor unitário do produto</string>
+    <string name="dialogoConfirmaExclusaoProdutoTitulo">Excluir Produto</string>
+    <string name="dialogoExcluirProdutoMsg">Deseja excluir este Produto?</string>
+    <string name="ProdutoSelecionado">Excluir o produto delecionado?</string>
+    <string name="dialogoConfirmaDuplicarProdutoTitulo">Duplicar Produto</string>
+    <string name="dialogoDuplicarProdutoMsg">Deseja duplicar este Produto?</string>
+    <string name="dialogoDescricaoProdutoTitulo">Descrição</string>
+    <string name="dialogoQuantidadeProdutoTitulo">Quantidade</string>
 
     /* activity_lista.xml */
     <string name="dialogoConfirmaExclusaoListaTitulo">Excluir Lista</string>
@@ -60,6 +67,9 @@
     <string name="lista_vazia_desc">Nenhuma lista criada</string>
     <string name="name">Name</string>
     <string name="produtoModel">Produto</string>
+    <string name="descricao">Descrição</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="valorUnitario">Valor Unitário</string>
 
     <plurals name="listas_selecionados">
         <item quantity="one">Excluir a lista delecionada?</item>

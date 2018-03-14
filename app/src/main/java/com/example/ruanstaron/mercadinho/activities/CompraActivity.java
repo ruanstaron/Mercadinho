@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +36,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.List;
 
-public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener {
+public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener, PopupMenu.OnMenuItemClickListener {
 
     private Lista lista = new Lista();
     private boolean                 retornoScanFalse = false;
@@ -103,7 +104,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         if(consumed){
             iniciarActionMode();
             listaCompras.setItemChecked(position, true);
-            atualizarItensMarcados(listaCompras, position);
         }
         return consumed;
     }
@@ -136,9 +136,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         }
     }
 
-    public void chamaDialog(){
-
-    }
     private void atualizarItensMarcados(ListView l, int position) {
         l.setItemChecked(position, l.isItemChecked(position));
         //atualizarTitulo();
@@ -152,7 +149,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
 
     private void iniciarActionMode(){
         actionMode = startSupportActionMode(this);
-        listaCompras.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listaCompras.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     public void verificaIdLista(){
@@ -221,14 +218,67 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
             produto.setRecente(true);
         }
 
-        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
-        comprasDao.insert(produto);
+        banco.insereProdutoNaLista(produto);
         atualizaListaDeCompras();
 
         codEscaneado = (long) 0;
         etProduto.setText("");
         etQuantidade.setText("");
         etValor.setText("");
+    }
+
+    public void excluirProdutoSelecionado(){
+        Lista_de_produtos lista_de_produtos2 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+
+        banco.excluiProdutoDaLista(lista_de_produtos2.getId());
+
+        actionMode.finish();
+        atualizaListaDeCompras();
+    }
+
+    public void duplicarProdutoSelecionado(){
+        Lista_de_produtos lista_de_produtos3 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+
+        banco.insereProdutoNaLista(lista_de_produtos3);
+
+        actionMode.finish();
+        atualizaListaDeCompras();
+    }
+
+    public String getDescricaoProdutoNoDialog(){
+        Lista_de_produtos lista_de_produtos4 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        return banco.getProdutoDescricao(lista_de_produtos4.getCod_barras());
+    }
+
+    public void setDescricaoProdutoNoDialog(String descricao){
+        Lista_de_produtos lista_de_produtos5 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        banco.atualizaDescricaoProduto(lista_de_produtos5.getCod_barras(), descricao);
+        actionMode.finish();
+        atualizaListaDeCompras();
+    }
+
+    public float getQuantidadeProdutoDialog(){
+        Lista_de_produtos lista_de_produtos6 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        return lista_de_produtos6.getQuantidade();
+    }
+
+    public void setQuantidadeProdutoDialog(float quantidade){
+        Lista_de_produtos lista_de_produtos7 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        banco.atualizaQuantidadeProduto(lista_de_produtos7.getId(), quantidade);
+        actionMode.finish();
+        atualizaListaDeCompras();
+    }
+
+    public float getValorProdutoDialog(){
+        Lista_de_produtos lista_de_produtos7 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        return lista_de_produtos7.getValor();
+    }
+
+    public void setValorProdutoDialog(float valor){
+        Lista_de_produtos lista_de_produtos8 = (Lista_de_produtos) listaCompras.getItemAtPosition(0);
+        banco.atualizaValorProduto(lista_de_produtos8.getId(), valor);
+        actionMode.finish();
+        atualizaListaDeCompras();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -284,19 +334,16 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch(item.getItemId()){
             case R.id.acao_delete:
-                /*SparseBooleanArray checked = lvListas.getCheckedItemPositions();
-
-                ExcluirDialogLista dlgExcluirListas = new ExcluirDialogLista();
-                dlgExcluirListas.setMensagem(getResources().getQuantityString(R.plurals.listas_selecionados, checked.size(), checked.size()));
-                dlgExcluirListas.show(getSupportFragmentManager(), "dlgExcluirLista");*/
+                ExcluirDialogProduto dlgExcluirProduto = new ExcluirDialogProduto();
+                dlgExcluirProduto.show(getSupportFragmentManager(), "dlgExcluirProduto");
                 break;
             case R.id.acao_edit:
-                /*EditarDialogLista dlgEditarListas = new EditarDialogLista();
-                dlgEditarListas.show(getSupportFragmentManager(), "dlgEditarLista");*/
+                View menuItemView = findViewById(R.id.acao_edit);
+                showMenuEditarProduto(menuItemView);
                 break;
             case R.id.acao_duplicar:
-                /*DuplicarDialogLista dlgDuplicarListas = new DuplicarDialogLista();
-                dlgDuplicarListas.show(getSupportFragmentManager(), "dlgDuplicarLista");*/
+                DuplicarDialogProduto dlgDuplicarProduto = new DuplicarDialogProduto();
+                dlgDuplicarProduto.show(getSupportFragmentManager(), "dlgDuplicarProduto");
                 break;
         }
         return true;
@@ -308,6 +355,35 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         listaCompras.clearChoices();
         listaCompras.setChoiceMode(ListView.CHOICE_MODE_NONE);
         atualizaListaDeCompras();
+    }
+
+    public void showMenuEditarProduto(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+
+        // This activity implements OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.menu_editar_produto);
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.descricao:
+                ListaDialogDescricaoProduto dlgEditarDescricaoProduto = new ListaDialogDescricaoProduto();
+                dlgEditarDescricaoProduto.show(getSupportFragmentManager(), "dlgEditarDescricaoProduto");
+                return true;
+            case R.id.quantidade:
+                ListaDialogQuantidadeProduto dlgEditarQuantidadeProduto = new ListaDialogQuantidadeProduto();
+                dlgEditarQuantidadeProduto.show(getSupportFragmentManager(), "dlgEditarQuantidadeProduto");
+                return true;
+            case R.id.valorUnitario:
+                ValorProdutoDialog dlgEditarValorProduto = new ValorProdutoDialog();
+                dlgEditarValorProduto.show(getSupportFragmentManager(), "dlgEditarValorProduto");
+                return true;
+            default:
+                return false;
+        }
     }
 
     public static class ListaDialogProduto extends DialogFragment {
@@ -365,6 +441,141 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                     .setView(input)
                     .setTitle(R.string.dialogoValorProdutoTitulo)
                     .setMessage(R.string.dialogoValorProdutoMsg)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
+    }
+
+    public static class ExcluirDialogProduto extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int button){
+                    if(button == DialogInterface.BUTTON_POSITIVE){
+                        CompraActivity compraActivity = ((CompraActivity) getActivity());
+                        compraActivity.excluirProdutoSelecionado();
+                        dismiss();
+                    }
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.dialogoConfirmaExclusaoProdutoTitulo)
+                    .setMessage(R.string.dialogoExcluirProdutoMsg)
+                    .setPositiveButton(R.string.sim, listener)
+                    .setNegativeButton(R.string.nao, null)
+                    .create();
+            return dialog;
+        }
+    }
+
+    public static class DuplicarDialogProduto extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int button){
+                    if(button == DialogInterface.BUTTON_POSITIVE){
+                        CompraActivity actvCompra = ((CompraActivity) getActivity());
+                        actvCompra.duplicarProdutoSelecionado();
+                        dismiss();
+                    }
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.dialogoConfirmaDuplicarProdutoTitulo)
+                    .setMessage(R.string.dialogoDuplicarProdutoMsg)
+                    .setPositiveButton(R.string.sim, listener)
+                    .setNegativeButton(R.string.nao, null)
+                    .create();
+            return dialog;
+        }
+    }
+
+    public static class ListaDialogDescricaoProduto extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            final CompraActivity compraActivity = (CompraActivity)getActivity();
+            input.setText(compraActivity.getDescricaoProdutoNoDialog());
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CompraActivity compraActivity = (CompraActivity)getActivity();
+                    compraActivity.setDescricaoProdutoNoDialog(input.getText().toString());
+                    dismiss();
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoDescricaoProdutoTitulo)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
+    }
+
+    public static class ListaDialogQuantidadeProduto extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            final CompraActivity compraActivity = (CompraActivity)getActivity();
+            input.setText(String.valueOf(compraActivity.getQuantidadeProdutoDialog()));
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CompraActivity compraActivity = (CompraActivity)getActivity();
+                    compraActivity.setQuantidadeProdutoDialog(Float.parseFloat(input.getText().toString()));
+                    dismiss();
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoQuantidadeProdutoTitulo)
+                    .setPositiveButton(R.string.ok, listener)
+                    .create();
+
+            return dialog;
+        }
+    }
+
+    public static class ValorProdutoDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final EditText input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            final CompraActivity compraActivity = (CompraActivity)getActivity();
+            input.setText(String.valueOf(compraActivity.getValorProdutoDialog()));
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CompraActivity compraActivity = (CompraActivity)getActivity();
+                    compraActivity.setValorProdutoDialog(Float.parseFloat(input.getText().toString()));
+                    dismiss();
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setView(input)
+                    .setTitle(R.string.dialogoValorProdutoTitulo)
                     .setPositiveButton(R.string.ok, listener)
                     .create();
 
