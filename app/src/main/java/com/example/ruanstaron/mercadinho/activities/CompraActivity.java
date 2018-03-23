@@ -4,12 +4,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.Banco;
+import com.example.ruanstaron.mercadinho.Cupom;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.adapters.CompraAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
@@ -29,11 +32,14 @@ import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
+import com.example.ruanstaron.mercadinho.db.Mercado;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener, PopupMenu.OnMenuItemClickListener {
@@ -62,6 +68,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     public static long              idListaCompras;
     public static boolean           valorProdutoZerado = false;
 
+    private Button                  finalizar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +83,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         etValor    = (EditText) findViewById(R.id.etValor);
         tvValorTotal = (TextView) findViewById(R.id.tvValorTotal);
 
+        finalizar = (Button) findViewById(R.id.bFinalizar);
+
         helper  = new DaoMaster.DevOpenHelper(this, "mercadinho-db");
         master  = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
@@ -82,6 +92,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
 
         scan.setOnClickListener(this);
         add.setOnClickListener(this);
+        finalizar.setOnClickListener(this);
 
         //clique longo no editText
         etProduto.setOnLongClickListener(new View.OnLongClickListener() {
@@ -132,6 +143,9 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
                 break;
             case R.id.bAdd:
                 IncluiCompraLista();
+                break;
+            case R.id.bFinalizar:
+                LerQrCode();
                 break;
         }
     }
@@ -581,5 +595,27 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
 
             return dialog;
         }
+    }
+
+    public void LerQrCode(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String qrcode = "http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41171076189406001955651250001302131310913228&nVersao=100&tpAmb=1&cDest=05494965996&dhEmi=323031372d31302d33315430393a31333a32332d30323a3030&vNF=79.60&vICMS=0.00&digVal=69766537713557534e325a5241394c6c3564646d6a555549414e673d&cIdToken=000001&cHashQRCode=7D9BB69A226CA3761C01A325253E840C3B2D3A49";
+        Cupom cupom = new Cupom(master);
+        Mercado mercado = new Mercado();
+        try {
+            mercado = cupom.getMercado(qrcode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*ArrayList<Produto> produtos = new ArrayList<Produto>();
+        try {
+            produtos = cupom.getProdutos(qrcode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Produto p : produtos){
+            System.out.println(p.getDescricao());
+        }*/
     }
 }

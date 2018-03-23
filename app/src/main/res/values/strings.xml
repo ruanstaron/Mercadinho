@@ -70,6 +70,13 @@
     <string name="descricao">Descrição</string>
     <string name="quantidade">Quantidade</string>
     <string name="valorUnitario">Valor Unitário</string>
+    <string name="toque_e_segure_para_buscar">Toque e segure para buscar</string>
+    <string name="valor">Valor</string>
+    <string name="adicionar_a_lista">Adicionar a lista</string>
+    <string name="escanear">Escanear</string>
+    <string name="valor_total">Valor Total:</string>
+    <string name="button">Button</string>
+    <string name="finalizar">Finalizar</string>
 
     <plurals name="listas_selecionados">
         <item quantity="one">Excluir a lista delecionada?</item>

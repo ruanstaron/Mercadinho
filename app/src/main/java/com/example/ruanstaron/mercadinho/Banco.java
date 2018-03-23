@@ -6,6 +6,8 @@ import android.util.Log;
 import com.example.ruanstaron.mercadinho.db.Cidade;
 import com.example.ruanstaron.mercadinho.db.CidadeDao;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
+import com.example.ruanstaron.mercadinho.db.Estado;
+import com.example.ruanstaron.mercadinho.db.EstadoDao;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
@@ -17,6 +19,7 @@ import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
@@ -244,5 +247,20 @@ public class Banco {
     public void atualizaQuantidadeProduto(long id, float quantidade){
         Database db = session.getDatabase();
         db.execSQL("UPDATE Lista_de_produtos SET quantidade = "+quantidade+" WHERE _id = "+id+";");
+    }
+
+    public long getCidadeId(String uf, String cidade){
+        long ufId = getUfId(uf);
+        CidadeDao cidadeDao = session.getCidadeDao();
+        QueryBuilder<Cidade> qb = cidadeDao.queryBuilder();
+        qb.where(CidadeDao.Properties.EstadoId.eq(ufId), CidadeDao.Properties.Descricao.like(cidade));
+        List<Cidade> datalist = qb.list();
+        return datalist.get(0).getId();
+    }
+
+    private long getUfId(String uf){
+        EstadoDao estadoDao = session.getEstadoDao();
+        List<Estado> datalist = estadoDao.queryBuilder().where(EstadoDao.Properties.Sigla.eq(uf)).list();
+        return datalist.get(0).getId();
     }
 }

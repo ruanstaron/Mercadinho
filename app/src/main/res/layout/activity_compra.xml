@@ -27,7 +27,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Toque e segure para buscar"
+        android:hint="@string/toque_e_segure_para_buscar"
         android:inputType="textPersonName"
         android:labelFor="@+id/etProduto"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Quantidade"
+        android:text="@string/quantidade"
         app:layout_constraintEnd_toStartOf="@+id/tvValor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etProduto" />
@@ -64,7 +64,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Valor"
+        android:text="@string/valor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvQuantidade"
         app:layout_constraintTop_toBottomOf="@+id/etProduto" />
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Adicionar a lista"
+        android:text="@string/adicionar_a_lista"
         app:layout_constraintEnd_toStartOf="@+id/bEscanear"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etQuantidade" />
@@ -100,7 +100,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Escanear"
+        android:text="@string/escanear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bAdd"
         app:layout_constraintTop_toBottomOf="@+id/etValor" />
@@ -117,12 +117,12 @@
 
     <TextView
         android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Valor Total:"
+        android:text="@string/valor_total"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,8 +139,22 @@
         android:textColor="@android:color/holo_red_dark"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bFinalizar"
         app:layout_constraintStart_toEndOf="@+id/tv"
+        app:layout_constraintTop_toBottomOf="@+id/lvCompras" />
+
+    <Button
+        android:id="@+id/bFinalizar"
+        android:layout_width="0dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/finalizar"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvValorTotal"
         app:layout_constraintTop_toBottomOf="@+id/lvCompras" />
 
 </android.support.constraint.ConstraintLayout>
