@@ -276,6 +276,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                         atvLista.editarBancoLista(atvLista.session, atvLista.lista);
                         dismiss();
                         atvLista.atualizaListListas();
+                        atvLista.actionMode.finish();
                     }
                 }
             };
