@@ -150,17 +150,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         }
     }
 
-    private void atualizarItensMarcados(ListView l, int position) {
-        l.setItemChecked(position, l.isItemChecked(position));
-        //atualizarTitulo();
-
-        /*if(l.getCheckedItemCount() == 1)
-            for(int i = 0; i < listaCompras.getCount(); i++) {
-                if(l.isItemChecked(i))
-                    produ = (Produto) l.getItemAtPosition(i);
-            }*/
-    }
-
     private void iniciarActionMode(){
         actionMode = startSupportActionMode(this);
         listaCompras.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -600,21 +589,21 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     public void LerQrCode(){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String qrcode = "http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41171076189406001955651250001302131310913228&nVersao=100&tpAmb=1&cDest=05494965996&dhEmi=323031372d31302d33315430393a31333a32332d30323a3030&vNF=79.60&vICMS=0.00&digVal=69766537713557534e325a5241394c6c3564646d6a555549414e673d&cIdToken=000001&cHashQRCode=7D9BB69A226CA3761C01A325253E840C3B2D3A49";
+        String qrcode = "http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41180376189406003656651140000948921252055427&nVersao=100&tpAmb=1&cDest=08279105921&dhEmi=323031382d30332d32355432303a35353a34322d30333a3030&vNF=21.46&vICMS=0.00&digVal=6a6278736a4b76436c48326a665a4b41576e4b507a57502b4b45593d&cIdToken=000001&cHashQRCode=8BB01F046FD53207E1176D3CAA705B5F3A5742AE";
         Cupom cupom = new Cupom(master);
-        Mercado mercado = new Mercado();
+        /*Mercado mercado = new Mercado();
         try {
             mercado = cupom.getMercado(qrcode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*ArrayList<Produto> produtos = new ArrayList<Produto>();
+        List<Lista_de_produtos> listaDeProdutos = new ArrayList<>();
         try {
-            produtos = cupom.getProdutos(qrcode);
+            listaDeProdutos = cupom.getProdutos(qrcode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (Produto p : produtos){
+        /*for (Produto p : produtos){
             System.out.println(p.getDescricao());
         }*/
     }
