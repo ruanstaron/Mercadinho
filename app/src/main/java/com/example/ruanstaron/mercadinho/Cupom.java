@@ -1,7 +1,5 @@
 package com.example.ruanstaron.mercadinho;
 
-import android.util.Log;
-
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
 import com.example.ruanstaron.mercadinho.db.Mercado;
@@ -45,7 +43,7 @@ public class Cupom {
         }
         return produtos;
     }
-    //Retorna um Array com todos os produtos
+    //Retorna uma Lista com todos os produtos
     public List<Lista_de_produtos> getProdutosDoCupomFiscal(String qrCode) throws IOException {
         List<Lista_de_produtos> lista_de_produtos = new ArrayList<>();
         Document doc = getHtml(qrCode);

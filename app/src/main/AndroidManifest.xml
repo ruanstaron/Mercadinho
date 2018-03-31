@@ -27,7 +27,8 @@
         <activity android:name=".activities.ListaActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.BuscaProdutosActivity" />
-        <activity android:name=".activities.CadastroActivity"></activity>
+        <activity android:name=".activities.CadastroActivity" />
+        <activity android:name=".activities.ConferenciaActivity"></activity>
     </application>
 
 </manifest>

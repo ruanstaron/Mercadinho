@@ -4,14 +4,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,22 +22,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ruanstaron.mercadinho.Banco;
-import com.example.ruanstaron.mercadinho.Cupom;
 import com.example.ruanstaron.mercadinho.R;
 import com.example.ruanstaron.mercadinho.adapters.CompraAdapter;
 import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
-import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
-import com.example.ruanstaron.mercadinho.db.Mercado;
 import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CompraActivity extends AppCompatActivity implements ActionMode.Callback, OnClickListener, AdapterView.OnItemLongClickListener, PopupMenu.OnMenuItemClickListener {
@@ -587,10 +580,15 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     }
 
     public void LerQrCode(){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        Intent intentConf = new Intent(this, ConferenciaActivity.class);
+        intentConf.putExtra("id_lista", lista.getId());
+        startActivity(intentConf);
+
+
+       /* StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         String qrcode = "http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41180376189406003656651140000948921252055427&nVersao=100&tpAmb=1&cDest=08279105921&dhEmi=323031382d30332d32355432303a35353a34322d30333a3030&vNF=21.46&vICMS=0.00&digVal=6a6278736a4b76436c48326a665a4b41576e4b507a57502b4b45593d&cIdToken=000001&cHashQRCode=8BB01F046FD53207E1176D3CAA705B5F3A5742AE";
-        Cupom cupom = new Cupom(master);
+        Cupom cupom = new Cupom(master);*/
         /*Mercado mercado = new Mercado();
         try {
             mercado = cupom.getMercado(qrcode);
