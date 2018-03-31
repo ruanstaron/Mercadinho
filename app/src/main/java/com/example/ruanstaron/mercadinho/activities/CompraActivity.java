@@ -596,10 +596,10 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
             mercado = cupom.getMercado(qrcode);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         List<Lista_de_produtos> listaDeProdutos = new ArrayList<>();
         try {
-            listaDeProdutos = cupom.getProdutos(qrcode);
+           listaDeProdutos = cupom.getProdutosDoCupomFiscal(qrcode);
         } catch (IOException e) {
             e.printStackTrace();
         }

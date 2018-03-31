@@ -78,15 +78,10 @@ public class Cupom {
 
     private List<Long> getCodBarras(Elements cod_barras){
         List<Long> barras = new ArrayList<>();
-        for (int i = 0; i<cod_barras.size(); i++) {
-            String a = cod_barras.get(i).select("span").get(0).text();
-            if(!a.matches("^[0-9]*$")){
-                cod_barras.remove(i);
-            }
-        }
+
         for (Element i : cod_barras) {
-            if(!i.select("span").get(0).text().isEmpty()){
-                barras.add(Long.parseLong(i.select("span").get(0).text()));
+            if(i.childNode(1).childNode(1).childNode(0).toString().equals("Código EAN Comercial")){
+                barras.add(Long.parseLong(i.childNode(1).childNode(3).childNode(0).toString()));
             }
         }
         return barras;
