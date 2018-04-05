@@ -279,38 +279,28 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanningResult != null && scanningResult.getContents() == null)
+            return;
+
         if(veioDoBotao){
-            if (scanningResult != null) {
-                String scanContent = scanningResult.getContents();
-                codEscaneado = Long.parseLong(scanContent);
+            String scanContent = scanningResult.getContents();
+            codEscaneado = Long.parseLong(scanContent);
 
-                if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
-                    etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
-                else
-                    retornoScanFalse = true;
-            }
-            else{
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Nenhum dado foi recebido!", Toast.LENGTH_SHORT);
-                toast.show();
-            }
+            if (banco.getProdutoDescricao(Long.parseLong(scanContent)) != "")
+                etProduto.setText(banco.getProdutoDescricao(Long.parseLong(scanContent)));
+            else
+                retornoScanFalse = true;
         }else{
-            if (scanningResult != null) {
-                String scanContent = scanningResult.getContents();
-                codBarrasNew = Long.parseLong(scanContent);
-                banco.atualizaCodBarras(idListaCompras,codBarrasOld,codBarrasNew);
-                banco.atualizaProdutoComprado(idListaCompras, 4);
-                codBarrasOld = 0;
-                codBarrasNew = 0;
-                codEscaneado = 0;
+            String scanContent = scanningResult.getContents();
+            codBarrasNew = Long.parseLong(scanContent);
+            banco.atualizaCodBarras(idListaCompras,codBarrasOld,codBarrasNew);
+            banco.atualizaProdutoComprado(idListaCompras, 4);
+            codBarrasOld = 0;
+            codBarrasNew = 0;
+            codEscaneado = 0;
 
-                atualizaListaDeCompras();
-            }
-            else{
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Nenhum dado foi recebido!", Toast.LENGTH_SHORT);
-                toast.show();
-            }
+            atualizaListaDeCompras();
         }
         veioDoBotao = false;
     }
@@ -584,6 +574,8 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         intentConf.putExtra("id_lista", lista.getId());
         startActivity(intentConf);
 
+      //  List<Lista_de_produtos> compras = banco.carregaCompras(lista.getId());
+
 
        /* StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -595,12 +587,12 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        List<Lista_de_produtos> listaDeProdutos = new ArrayList<>();
+      /*  List<Lista_de_produtos> listaDeProdutos = new ArrayList<>();
         try {
            listaDeProdutos = cupom.getProdutosDoCupomFiscal(qrcode);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         /*for (Produto p : produtos){
             System.out.println(p.getDescricao());
         }*/

@@ -77,6 +77,8 @@
     <string name="valor_total">Valor Total:</string>
     <string name="button">Button</string>
     <string name="finalizar">Finalizar</string>
+    <string name="imgConfSituacao">Situação</string>
+    <string name="confProduto">Produto</string>
 
     <plurals name="listas_selecionados">
         <item quantity="one">Excluir a lista delecionada?</item>

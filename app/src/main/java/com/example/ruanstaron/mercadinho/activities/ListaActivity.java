@@ -226,6 +226,13 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
         fabAddLista.show();
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        atualizaListListas();
+    }
+
     public static class ListaDialogLista extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -235,10 +242,10 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
             DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ListaActivity atvLista = (ListaActivity)getActivity();
+                    ListaActivity atvLista = (ListaActivity) getActivity();
                     Lista lista = new Lista();
 
-                    if(input.getText().toString().isEmpty())
+                    if (input.getText().toString().isEmpty())
                         input.setText("Nova Lista");
 
                     lista.setDescricao(input.getText().toString());
