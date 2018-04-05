@@ -28,7 +28,6 @@ public class DaoMaster extends AbstractDaoMaster {
         CidadeDao.createTable(db, ifNotExists);
         MercadoDao.createTable(db, ifNotExists);
         Lista_de_produtosDao.createTable(db, ifNotExists);
-        //AtributosDao.insereDados(db);
     }
 
     /** Drops underlying database table using DAOs. */

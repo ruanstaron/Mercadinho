@@ -21,7 +21,7 @@ public class ProdutoDao extends AbstractDao<Produto, Long> {
     public static final String TABLENAME = "PRODUTO";
 
     /**
-     * Properties of entity ProdutoModel.<br/>
+     * Properties of entity Produto.<br/>
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {

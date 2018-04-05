@@ -32,8 +32,9 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
         public final static Property SituacaoId = new Property(4, Long.class, "situacaoId", false, "SITUACAO_ID");
         public final static Property Quantidade = new Property(5, Float.class, "quantidade", false, "QUANTIDADE");
         public final static Property Valor = new Property(6, Float.class, "valor", false, "VALOR");
-        public final static Property Data_da_compra = new Property(7, java.util.Date.class, "data_da_compra", false, "DATA_DA_COMPRA");
-        public final static Property Recente = new Property(8, Boolean.class, "recente", false, "RECENTE");
+        public final static Property Valor_nota = new Property(7, Float.class, "valor_nota", false, "VALOR_NOTA");
+        public final static Property Data_da_compra = new Property(8, java.util.Date.class, "data_da_compra", false, "DATA_DA_COMPRA");
+        public final static Property Recente = new Property(9, Boolean.class, "recente", false, "RECENTE");
     }
 
     private DaoSession daoSession;
@@ -59,8 +60,9 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
                 "\"SITUACAO_ID\" INTEGER," + // 4: situacaoId
                 "\"QUANTIDADE\" REAL," + // 5: quantidade
                 "\"VALOR\" REAL," + // 6: valor
-                "\"DATA_DA_COMPRA\" INTEGER," + // 7: data_da_compra
-                "\"RECENTE\" INTEGER);"); // 8: recente
+                "\"VALOR_NOTA\" REAL," + // 7: valor_nota
+                "\"DATA_DA_COMPRA\" INTEGER," + // 8: data_da_compra
+                "\"RECENTE\" INTEGER);"); // 9: recente
     }
 
     /** Drops the underlying database table. */
@@ -108,14 +110,19 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
             stmt.bindDouble(7, valor);
         }
  
+        Float valor_nota = entity.getValor_nota();
+        if (valor_nota != null) {
+            stmt.bindDouble(8, valor_nota);
+        }
+ 
         java.util.Date data_da_compra = entity.getData_da_compra();
         if (data_da_compra != null) {
-            stmt.bindLong(8, data_da_compra.getTime());
+            stmt.bindLong(9, data_da_compra.getTime());
         }
  
         Boolean recente = entity.getRecente();
         if (recente != null) {
-            stmt.bindLong(9, recente ? 1L: 0L);
+            stmt.bindLong(10, recente ? 1L: 0L);
         }
     }
 
@@ -158,14 +165,19 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
             stmt.bindDouble(7, valor);
         }
  
+        Float valor_nota = entity.getValor_nota();
+        if (valor_nota != null) {
+            stmt.bindDouble(8, valor_nota);
+        }
+ 
         java.util.Date data_da_compra = entity.getData_da_compra();
         if (data_da_compra != null) {
-            stmt.bindLong(8, data_da_compra.getTime());
+            stmt.bindLong(9, data_da_compra.getTime());
         }
  
         Boolean recente = entity.getRecente();
         if (recente != null) {
-            stmt.bindLong(9, recente ? 1L: 0L);
+            stmt.bindLong(10, recente ? 1L: 0L);
         }
     }
 
@@ -190,8 +202,9 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // situacaoId
             cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5), // quantidade
             cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6), // valor
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // data_da_compra
-            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0 // recente
+            cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7), // valor_nota
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // data_da_compra
+            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0 // recente
         );
         return entity;
     }
@@ -205,8 +218,9 @@ public class Lista_de_produtosDao extends AbstractDao<Lista_de_produtos, Long> {
         entity.setSituacaoId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
         entity.setQuantidade(cursor.isNull(offset + 5) ? null : cursor.getFloat(offset + 5));
         entity.setValor(cursor.isNull(offset + 6) ? null : cursor.getFloat(offset + 6));
-        entity.setData_da_compra(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setRecente(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
+        entity.setValor_nota(cursor.isNull(offset + 7) ? null : cursor.getFloat(offset + 7));
+        entity.setData_da_compra(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setRecente(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
      }
     
     @Override

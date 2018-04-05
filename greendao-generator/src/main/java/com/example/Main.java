@@ -51,6 +51,7 @@ public class Main {
         Property situacaoId = lista_de_produtos.addLongProperty("situacaoId").getProperty();
         lista_de_produtos.addFloatProperty("quantidade");
         lista_de_produtos.addFloatProperty("valor");
+        lista_de_produtos.addFloatProperty("valor_nota");
         lista_de_produtos.addDateProperty("data_da_compra");
         lista_de_produtos.addBooleanProperty("recente");
         lista_de_produtos.addToMany(produto, cod_barras);
