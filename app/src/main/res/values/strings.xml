@@ -10,6 +10,7 @@
     <string name="acao_delete">Excluir</string>
     <string name="acao_edit">Editar</string>
     <string name="acao_duplicar">Duplicar</string>
+    <string name="acao_reabrir">Reabrir</string>
     <string name="erro_generico">Erro!</string>
     <string name="email_invalido">E-mail inválido!</string>
 
@@ -60,7 +61,11 @@
     /* activity_lista.xml */
     <string name="dialogoConfirmaExclusaoListaTitulo">Excluir Lista</string>
     <string name="dialogoConfirmaDuplicarListaTitulo">Duplicar Lista</string>
+    <string name="dialogoConfirmaCorrigirCompraTitulo">Corrigir Compra</string>
+    <string name="dialogoConfirmaReabrirListaTitulo">Reabrir Lista</string>
     <string name="dialogoDuplicarListaMsg">Deseja duplicar esta Lista ?</string>
+    <string name="dialogoCorrigirCompraMsg">Deseja corrigir esta compra com o valor informado ?</string>
+    <string name="dialogoReabrirListaMsg">Deseja reabrir esta Lista ?</string>
     <string name="dialogoEditarListaTitulo">Alterar nome</string>
     <string name="dialogoEditarNomeListaMsg">Nome da lista:</string>
     <string name="lista_vazia">Você ainda não realizou nenhuma compra :(</string>

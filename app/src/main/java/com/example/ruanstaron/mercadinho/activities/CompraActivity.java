@@ -102,17 +102,6 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        boolean consumed = (actionMode == null);
-
-        if(consumed){
-            iniciarActionMode();
-            listaCompras.setItemChecked(position, true);
-        }
-        return consumed;
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
@@ -121,10 +110,24 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
             dlgNomeProduto.show(getSupportFragmentManager(), "dlgnomeProduto");
             retornoScanFalse = false;
         }
+
         if (valorProdutoZerado){
             ListaDialogValorProduto dlgNomeValorProduto = new ListaDialogValorProduto();
             dlgNomeValorProduto.show(getSupportFragmentManager(), "dlgNomeValorProduto");
         }
+
+        atualizaListaDeCompras();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+        boolean consumed = (actionMode == null);
+
+        if(consumed){
+            iniciarActionMode();
+            listaCompras.setItemChecked(position, true);
+        }
+        return consumed;
     }
 
     public void onClick(View v){
@@ -151,7 +154,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
     public void verificaIdLista(){
         Intent it = getIntent();
         if (it.hasExtra("id_lista")){
-            lista.setId(((long) Integer.parseInt(it.getStringExtra("id_lista"))));
+            lista.setId(it.getLongExtra("id_lista", -1));
             lista.setDescricao(it.getStringExtra("descricao_lista"));
         }
     }
@@ -160,6 +163,7 @@ public class CompraActivity extends AppCompatActivity implements ActionMode.Call
         lista_de_produtos = new Banco(master.newSession()).carregaCompras(lista.getId().intValue());
         listaCompras.setAdapter(new CompraAdapter(lista_de_produtos, this, master, this));
         atualizaValorTotal();
+        finalizar.setVisibility(!banco.isListaConferida(lista.getId().intValue()) && banco.carregaCompras(lista.getId().intValue()).size() > 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void atualizaValorTotal(){

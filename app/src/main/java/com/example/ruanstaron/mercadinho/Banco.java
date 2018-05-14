@@ -18,9 +18,7 @@ import com.example.ruanstaron.mercadinho.db.Produto;
 import com.example.ruanstaron.mercadinho.db.ProdutoDao;
 
 import org.greenrobot.greendao.database.Database;
-import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +63,23 @@ public class Banco {
         Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
         List<Lista_de_produtos> lCompras = comprasDao.queryBuilder().where(Lista_de_produtosDao.Properties.ListaId.eq(id)).list();
         return lCompras;
+    }
+
+
+    public boolean isListaConferida(int id){
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+        List<Lista_de_produtos> lCompras = comprasDao.queryBuilder().where(Lista_de_produtosDao.Properties.ListaId.eq(id)).list();
+
+        if(lCompras.size() <= 0){
+            return false;
+        }
+
+        for(int i = 0; i < lCompras.size(); i++){
+            if(lCompras.get(i).getSituacaoId() == Lista_de_produtos.COMPRA || lCompras.get(i).getSituacaoId() == Lista_de_produtos.COMPRADO){
+                return false;
+            }
+        }
+        return true;
     }
 
     public ArrayList<String> carregaProdutosDaLista(int id){

@@ -61,6 +61,10 @@ public class Lista {
     }
 
     // KEEP METHODS - put your custom methods here
+    public Lista(String descricao, boolean recente){
+        setDescricao(descricao);
+        setRecente(recente);
+    }
     // KEEP METHODS END
 
 }

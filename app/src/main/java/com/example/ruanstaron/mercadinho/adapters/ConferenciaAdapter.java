@@ -1,7 +1,6 @@
 package com.example.ruanstaron.mercadinho.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import java.util.List;
 public class ConferenciaAdapter extends BaseAdapter {
 
     private List<Lista_de_produtos> compras;
-    private List<Lista_de_produtos> comprasNF;
     private Context                 context;
 
     private DaoMaster.DevOpenHelper helper;
@@ -34,10 +32,9 @@ public class ConferenciaAdapter extends BaseAdapter {
     private Lista_de_produtosDao    listaProdutosDao;
     private Banco                   banco;
 
-    public ConferenciaAdapter(Context context, List<Lista_de_produtos> compras, List<Lista_de_produtos> comprasNF){
+    public ConferenciaAdapter(Context context, List<Lista_de_produtos> compras){
         this.context   = context;
         this.compras   = compras;
-        this.comprasNF = comprasNF;
 
         helper = new DaoMaster.DevOpenHelper(context, "mercadinho-db");
         master = new DaoMaster(helper.getWritableDatabase());
@@ -71,24 +68,24 @@ public class ConferenciaAdapter extends BaseAdapter {
 
         listaProdutosDao = session.getLista_de_produtosDao();
 
-        switch (String.valueOf(compra.getSituacaoId())){
-            case "1" :Log.i("asd","asd");
-            break;
-            case "2": Log.i("asd","asd");
-            break;
-            case "3": Log.i("asd","asd");
-            break;
-        }
-
-        lvtvProdutoConf.setText("Produtinho");
+        lvtvProdutoConf.setText(banco.getProdutoDescricao(compra.getCod_barras()));
         lvtvValorEsperado.setText(String.valueOf(compra.getValor()));
-        lvtvValorNota.setText(String.valueOf("xxx"));
+        lvtvValorNota.setText(String.valueOf(compra.getValor_nota()));
+
+        switch (String.valueOf(compra.getSituacaoId())){
+            case "1" : pintaLinha(Lista_de_produtos.OK, linha);
+                break;
+            case "2": pintaLinha(Lista_de_produtos.DIVERGENCIA, linha);
+                break;
+            case "3": pintaLinha(Lista_de_produtos.COMPRA, linha);
+                break;
+        }
 
         return linha;
     }
 
     private void pintaLinha(int idSituacao, View linha){
-        ImageView imgIcone = ((ImageView) linha.findViewById(R.id.imgIconeListaSituacao));
+        ImageView imgIcone = ((ImageView) linha.findViewById(R.id.imgIconeConfSituacao));
 
         switch (idSituacao){
             case Lista_de_produtos.DIVERGENCIA:

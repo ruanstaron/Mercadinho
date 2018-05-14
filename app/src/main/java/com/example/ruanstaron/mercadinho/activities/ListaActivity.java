@@ -26,6 +26,8 @@ import com.example.ruanstaron.mercadinho.db.DaoMaster;
 import com.example.ruanstaron.mercadinho.db.DaoSession;
 import com.example.ruanstaron.mercadinho.db.Lista;
 import com.example.ruanstaron.mercadinho.db.ListaDao;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtos;
+import com.example.ruanstaron.mercadinho.db.Lista_de_produtosDao;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
 
     private final int ACAO_EDITAR   = 0;
     private final int ACAO_DUPLICAR = 2;
+    private final int ACAO_REABRIR  = 3;
 
     private DaoMaster.DevOpenHelper helper;
     private DaoMaster master;
@@ -59,8 +62,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 if(actionMode == null){
                     Lista lista = (Lista)parent.getItemAtPosition(position);
 
-                    Intent itScan = new Intent(getApplicationContext(), CompraActivity.class);
-                    itScan.putExtra("id_lista", lista.getId().toString());
+                    Intent itScan = new Intent(getApplicationContext(), new Banco(session).isListaConferida(lista.getId().intValue()) ? ConferenciaActivity.class : CompraActivity.class);
+                    itScan.putExtra("id_lista", lista.getId());
                     itScan.putExtra("descricao_lista", lista.getDescricao());
                     startActivity(itScan);
                 }else{
@@ -155,6 +158,8 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                 if(l.isItemChecked(i))
                     lista = (Lista) l.getItemAtPosition(i);
             }
+
+       actionMode.getMenu().getItem(ACAO_REABRIR).setVisible(new Banco(session).isListaConferida(lista.getId().intValue()));
     }
 
     @Override
@@ -212,9 +217,30 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
             case R.id.acao_duplicar:
                 DuplicarDialogLista dlgDuplicarListas = new DuplicarDialogLista();
                 dlgDuplicarListas.show(getSupportFragmentManager(), "dlgDuplicarLista");
+                break;
+            case R.id.acao_reabrir:
+                ReabrirDialogLista dlgReabrirListas = new ReabrirDialogLista();
+                dlgReabrirListas.show(getSupportFragmentManager(), "dlgDuplicarLista");
+                break;
         }
 
         return true;
+    }
+
+    private void reabrirLista() {
+        Banco banco = new Banco(session);
+
+        List<Lista_de_produtos> compras = banco.carregaComprasLista(lista.getId());
+        Lista_de_produtosDao comprasDao = session.getLista_de_produtosDao();
+
+        for(int i = 0; i < compras.size(); i++){
+            compras.get(i).setSituacaoId((long) Lista_de_produtos.COMPRA);
+            compras.get(i).setValor_nota(null);
+            comprasDao.update(compras.get(i));
+        }
+
+        actionMode.finish();
+        atualizaListListas();
     }
 
     @Override
@@ -344,6 +370,32 @@ public class ListaActivity extends AppCompatActivity implements ActionMode.Callb
                         actvListas.incluirBancoLista(actvListas.session, duplicata);
                         actvListas.actionMode.finish();
                         actvListas.atualizaListListas();
+                        dismiss();
+                    }
+                }
+            };
+
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.dialogoConfirmaDuplicarListaTitulo)
+                    .setMessage(R.string.dialogoDuplicarListaMsg)
+                    .setPositiveButton(R.string.sim, listener)
+                    .setNegativeButton(R.string.nao, null)
+                    .create();
+            return dialog;
+        }
+    }
+
+    public static class ReabrirDialogLista extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int button){
+                    if(button == DialogInterface.BUTTON_POSITIVE){
+                        ListaActivity actvListas = ((ListaActivity) getActivity());
+
+                        actvListas.reabrirLista();
                         dismiss();
                     }
                 }
