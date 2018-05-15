@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ruanstaron.mercadinho">
+    package="tech.pucci.mercadinho">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="tech.pucci.mercadinho.activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +21,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.CompraActivity"
+            android:name="tech.pucci.mercadinho.activities.CompraActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ListaActivity" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.BuscaProdutosActivity" />
-        <activity android:name=".activities.CadastroActivity" />
-        <activity android:name=".activities.ConferenciaActivity"></activity>
+        <activity android:name="tech.pucci.mercadinho.activities.ListaActivity" />
+        <activity android:name="tech.pucci.mercadinho.activities.LoginActivity" />
+        <activity android:name="tech.pucci.mercadinho.activities.BuscaProdutosActivity" />
+        <activity android:name="tech.pucci.mercadinho.activities.CadastroActivity" />
+        <activity android:name="tech.pucci.mercadinho.activities.ConferenciaActivity"/>
     </application>
 
 </manifest>

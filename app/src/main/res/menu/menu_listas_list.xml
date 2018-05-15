@@ -12,13 +12,13 @@
         android:title="@string/acao_delete"
         app:showAsAction="always" />
     <item
-        android:id="@+id/acao_reabrir"
-        android:icon="@android:drawable/ic_menu_set_as"
-        android:title="@string/acao_reabrir"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/acao_duplicar"
         android:icon="@android:drawable/ic_menu_set_as"
         android:title="@string/acao_duplicar"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/acao_reabrir"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="@string/acao_reabrir"
         app:showAsAction="ifRoom" />
 </menu>
