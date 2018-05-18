@@ -16,7 +16,7 @@
 
     <plurals name="numero_selecionados">
         <item quantity="one">1 selecionado</item>
-        <item quantity="other">%d selecionado</item>
+        <item quantity="other">%d selecionados</item>
     </plurals>
 
     /* activity_login.xml */

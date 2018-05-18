@@ -1,7 +1,6 @@
 package tech.pucci.mercadinho;
 
 import android.database.sqlite.SQLiteConstraintException;
-import android.util.Log;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -226,8 +225,7 @@ public class Banco {
         Database db = session.getDatabase();
         try {
             db.execSQL("UPDATE Produto SET cod_barras ="+codBarrasNew+" WHERE cod_barras ="+codBarrasOld+";");
-        }catch (SQLiteConstraintException e){
-            Log.i("Erro sql: ", "Primarykey");
+        }catch (SQLiteConstraintException ignored){
         }
         db.execSQL("UPDATE Lista_de_produtos SET cod_barras = "+codBarrasNew+" WHERE _id = "+id+";");
     }

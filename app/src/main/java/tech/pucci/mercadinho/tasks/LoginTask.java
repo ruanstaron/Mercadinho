@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import tech.pucci.mercadinho.R;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -23,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tech.pucci.mercadinho.R;
 import tech.pucci.mercadinho.WebService;
 import tech.pucci.mercadinho.WsClient;
 import tech.pucci.mercadinho.activities.ListaActivity;
@@ -46,8 +44,6 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
     @Override
     protected void onPreExecute() {
-        Log.i("LoginTask", "onPreExecute");
-
         if(contextRef.get() instanceof LoginActivity){
             ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
             pbLogin.setVisibility(View.VISIBLE);
@@ -66,8 +62,6 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... strings) {
-        Log.i("LoginTask", "doInBackground");
-
         final String LOGIN_INVALIDO           = "-2";
         final String LOGIN_SUCESSO            = null;
         final int    STRINGS_USUARIO_USERNAME = 0;
@@ -115,8 +109,6 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean b) {
-        Log.i("LoginTask", "OnPostExecute");
-
         Context context = contextRef.get();
 
         if(b && context instanceof LoginActivity){
@@ -134,7 +126,6 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
             ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
             pbLogin.setVisibility(View.GONE);
 
-            Log.i("Retrofit", "Login success");
         }
         else if(!b && context instanceof LoginActivity){
             ProgressBar pbLogin = ((ProgressBar) ((LoginActivity) contextRef.get()).findViewById(R.id.pbLogin));
@@ -164,8 +155,6 @@ public class LoginTask extends AsyncTask<String, Integer, Boolean> {
             Toast.makeText(context, "Usuário/Senha inválidos", Toast.LENGTH_SHORT).show();
         }
         else{
-            Log.i("Retrofit", "Erro desconhecido");
-
             Toast.makeText(context, "Erro desconhecido", Toast.LENGTH_SHORT).show();
         }
     }

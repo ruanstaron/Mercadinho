@@ -21,11 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import tech.pucci.mercadinho.R;
-
 import java.util.List;
 
 import tech.pucci.mercadinho.Banco;
+import tech.pucci.mercadinho.R;
 import tech.pucci.mercadinho.adapters.CompraAdapter;
 import tech.pucci.mercadinho.db.DaoMaster;
 import tech.pucci.mercadinho.db.DaoSession;

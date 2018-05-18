@@ -17,8 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import tech.pucci.mercadinho.R;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +27,7 @@ import java.util.Set;
 
 import tech.pucci.mercadinho.Banco;
 import tech.pucci.mercadinho.Cupom;
+import tech.pucci.mercadinho.R;
 import tech.pucci.mercadinho.adapters.ConferenciaAdapter;
 import tech.pucci.mercadinho.db.DaoMaster;
 import tech.pucci.mercadinho.db.DaoSession;
@@ -67,16 +66,16 @@ public class ConferenciaActivity extends AppCompatActivity {
         inicializarBanco();
 
         comprasSelecionadas = banco.carregaCompras((int)idLista);
-
-        atualizarListViewCompras();
     }
 
    @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPostResume() {
+        super.onPostResume();
 
         atualizarListViewCompras();
     }
+
+
 
     private void inicializarComponentes(){
         tvMsgConferencia  = ((TextView) findViewById(R.id.tvMsgConferencia));
@@ -172,6 +171,7 @@ public class ConferenciaActivity extends AppCompatActivity {
             }
 
             atualizarListViewCompras();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
             Toast.makeText(this, "Erro no escaneamento", Toast.LENGTH_SHORT).show();
